@@ -1,3 +1,10 @@
+/**
+* @author Steven T Hanna
+* @date 5/2/15
+* @class JSAnalysis
+* @description Analyze syntax of JavaScript files
+*/
+
 public class JSAnalysis {
 
   /**
