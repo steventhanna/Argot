@@ -24,6 +24,11 @@ public class DPFile {
   String extension;
 
   /**
+  * Classname of file
+  */
+  String classname;
+
+  /**
   * Default constructer
   * @param String filename - the filename of the DPFile
   */
@@ -44,6 +49,18 @@ public class DPFile {
   }
 
   /**
+  * Gets classname of file
+  * @return String classname - classname of file
+  */
+  public String getClassname() {
+    int length = filename.length();
+    // Look for last occuring period
+    int periodPosition = filename.lastIndexOf(".");
+    classname = filename.subString(0, periodPosition);
+    return classname;
+  }
+
+  /**
   * Reads the contents of a DPFile
   * @return ArrayList<String> contents - contents of file in ArrayList
   */
@@ -61,5 +78,15 @@ public class DPFile {
     }
     return null;
   }
+
+  /**
+  * Retrieve filename
+  * @return filename
+  */
+  public String getFilename() {
+    return filename;
+  }
+
+
 
 }
