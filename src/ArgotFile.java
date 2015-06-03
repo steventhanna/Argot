@@ -1,7 +1,7 @@
 /**
 * @author Steven T Hanna
 * @date 5/2/15
-* @class DPFile
+* @class ArgotFile
 * @description Main file class to be called by other classes to create files with documenation
 */
 
@@ -12,52 +12,69 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class DPFile {
+public class ArgotFile {
 
   /**
-  * Filename in type string
+  * @description Path in type String
+  */
+  String path;
+  /**
+  * @description Filename in type String
   */
   String filename;
   /**
-  * Filetype extension
+  * @description Filetype extension
   */
   String extension;
 
   /**
-  * Classname of file
+  * @description Classname of file
   */
   String classname;
 
   /**
   * Default constructer
-  * @param String filename - the filename of the DPFile
+  * @param String pathName - the complete path of the ArgotFile
   */
-  public DPFile(String filename) {
-    this.filename = filename;
+  public ArgotFile(String pathName) {
+    path = pathName;
   }
 
   /**
-  * Gets extension of file
-  * @return String extension - extension of file
+  * Get filename
+  * @return filename
   */
-  public String getExtension() {
-    int length = filename.length();
-    // Look for period
-    int periodPosition = filename.lastIndexOf(".");
-    extension = filename.substring(periodPosition + 1);
+  public String getFilename() {
+    return filename;
+  }
+
+  /**
+  * Get path
+  * @return path
+  */
+  public String getPath() {
+    return path;
+  }
+
+  /**
+  * Get extension
+  * @return extension
+  */
+  public String getExension() {
     return extension;
   }
 
   /**
   * Gets classname of file
-  * @return String classname - classname of file
   */
-  public String getClassname() {
-    int length = filename.length();
-    // Look for last occuring period
-    int periodPosition = filename.lastIndexOf(".");
-    classname = filename.subString(0, periodPosition);
-    return classname;
+  public void seperateClassnameExtension() {
+    // Split path at /
+    String[] pathSplit = path.split("/");
+    String complete = pathSplit[pathSplit.length - 1];
+    // Get period position to seperate extension
+    int periodPosition = complete.lastIndexOf(".");
+    extension = complete.substring(periodPosition + 1);
+    classname = complete.substring(0, periodPosition);
   }
 
   /**
@@ -78,15 +95,5 @@ public class DPFile {
     }
     return null;
   }
-
-  /**
-  * Retrieve filename
-  * @return filename
-  */
-  public String getFilename() {
-    return filename;
-  }
-
-
-
+  
 }

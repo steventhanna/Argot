@@ -34,14 +34,11 @@ public class JavaAnalysis {
   */
   private String[] description;
 
-
-
-
   /**
   * @description Constructor for JSAnalysis
   * @param DPFIle file - Predetermined JS File
   */
-  public JavaAnalysis(DPFile file) {
+  public JavaAnalysis(ArgotFile file) {
     filename = file.getFilename();
     contents = file.read();
     systemClass = file.getClassname();
@@ -51,7 +48,7 @@ public class JavaAnalysis {
     // Look for the class declartion
     int classDeclaration;
     for(int i = 0; i < contents.size(); i++) {
-      if(indexOf("class") > 0) {
+      if(contents.get(i).indexOf("class") > 0) {
         classDeclaration = i;
         break;
       }
@@ -59,7 +56,7 @@ public class JavaAnalysis {
     ArrayList<String> header = new ArrayList<String>();
     // Strip all blank space and transfer header
     for(int i = 0; i < classDeclaration; i++) {
-      if(contets.get(i) != "") {
+      if(contents.get(i) != "") {
         header.add(contents.get(i));
       }
     }
