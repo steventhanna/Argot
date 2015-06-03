@@ -39,25 +39,31 @@ public class JavaAnalysis {
   * @param DPFIle file - Predetermined JS File
   */
   public JavaAnalysis(ArgotFile file) {
-    filename = file.getFilename();
     contents = file.read();
+    filename = file.getFilename();
     systemClass = file.getClassname();
   }
 
   public void extractHeader() {
     // Look for the class declartion
-    int classDeclaration;
+    int classDeclaration = -1;
     for(int i = 0; i < contents.size(); i++) {
       if(contents.get(i).indexOf("class") > 0) {
         classDeclaration = i;
         break;
       }
     }
-    ArrayList<String> header = new ArrayList<String>();
-    // Strip all blank space and transfer header
-    for(int i = 0; i < classDeclaration; i++) {
-      if(contents.get(i) != "") {
-        header.add(contents.get(i));
+    if(classDeclaration == -1) {
+      // Handle error here.  Header does not exist
+      System.out.println("Header does not exist");
+      return;
+    } else {
+      ArrayList<String> header = new ArrayList<String>();
+      // Strip all blank space and transfer header
+      for(int i = 0; i < classDeclaration; i++) {
+        if(contents.get(i) != "") {
+          header.add(contents.get(i));
+        }
       }
     }
   }

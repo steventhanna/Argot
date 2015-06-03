@@ -65,7 +65,15 @@ public class ArgotFile {
   }
 
   /**
-  * Gets classname of file
+  * Get classname
+  * @return classname
+  */
+  public String getClassname() {
+    return classname;
+  }
+
+  /**
+  * Harvest classname and extension of file
   */
   public void seperateClassnameExtension() {
     // Split path at /
@@ -95,5 +103,5 @@ public class ArgotFile {
     }
     return null;
   }
-  
+
 }
