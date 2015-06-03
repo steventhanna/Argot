@@ -60,7 +60,7 @@ public String sampleMethod(String text) {
 }
 ```
 
-### Variables
+### Variables / Instance Variables
 Like methods, documentation for variables must begin before the variable is declared.  Variables should only be documented upon declaration.
 
 `@description` - description of the variable in relation to rest of the class

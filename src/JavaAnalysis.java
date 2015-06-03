@@ -40,6 +40,21 @@ public class JavaAnalysis {
   private String[] author;
 
   /**
+  * @description Date of class
+  */
+  private String date;
+
+  /**
+  * @description Version of class
+  */
+  private String version;
+
+  /**
+  * @description See's of class
+  */
+  private String[] see;
+
+  /**
   * @description ArrayList<String> of the extracted header
   */
   private ArrayList<String> header = new ArrayList<String>();
@@ -86,6 +101,9 @@ public class JavaAnalysis {
     }
   }
 
+  /**
+  * Extact the authors of the class
+  */
   public void extractAuthor() {
     ArrayList<String> authors = new ArrayList<String>();
     for(int i = 0; i < header.size(); i++) {
@@ -102,6 +120,59 @@ public class JavaAnalysis {
       System.out.println(author[i]);
     }
   }
+
+  /**
+  * Extract the date of the class
+  * If multiple occurences of date found, take last occurence
+  */
+  public void extractDate() {
+    for(int i = 0; i < header.size(); i++) {
+        if(header.get(i).contains("@date")) {
+          date = removeTag("@date", header.get(i));
+        }
+    }
+  }
+
+  /**
+  * Extract the user class
+  * Check user class against system class... Present error to user?
+  */
+  // TODO Check user class against system class... Present error to user?
+  public void extractClass() {
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@class")) {
+        userClass = removeTag("@class", header.get(i));
+      }
+    }
+  }
+
+  /**
+  * Extract version
+  */
+  public void extractVersion() {
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@version")) {
+        version = removeTag("@version", header.get(i));
+      }
+    }
+  }
+
+  /**
+  * Extrat see
+  */
+  public void extractSee() {
+    ArrayList<String> seeList = new ArrayList<String>();
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@see")) {
+        seeList.add(header.get(i));
+      }
+    }
+    see = new String[seeList.size()];
+    for(int i = 0; i < see.length; i++) {
+      see[i] = removeTag("@see", seeList.get(i));
+    }
+  }
+
 
   /**
   * Remove the tag from a specified string.
