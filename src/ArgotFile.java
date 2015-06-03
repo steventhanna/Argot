@@ -104,14 +104,14 @@ public class ArgotFile {
     return null;
   }
 
-  public static void main(String[] args) {
-    ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");
-
-    ArrayList<String> contents = new ArrayList<String>();
-    contents = file.read();
-    for(int i = 0; i < contents.size(); i++) {
-      System.out.println(contents.get(i));
-    }
-  }
+  // public static void main(String[] args) {
+  //   ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");
+  //
+  //   ArrayList<String> contents = new ArrayList<String>();
+  //   contents = file.read();
+  //   for(int i = 0; i < contents.size(); i++) {
+  //     System.out.println(contents.get(i));
+  //   }
+  // }
 
 }

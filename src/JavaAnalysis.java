@@ -48,7 +48,7 @@ public class JavaAnalysis {
     // Look for the class declartion
     int classDeclaration = -1;
     for(int i = 0; i < contents.size(); i++) {
-      if(contents.get(i).indexOf("class") > 0) {
+      if(contents.get(i).indexOf(" class") > 0) {
         classDeclaration = i;
         break;
       }
@@ -62,12 +62,18 @@ public class JavaAnalysis {
       // Strip all blank space and transfer header
       for(int i = 0; i < classDeclaration; i++) {
         if(contents.get(i) != "") {
-          System.out.println(contents.get(i));
-          header.add(contents.get(i));
+          // System.out.println(contents.get(i));
+          // For now, I am going to assume that documentation does not end in a semicolon
+          String temp = contents.get(i);
+          if(temp.lastIndexOf(";") != temp.length() - 1) {
+            header.add(contents.get(i));
+          }
         }
       }
+      // for(int i = 0; i < header.size(); i++) {
+      //   System.out.println(header.get(i));
+      // }
     }
-
   }
 
 
