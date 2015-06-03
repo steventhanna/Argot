@@ -1,4 +1,4 @@
-# Documentation-Parse
+# Argot
 Parse documentation from codebases into markdown for easy doc creation.  With the exception of markup languages and stylesheets, languages with / notation will follow a modified version of the Java documentation system
 
 ## / Comment Languages
