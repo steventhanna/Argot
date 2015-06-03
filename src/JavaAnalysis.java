@@ -62,9 +62,20 @@ public class JavaAnalysis {
       // Strip all blank space and transfer header
       for(int i = 0; i < classDeclaration; i++) {
         if(contents.get(i) != "") {
+          System.out.println(contents.get(i));
           header.add(contents.get(i));
         }
       }
     }
+
+  }
+
+
+
+
+  public static void main(String[] args) {
+    ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");
+    JavaAnalysis analyze = new JavaAnalysis(file);
+    analyze.extractHeader();
   }
 }

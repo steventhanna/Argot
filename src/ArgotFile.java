@@ -92,7 +92,7 @@ public class ArgotFile {
   public ArrayList<String> read() {
     ArrayList<String> contents = new ArrayList<String>();
     try {
-      BufferedReader in = new BufferedReader(new FileReader(filename));
+      BufferedReader in = new BufferedReader(new FileReader(new File(path)));
       while(in.ready()) {
         contents.add(in.readLine());
       }
@@ -102,6 +102,16 @@ public class ArgotFile {
       System.out.println("File could not be read: " + e);
     }
     return null;
+  }
+
+  public static void main(String[] args) {
+    ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");
+
+    ArrayList<String> contents = new ArrayList<String>();
+    contents = file.read();
+    for(int i = 0; i < contents.size(); i++) {
+      System.out.println(contents.get(i));
+    }
   }
 
 }
