@@ -3,6 +3,7 @@
 * @date 5/7/15
 * @class JavaMethod
 * @description Specific class regarding Java methods
+* @parent Method
 */
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public class JavaMethod {
+public class JavaMethod extends Method {
 
   /**
   * @desciption Name of method as a String
@@ -104,9 +105,7 @@ public class JavaMethod {
     int occurence = -1;
     for(int i = 0; i < contents.size(); i++) {
       if(contents.get(i).contains("{")) {
-        // System.out.println(contents.get(i).contains("{"));
         occurence = i;
-        // System.out.println(occurence);
         break;
       }
     }
@@ -123,7 +122,6 @@ public class JavaMethod {
         occurence -= 1;
       }
       for(int i = 0; i <= occurence; i++) {
-        // System.out.println(contents.get(i));
         header.add(contents.get(i));
       }
     }
@@ -131,13 +129,15 @@ public class JavaMethod {
 
   /**
   * Extract the method signature from the rest of the method
+  * Use header to get the method... Should be the last line
   */
   public void extractSignature() {
-
+      methodSignature = header.get(header.size());
   }
 
   /**
   * Extract the body from the method
+  * Harvest everything after the method signature
   */
   public void extractBody() {
 
