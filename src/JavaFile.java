@@ -24,15 +24,16 @@ public class JavaFile extends ArgotFile {
     // Look for the first instance of the class name
     int firstInstance = -1;
     for(int i = 0; i < contents.size(); i++) {
-      if(contents.get(i).indexOf(getClassname()) > 0) {
+      // Check if line has classname, and does not contain @
+      if(contents.get(i).indexOf(getClassname()) > 0 && !(contents.get(i).contains("@"))) {
         firstInstance = i;
         break;
       }
     }
     // Error handling
     if(firstInstance == -1) {
-      // Header does not exist
-      System.out.println("Header does not exist");
+      // Class declaration does not exist... Is this a complete Java File?
+      System.out.println("Class declaration does not exist.");
       return;
     } else {
       // Strip all blank space and transfer header
@@ -46,5 +47,38 @@ public class JavaFile extends ArgotFile {
         }
       }
     }
+  }
+
+  /**
+  * Extract body
+  */
+  public void extractBody() {
+    // Extract everything else from the file excluding the header
+    // Look for first instance of class name
+    int firstInstance = -1;
+    for(int i = 0; i < contents.size(); i++) {
+      if(contents.get(i).indexOf(getClassname()) > 0) {
+        firstInstance = i;
+        break;
+      }
+    }
+    if(firstInstance == -1) {
+      // Class declaration does not exist... Is this a complete Java File?
+      System.out.println("Class declaration does not exist.");
+      return;
+    } else {
+      // Transfer body including class declaration
+      for(int i = firstInstance; i < contents.size(); i++) {
+        body.add(contents.get(i));
+      }
+    }
+  }
+
+  /**
+  * Recognize a method in a given block of code
+  */
+  // TODO Make new Method class with common method shit
+  public void extractMethods() {
+
   }
 }

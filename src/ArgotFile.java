@@ -278,6 +278,19 @@ public abstract class ArgotFile implements FileBase {
     System.out.println();
     System.out.println("Version: " + version);
     System.out.println("Date: " + date);
+
+    // Raw Data
+    System.out.println("RAW DATA");
+    System.out.println("HEADER");
+    System.out.println();
+    for(int i = 0; i < header.size(); i++) {
+      System.out.println(header.get(i));
+    }
+    System.out.println("BODY");
+    System.out.println();
+    for(int i = 0; i < body.size(); i++) {
+      System.out.println(body.get(i));
+    }
   }
 
   /**
@@ -289,6 +302,6 @@ public abstract class ArgotFile implements FileBase {
   * Recognize a method in a given block of code
   */
   // TODO Make new Method class with common method shit
-  public abstract void recognizeMethods();
+  public abstract void extractMethods();
 
 }
