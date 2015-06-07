@@ -21,6 +21,11 @@ public class JavaMethod {
   private String name;
 
   /**
+  * @description Method signature
+  */
+  private String methodSignature;
+
+  /**
   * @desciption Parameters of method in String array
   */
   private String[] parameters;
@@ -87,6 +92,8 @@ public class JavaMethod {
   */
   public JavaMethod(ArrayList<String> c) {
     contents = c;
+    extractHeader();
+    System.out.println(methodSignature);
   }
 
 
@@ -97,8 +104,10 @@ public class JavaMethod {
     // Look for the first {
     int occurence = -1;
     for(int i = 0; i < contents.size(); i++) {
-      if(contents.get(i).lastIndexOf("}") > 0) {
+      if(contents.get(i).contains("{")) {
+        System.out.println(contents.get(i).contains("{"));
         occurence = i;
+        System.out.println(occurence);
         return;
       }
     }
@@ -107,6 +116,7 @@ public class JavaMethod {
       // Cannot locate the method... Error
       System.out.println("Method does not exist / Cannot be found");
     } else {
+      methodSignature =  contents.get(7);
       // Take into account styling of user...
       // If they put the bracket below the method
       if(contents.get(occurence).length() == 1) {
@@ -114,6 +124,7 @@ public class JavaMethod {
         occurence -= 1;
       }
       for(int i = 0; i <= occurence; i++) {
+        System.out.println(contents.get(i));
         header.add(contents.get(i));
       }
     }
