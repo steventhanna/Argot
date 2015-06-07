@@ -253,6 +253,20 @@ public abstract class ArgotFile implements FileBase {
   }
 
   /**
+  * Check a specific line for the escape character in the header
+  * @note Meant to be used recursively
+  * @param Integer line - the line to be checked for the escape character
+  * @return Integer - the line number that contains the escape character
+  */
+  public int checkLineForEscapeCharHeader(int line) {
+    if(!(header.get(line).contains("@"))) {
+      return checkLineForEscapeCharHeader(line + 1);
+    } else {
+      return line;
+    }
+  }
+
+  /**
   * Extract the description of the class
   * I have to probably handle multi-line inputs... Crap
   * Using an array to handle multi-line inputs
@@ -262,23 +276,26 @@ public abstract class ArgotFile implements FileBase {
     // find first instance in header
     int begin = -1;
     int end = -1;
+    // Determine beginning of description
     for(int i = 0; i < header.size(); i++) {
       if(header.get(i).contains("@description")) {
         begin = i;
       }
-      if(!(i + 1 >= header.size())) {
-        for(int a = i + 1; a < header.size(); a++) {
-          if(!(header.get(a).contains("@"))) {
-            end = i;
-          }
-        }
-      }
-    }
-    // Compensate for the strange way I did things
-    end -= 1;
 
+      // if(!(i + 1 >= header.size())) {
+      //   for(int a = i + 1; a < header.size(); a++) {
+      //     if(!(header.get(a).contains("@"))) {
+      //       end = i;
+      //     }
+      //   }
+      // }
+    }
+    end = checkLineForEscapeCharHeader(begin + 1) - 1;
     System.out.println("Begin: " + begin);
     System.out.println("End: " + end);
+
+    // Compensate for the strange way I did things
+    end -= 1;
 
     // Add Description from header lines
     if(begin != -1 && end != -1) {
