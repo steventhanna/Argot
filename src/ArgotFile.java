@@ -290,12 +290,12 @@ public abstract class ArgotFile implements FileBase {
       //   }
       // }
     }
-    end = checkLineForEscapeCharHeader(begin + 1) - 1;
+    end = checkLineForEscapeCharHeader(begin + 1);
     System.out.println("Begin: " + begin);
     System.out.println("End: " + end);
 
     // Compensate for the strange way I did things
-    end -= 1;
+    // end += 1;
 
     // Add Description from header lines
     if(begin != -1 && end != -1) {
