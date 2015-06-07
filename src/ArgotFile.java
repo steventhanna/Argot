@@ -77,6 +77,16 @@ public abstract class ArgotFile implements FileBase {
   private String[] description;
 
   /**
+  * @description Parent of the file
+  */
+  private String parent;
+
+  /**
+  * @description Children of file
+  */
+  private String[] children;
+
+  /**
   * @description ArrayList of type String holding contents of header
   * @note Children can modify
   */
@@ -126,6 +136,14 @@ public abstract class ArgotFile implements FileBase {
   */
   public String getClassname() {
     return classname;
+  }
+
+  /**
+  * Get Parent
+  * @return String parent of class
+  */
+  public String getParent() {
+    return parent;
   }
 
   /**
@@ -253,6 +271,34 @@ public abstract class ArgotFile implements FileBase {
   }
 
   /**
+  * Extract the child / children of the class
+  */
+  public void extractChild() {
+    // Find all lines with child
+    ArrayList<String> temp = new ArrayList<String>();
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@child")) {
+        temp.add(removeTag("@child", header.get(i)));
+      }
+    }
+    children = new String[temp.size()];
+    for(int i = 0; i < children.length; i++) {
+      children[i] = temp.get(i);
+    }
+  }
+
+  /**
+  * Extract the parent of the class
+  */
+  public void extractParent() {
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@parent")) {
+        parent = removeTag("@parent", header.get(i));
+      }
+    }
+  }
+
+  /**
   * Check a specific line for the escape character in the header
   * @note Meant to be used recursively
   * @param Integer line - the line to be checked for the escape character
@@ -318,6 +364,8 @@ public abstract class ArgotFile implements FileBase {
     extractSee();
     extractDate();
     extractDescription();
+    extractChild();
+    extractParent();
   }
 
   /**
@@ -345,18 +393,18 @@ public abstract class ArgotFile implements FileBase {
     System.out.println("Version: " + version);
     System.out.println("Date: " + date);
 
-    // Raw Data
-    System.out.println("RAW DATA");
-    System.out.println("HEADER");
-    System.out.println();
-    for(int i = 0; i < header.size(); i++) {
-      System.out.println(header.get(i));
-    }
-    System.out.println("BODY");
-    System.out.println();
-    for(int i = 0; i < body.size(); i++) {
-      System.out.println(body.get(i));
-    }
+    // // Raw Data
+    // System.out.println("RAW DATA");
+    // System.out.println("HEADER");
+    // System.out.println();
+    // for(int i = 0; i < header.size(); i++) {
+    //   System.out.println(header.get(i));
+    // }
+    // System.out.println("BODY");
+    // System.out.println();
+    // for(int i = 0; i < body.size(); i++) {
+    //   System.out.println(body.get(i));
+    // }
   }
 
   /**

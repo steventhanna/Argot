@@ -30,7 +30,7 @@ When beginning the file, you can use any of the following in any combination at 
 
 `@see` - provides a link to another file in reference
 
-`@child` - indicate the child of the class
+`@child` - indicate the child of the class.  Multiple children should have their own `@child` tag
 
 `@parent` indicate the parent of the class
 
