@@ -18,6 +18,7 @@ public abstract class ArgotFile implements FileBase {
   public ArgotFile(String pathname) {
     path = pathname;
     seperateClassnameExtension();
+    read();
   }
 
   /**
@@ -72,13 +73,15 @@ public abstract class ArgotFile implements FileBase {
 
   /**
   * @description ArrayList of type String holding contents of header
+  * @note Children can modify
   */
-  private ArrayList<String> header = new ArrayList<String>();
+  public ArrayList<String> header = new ArrayList<String>();
 
   /**
   * @description ArrayList of type String holding contents of file
+  * @note Children can modify
   */
-  private ArrayList<String> contents = new ArrayList<String>();
+  public ArrayList<String> contents = new ArrayList<String>();
 
   /**
   * Get Filename
@@ -234,5 +237,16 @@ public abstract class ArgotFile implements FileBase {
           date = removeTag("@date", header.get(i));
         }
     }
+  }
+
+  /**
+  * Combined all data extraction into one method
+  */
+  public void harvestHeaderData() {
+    extractAuthor();
+    extractClass();
+    extractVersion();
+    extractSee();
+    extractDate();
   }
 }
