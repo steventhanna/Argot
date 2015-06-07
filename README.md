@@ -49,6 +49,8 @@ Documentation for methods must begin before the method starts.
 
 `@see` - provides a link to another method in reference
 
+`@note` - notes any important information relevant to the method 
+
 ```java
 /** Provides a sample method for this example.
 * @param String text - text to be returned
