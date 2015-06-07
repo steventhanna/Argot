@@ -96,7 +96,6 @@ public class JavaMethod {
     System.out.println(methodSignature);
   }
 
-
   /**
   * Extract the header from the method
   */
@@ -105,10 +104,10 @@ public class JavaMethod {
     int occurence = -1;
     for(int i = 0; i < contents.size(); i++) {
       if(contents.get(i).contains("{")) {
-        System.out.println(contents.get(i).contains("{"));
+        // System.out.println(contents.get(i).contains("{"));
         occurence = i;
-        System.out.println(occurence);
-        return;
+        // System.out.println(occurence);
+        break;
       }
     }
     // Error handling
@@ -124,7 +123,7 @@ public class JavaMethod {
         occurence -= 1;
       }
       for(int i = 0; i <= occurence; i++) {
-        System.out.println(contents.get(i));
+        // System.out.println(contents.get(i));
         header.add(contents.get(i));
       }
     }
