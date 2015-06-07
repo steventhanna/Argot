@@ -15,6 +15,11 @@ import java.io.IOException;
 
 public abstract class ArgotFile implements FileBase {
 
+  public ArgotFile(String pathname) {
+    path = pathname;
+    seperateClassnameExtension();
+  }
+
   /**
   * @description Absolute path of file in type String
   */
