@@ -84,6 +84,14 @@ public abstract class ArgotFile implements FileBase {
   public ArrayList<String> contents = new ArrayList<String>();
 
   /**
+  * @description ArrayList of type String holding contents of body
+  * @note Children can modify
+  */
+  public ArrayList<String> body = new ArrayList<String>();
+
+
+
+  /**
   * Get Filename
   * @return String name of file
   */
@@ -271,5 +279,16 @@ public abstract class ArgotFile implements FileBase {
     System.out.println("Version: " + version);
     System.out.println("Date: " + date);
   }
+
+  /**
+  * Extract body
+  */
+  public abstract void extractBody();
+
+  /**
+  * Recognize a method in a given block of code
+  */
+  // TODO Make new Method class with common method shit
+  public abstract void recognizeMethods();
 
 }
