@@ -12,33 +12,40 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class ArgotFile {
+public abstract class ArgotFile {
 
   /**
   * @description Path in type String
   */
-  String path;
+  private String path;
   /**
   * @description Filename in type String
   */
-  String filename;
+  private String filename;
   /**
   * @description Filetype extension
   */
-  String extension;
+  private String extension;
 
   /**
   * @description Classname of file
   */
-  String classname;
+  private String classname;
 
   /**
-  * Default constructer
-  * @param String pathName - the complete path of the ArgotFile
+  * @description Date of file
   */
-  public ArgotFile(String pathName) {
-    path = pathName;
-  }
+  private String date;
+
+  /**
+  * @description Authors in String array in case more than one
+  */
+  private String[] author;
+
+  /**
+  * @description ArrayList of String holding contents of header
+  */
+  private ArrayList<String> header = new ArrayList<String>();
 
   /**
   * Get filename
@@ -103,6 +110,35 @@ public class ArgotFile {
     }
     return null;
   }
+
+  public abstract void extractHeader();
+
+  public abstract String removeTag(String tag, String s);
+
+  /**
+  * Extact the authors of the class
+  */
+  public void extractAuthor() {
+    ArrayList<String> authors = new ArrayList<String>();
+    for(int i = 0; i < header.size(); i++) {
+      // System.out.println(header.get(i).contains("@author"));
+      if(header.get(i).contains("@author")) {
+        authors.add(header.get(i));
+        // System.out.println(header.get(i));
+      }
+    }
+    author = new String[authors.size()];
+    for(int i = 0; i < authors.size(); i++) {
+      // Remove @author
+      author[i] = removeTag("@author", authors.get(i));
+      System.out.println(author[i]);
+    }
+  }
+
+
+
+
+
 
   // public static void main(String[] args) {
   //   ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");

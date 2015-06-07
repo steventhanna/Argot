@@ -7,7 +7,7 @@
 
 import java.util.ArrayList;
 
-public class JavaAnalysis {
+public class JavaAnalysis extends ArgotFile {
 
   /**
   * @description The filename of the file in a String
@@ -63,7 +63,8 @@ public class JavaAnalysis {
   * @description Constructor for JSAnalysis
   * @param DPFIle file - Predetermined JS File
   */
-  public JavaAnalysis(ArgotFile file) {
+  public JavaAnalysis(String pathName) {
+    path = pathName;
     contents = file.read();
     filename = file.getFilename();
     systemClass = file.getClassname();
@@ -195,7 +196,7 @@ public class JavaAnalysis {
 
 
   public static void main(String[] args) {
-    ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");
+    // ArgotFile file = new ArgotFile("/Users/steventhanna/Desktop/BiggestDir.java");
     JavaAnalysis analyze = new JavaAnalysis(file);
     analyze.go();
   }
