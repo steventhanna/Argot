@@ -4,6 +4,5 @@ public class TestRun {
       JavaFile file = new JavaFile("/Users/steventhanna/Desktop/BiggestDir.java");
       // System.out.println(file.getExtension());
       file.printInfo();
-
   }
 }
