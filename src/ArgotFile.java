@@ -281,21 +281,10 @@ public abstract class ArgotFile implements FileBase {
       if(header.get(i).contains("@description")) {
         begin = i;
       }
-
-      // if(!(i + 1 >= header.size())) {
-      //   for(int a = i + 1; a < header.size(); a++) {
-      //     if(!(header.get(a).contains("@"))) {
-      //       end = i;
-      //     }
-      //   }
-      // }
     }
     end = checkLineForEscapeCharHeader(begin + 1);
     System.out.println("Begin: " + begin);
     System.out.println("End: " + end);
-
-    // Compensate for the strange way I did things
-    // end += 1;
 
     // Add Description from header lines
     if(begin != -1 && end != -1) {
@@ -314,7 +303,7 @@ public abstract class ArgotFile implements FileBase {
       // For rest of the array, remove the *_
       // Java specific?
       for(int i = 1; i < description.length; i++) {
-        description[i] = description[i].substring(1);
+        description[i] = description[i].substring(2);
       }
     }
   }
