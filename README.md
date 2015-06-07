@@ -30,6 +30,10 @@ When beginning the file, you can use any of the following in any combination at 
 
 `@see` - provides a link to another file in reference
 
+`@child` - indicate the child of the class
+
+`@parent` indicate the parent of the class
+
 ### Methods
 Documentation for methods must begin before the method starts.
 
@@ -49,7 +53,7 @@ Documentation for methods must begin before the method starts.
 
 `@see` - provides a link to another method in reference
 
-`@note` - notes any important information relevant to the method 
+`@note` - notes any important information relevant to the method
 
 ```java
 /** Provides a sample method for this example.

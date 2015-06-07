@@ -72,6 +72,11 @@ public abstract class ArgotFile implements FileBase {
   private String date;
 
   /**
+  * @description Description of a file
+  */
+  private String[] description;
+
+  /**
   * @description ArrayList of type String holding contents of header
   * @note Children can modify
   */
@@ -248,6 +253,56 @@ public abstract class ArgotFile implements FileBase {
   }
 
   /**
+  * Extract the description of the class
+  * I have to probably handle multi-line inputs... Crap
+  * Using an array to handle multi-line inputs
+  */
+  public void extractDescription() {
+    // Get total amount of description lines
+    // find first instance in header
+    int begin = -1;
+    int end = -1;
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@description")) {
+        begin = i;
+      }
+      if(!(i + 1 >= header.size())) {
+        for(int a = i + 1; a < header.size(); a++) {
+          if(!(header.get(a).contains("@"))) {
+            end = i;
+          }
+        }
+      }
+    }
+    // Compensate for the strange way I did things
+    end -= 1;
+
+    System.out.println("Begin: " + begin);
+    System.out.println("End: " + end);
+
+    // Add Description from header lines
+    if(begin != -1 && end != -1) {
+      description = new String[end - begin];
+      // While loop might be better
+      int arrayCounter = 0;
+      int headerCounter = begin;
+      while(arrayCounter < description.length && headerCounter <= end) {
+        description[arrayCounter] = header.get(headerCounter);
+        arrayCounter++;
+        headerCounter++;
+      }
+
+      // Clean up data in array
+      description[0] = removeTag("@description", description[0]);
+      // For rest of the array, remove the *_
+      // Java specific?
+      for(int i = 1; i < description.length; i++) {
+        description[i] = description[i].substring(1);
+      }
+    }
+  }
+
+  /**
   * Combined all data extraction into one method
   */
   public void harvestHeaderData() {
@@ -256,6 +311,7 @@ public abstract class ArgotFile implements FileBase {
     extractVersion();
     extractSee();
     extractDate();
+    extractDescription();
   }
 
   /**
@@ -266,6 +322,10 @@ public abstract class ArgotFile implements FileBase {
     System.out.println("Path: " + path);
     System.out.println("Class: " + classname);
     System.out.println("Extension: " + extension);
+    System.out.println("Description: ");
+    for(int i = 0; i < description.length; i++) {
+      System.out.println(description[i]);
+    }
     System.out.print("Author: ");
     for(int i = 0; i < author.length; i++) {
       System.out.print(author[i] + ", ");

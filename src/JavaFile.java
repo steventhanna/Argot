@@ -1,3 +1,12 @@
+/**
+* @author Steven T Hanna
+* @date 5/7/15
+* @class JavaFile
+* @description Implementation of abstract methods for Java files.
+* Includes extraction of body, header, methods, and instance variables
+* @parent ArgotFile
+*/
+
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileReader;
@@ -15,6 +24,7 @@ public class JavaFile extends ArgotFile {
     super(path);
     extractHeader();
     harvestHeaderData();
+    extractBody();
   }
 
   /**
@@ -57,7 +67,7 @@ public class JavaFile extends ArgotFile {
     // Look for first instance of class name
     int firstInstance = -1;
     for(int i = 0; i < contents.size(); i++) {
-      if(contents.get(i).indexOf(getClassname()) > 0) {
+      if(contents.get(i).indexOf(getClassname()) > 0 && !(contents.get(i).contains("@"))) {
         firstInstance = i;
         break;
       }
