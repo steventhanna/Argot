@@ -34,6 +34,8 @@ When beginning the file, you can use any of the following in any combination at 
 
 `@parent` indicate the parent of the class
 
+`@note` - notes any important information relevant to the file
+
 ### Methods
 Documentation for methods must begin before the method starts.
 

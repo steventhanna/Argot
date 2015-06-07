@@ -87,6 +87,11 @@ public abstract class ArgotFile implements FileBase {
   private String[] children;
 
   /**
+  * @description Notes any important information in the file
+  */
+  private String[] note;
+
+  /**
   * @description ArrayList of type String holding contents of header
   * @note Children can modify
   */
@@ -139,11 +144,59 @@ public abstract class ArgotFile implements FileBase {
   }
 
   /**
+  * Get author
+  * @return String array of authors
+  */
+  public String[] getAuthor() {
+    return author;
+  }
+
+  /**
+  * Get date
+  * @return String date
+  */
+  public String getDate() {
+    return date;
+  }
+
+  /**
+  * Get version
+  * @return String version
+  */
+  public String getVersion() {
+    return version;
+  }
+
+  /**
+  * Get see
+  * @return String array of see
+  */
+  public String[] getSee() {
+    return see;
+  }
+
+  /**
+  * Get class description
+  * @return String array of descriptions
+  */
+  public String[] getDescription() {
+    return description;
+  }
+
+  /**
   * Get Parent
   * @return String parent of class
   */
   public String getParent() {
     return parent;
+  }
+
+  /**
+  * Get Children
+  * @return String array of Children
+  */
+  public String[] getChildren() {
+    return children;
   }
 
   /**
@@ -392,6 +445,12 @@ public abstract class ArgotFile implements FileBase {
     System.out.println();
     System.out.println("Version: " + version);
     System.out.println("Date: " + date);
+    System.out.println("Parent: " + parent);
+    System.out.print("Children: ");
+    for(int i = 0; i < children.length; i++) {
+      System.out.print(children[i] + ", ");
+    }
+    System.out.println();
 
     // // Raw Data
     // System.out.println("RAW DATA");
