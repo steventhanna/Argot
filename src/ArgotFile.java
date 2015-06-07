@@ -249,4 +249,27 @@ public abstract class ArgotFile implements FileBase {
     extractSee();
     extractDate();
   }
+
+  /**
+  * Print all relevant information
+  */
+  public void printInfo() {
+    System.out.println("Filename: " + filename);
+    System.out.println("Path: " + path);
+    System.out.println("Class: " + classname);
+    System.out.println("Extension: " + extension);
+    System.out.print("Author: ");
+    for(int i = 0; i < author.length; i++) {
+      System.out.print(author[i] + ", ");
+    }
+    System.out.println();
+    System.out.print("See: ");
+    for(int i = 0; i < see.length; i++) {
+      System.out.print(see[i] + ", ");
+    }
+    System.out.println();
+    System.out.println("Version: " + version);
+    System.out.println("Date: " + date);
+  }
+
 }
