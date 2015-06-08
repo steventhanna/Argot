@@ -17,85 +17,17 @@ import java.io.IOException;
 public class JavaMethod extends Method {
 
   /**
-  * @desciption Name of method as a String
+  * Constructor for JavaMethod
+  * @param ArrayList<String> c - entire contentes of the method
   */
-  private String name;
-
-  /**
-  * @description Method signature
-  */
-  private String methodSignature;
-
-  /**
-  * @desciption Parameters of method in String array
-  */
-  private String[] parameters;
+  public JavaMethod(ArrayList<String> c) {
+    super(c);
+  }
 
   /**
   * @desciption Return type of method in type String as specified by method signature itself
   */
   private String returnType;
-
-  /**
-  * @desciption Description of the method in String array
-  */
-  private String[] desciption;
-
-  /**
-  * @description Date of method
-  */
-  private String date;
-
-  /**
-  * @description What is returned from method as a String
-  */
-  private String returned;
-
-  /**
-  * @description What method throws as a String
-  */
-  private String thrown;
-
-
-  /**
-  * @description Exceptions of the method
-  */
-  private String exception;
-
-  /**
-  * @description See related as a String array
-  */
-  private String[] see;
-
-  /**
-  * @description Notes as a String array
-  */
-  private String[] note;
-
-  /**
-  * @description Body of the method
-  */
-  public ArrayList<String> body = new ArrayList<String>();
-
-  /**
-  * @description Header of the Method
-  */
-  public ArrayList<String> header = new ArrayList<String>();
-
-  /**
-  * @description Entire contents of the method
-  */
-  public ArrayList<String> contents = new ArrayList<String>();
-
-  /**
-  * Constructor for JavaMethod
-  * @param ArrayList<String> c - entire contentes of the method
-  */
-  public JavaMethod(ArrayList<String> c) {
-    contents = c;
-    extractHeader();
-    System.out.println(methodSignature);
-  }
 
   /**
   * Extract the header from the method
@@ -114,7 +46,7 @@ public class JavaMethod extends Method {
       // Cannot locate the method... Error
       System.out.println("Method does not exist / Cannot be found");
     } else {
-      methodSignature =  contents.get(7);
+      setMethodSignature(contents.get(7));
       // Take into account styling of user...
       // If they put the bracket below the method
       if(contents.get(occurence).length() == 1) {
@@ -132,7 +64,7 @@ public class JavaMethod extends Method {
   * Use header to get the method... Should be the last line
   */
   public void extractSignature() {
-      methodSignature = header.get(header.size());
+      setMethodSignature(header.get(header.size()));
   }
 
   /**

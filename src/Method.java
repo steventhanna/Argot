@@ -15,6 +15,10 @@ import java.io.IOException;
 
 public abstract class Method {
 
+  public Method(ArrayList<String> contents) {
+    this.contents = contents;
+  }
+
   /**
   * @desciption Name of method as a String
   */
