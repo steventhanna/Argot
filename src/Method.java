@@ -24,6 +24,7 @@ public abstract class Method {
     extractHeader();
     extractSignature();
     extractBody();
+    extractDescription();
   }
 
   /**
@@ -402,7 +403,19 @@ public abstract class Method {
         for(int i = 0; i < description.length; i++) {
           description[i] = temp.get(i);
         }
-
+      }
+    }  else {
+      // Look through from the second line, to the tag
+      ArrayList<String> temp = new ArrayList<String>();
+      for(int i = 0; i < tagPosition; i++) {
+        // Ignore line breaks
+        if(header.get(i).substring(3).length() != 0) {
+          temp.add(header.get(i));
+        }
+      }
+      description = new String[temp.size()];
+      for(int i = 0; i < description.length; i++) {
+        description[i] = temp.get(i);
       }
     }
   }
