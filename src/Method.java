@@ -356,9 +356,55 @@ public abstract class Method {
   * Extract the description from the methhod header
   * @note Does not support multi-line... Will always return with one element in
   * array
+  * @note Technically, descriptions happen before any tags begin...
   */
   public void extractDescription() {
-    description = extractMultiple("@description");
+    // description = extractMultiple("@description");
+    // Determine if description exists
+    // Determine first position of tag
+    int tagPosition = -1;
+    // Check to see if line contains data
+    boolean[] data = new boolean[header.size()];
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains("@")) {
+        tagPosition = i;
+        if(header.get(i).length() > 2) {
+          data[i] = true;
+        } else {
+          data[i] = false;
+        }
+        break;
+      }
+    }
+    // Determine if anything in data is true
+    boolean anythingTrue = false;
+    for(int i = 0; i < data.length; i++) {
+      if(data[i]) {
+        anythingTrue = true;
+        break;
+      }
+    }
+    if(tagPosition == -1) {
+      // There might not be any tags, but possibly a description
+      if(!anythingTrue) {
+        // Nothing there... Assume no description
+        System.out.println("No description found");
+        description = null;
+      } else {
+        ArrayList<String> temp = new ArrayList<String>();
+        // Ignore line breaks
+        for(int i = 0; i < header.size(); i++) {
+          if(header.get(i).substring(3).length() != 0) {
+              temp.add(header.get(i).substring(3));
+          }
+        }
+        description = new String[temp.size()];
+        for(int i = 0; i < description.length; i++) {
+          description[i] = temp.get(i);
+        }
+
+      }
+    }
   }
 
   /**
