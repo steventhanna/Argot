@@ -396,7 +396,7 @@ public abstract class Method {
         // Ignore line breaks
         for(int i = 0; i < header.size(); i++) {
           if(header.get(i).substring(3).length() != 0) {
-              temp.add(header.get(i).substring(3));
+              temp.add(header.get(i).substring(2));
           }
         }
         description = new String[temp.size()];
@@ -410,7 +410,7 @@ public abstract class Method {
       for(int i = 0; i < tagPosition; i++) {
         // Ignore line breaks
         if(header.get(i).substring(3).length() != 0) {
-          temp.add(header.get(i));
+          temp.add(header.get(i).substring(2));
         }
       }
       description = new String[temp.size()];
