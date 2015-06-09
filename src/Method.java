@@ -311,4 +311,19 @@ public abstract class Method {
   public void extractReturned() {
     returned = extract("@return");
   }
+
+  /**
+  * Extract the date from the method header
+  */
+  public void extractDate() {
+    date = extract("@date");
+  }
+
+  /**
+  * Extract what method throws from header
+  */
+  public void extractThrown() {
+    thrown = extract("@thrown");
+  }
+  
 }
