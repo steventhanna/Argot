@@ -283,9 +283,11 @@ public abstract class Method {
   }
 
   /**
-  * Extract the the text following the tag
+  * Extract the the text following the tag from the header
+  * @note Only extracts a sinlge occurence
+  * @param String tag - the tag to be extracted
   */
-  public String extract(String tag) {
+  public String extractSingle(String tag) {
     // Search header for tag
     int location = -1;
     for(int i = 0; i < header.size(); i++) {
@@ -299,31 +301,99 @@ public abstract class Method {
     } else {
       // Strip tag
       String temp = header.get(location);
-      temp = temp.substring(3 + tag.length());
-      return temp;
+      return temp.substring(3 + tag.length());
     }
     return null;
+  }
+
+  /**
+  * Extract the text following the tag from param text
+  * @note Only extracts a single occurence
+  * @param String tag - the tag to be extracted
+  * @param String content - the content from which the tag is extracted
+  */
+  public String extractSingle(String tag, String content) {
+    // Search content for tag
+    if(content.contains(tag)) {
+      return content.substring(3 + tag.length());
+    } else {
+      System.out.println(tag + " does not exist");
+      return null;
+    }
+  }
+
+  /**
+  * Extract multiple lines of text following the tag
+  * @note Extracts one and multiple occurences
+  */
+  public String[] extractMultiple(String tag) {
+    ArrayList<String> temp = new ArrayList<String>();
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains(tag)) {
+        temp.add(header.get(i));
+      }
+    }
+    if(header.size() > 0) {
+      String[] array = new String[temp.size()];
+      for(int i = 0; i < array.length; i++) {
+        array[i] = extractSingle(tag, temp.get(i));
+      }
+      return array;
+    } else {
+      System.out.println(tag + " does not exist");
+      return null;
+    }
+  }
+
+  /**
+  * Extract parameters from method header
+  */
+  public void extractParameters() {
+    parameters = extractMultiple("@param");
+  }
+
+  /**
+  * Extract the description from the methhod header
+  * @note Does not support multi-line... Will always return with one element in
+  * array
+  */
+  public void extractDescription() {
+    description = extractMultiple("@description");
   }
 
   /**
   * Extract the returned tag from method header
   */
   public void extractReturned() {
-    returned = extract("@return");
+    returned = extractSingle("@return");
   }
 
   /**
   * Extract the date from the method header
   */
   public void extractDate() {
-    date = extract("@date");
+    date = extractSingle("@date");
   }
 
   /**
   * Extract what method throws from header
   */
   public void extractThrown() {
-    thrown = extract("@thrown");
+    thrown = extractSingle("@thrown");
   }
-  
+
+  /**
+  * Extract see from the header
+  */
+  public void extractSee() {
+    see = extractMultiple("@see");
+  }
+
+  /**
+  * Extract note from the header
+  */
+  public void extractNote() {
+    note = extractMultiple("@note");
+  }
+
 }
