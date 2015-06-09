@@ -347,6 +347,46 @@ public abstract class Method {
   }
 
   /**
+  * Find line difference between tags
+  * @param String tag - origin tag
+  * @return Int - number of lines in between tags or ending
+  * @note Can only be used so far with tags with one occurence
+  */
+  public int tagDifference(String tag) {
+    // Get tag line number
+    int lineNumber = -1;
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains(tag)) {
+        lineNumber = i;
+        break;
+      }
+    }
+    // Error handling
+    if(lineNumber == -1) {
+      System.out.println(tag + " does not exist");
+      return 0;
+    } else {
+      // Find next tag
+      int nextTag = -1;
+      for(int i = lineNumber; i < header.size(); i++) {
+        if(header.get(i).contains("@")) {
+          nextTag = i;
+        }
+      }
+      // Error handling
+      if(nextTag == -1) {
+        // There could be no next tags, but you now just have to check until
+        // the end of the header
+        // You should know the end of the header...
+        int endOfHeader = header.size() - 1; // subtract 1 because of **/ on bottom
+        return endOfHeader - lineNumber;
+      } else {
+        return nextTag - lineNumber;
+      }
+    }
+  }
+
+  /**
   * Extract parameters from method header
   */
   public void extractParameters() {
