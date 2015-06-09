@@ -15,8 +15,15 @@ import java.io.IOException;
 
 public abstract class Method {
 
+  /**
+  * @description Constructor for Method
+  * @param ArrayList<String> contents - contents of method
+  */
   public Method(ArrayList<String> contents) {
     this.contents = contents;
+    extractHeader();
+    extractSignature();
+    extractBody();
   }
 
   /**
@@ -253,7 +260,7 @@ public abstract class Method {
   * Extract the method signature from the rest of the method
   * Use header to get the method... Should be the last line
   */
-  public abstract void exstractSignature();
+  public abstract void extractSignature();
 
   /**
   * Extract the body from the method
@@ -273,5 +280,35 @@ public abstract class Method {
     // Take into account the * space
     int tagLength = tag.length() + 3;
     return s.substring(tagLength);
+  }
+
+  /**
+  * Extract the the text following the tag
+  */
+  public String extract(String tag) {
+    // Search header for tag
+    int location = -1;
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains(tag)) {
+        location = i;
+      }
+    }
+    // Error handling
+    if(location == -1) {
+      System.out.println(tag + " could not be located");
+    } else {
+      // Strip tag
+      String temp = header.get(location);
+      temp = temp.substring(3 + tag.length());
+      return temp;
+    }
+    return null;
+  }
+
+  /**
+  * Extract the returned tag from method header
+  */
+  public void extractReturned() {
+    returned = extract("@return");
   }
 }

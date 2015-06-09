@@ -64,7 +64,7 @@ public class JavaMethod extends Method {
   * Use header to get the method... Should be the last line
   */
   public void extractSignature() {
-      setMethodSignature(header.get(header.size()));
+      setMethodSignature(header.get(header.size() - 1));
   }
 
   /**
