@@ -287,13 +287,13 @@ public abstract class Method {
     extractHeader();
     extractSignature();
     extractBody();
-    extractParameters();
-    extractDescription();
-    extractReturned();
-    extractDate();
-    extractThrown();
-    extractSee();
-    extractNote();
+    // extractParameters();
+    // extractDescription();
+    // extractReturned();
+    // extractDate();
+    // extractThrown();
+    // extractSee();
+    // extractNote();
   }
 
   /**
@@ -302,6 +302,38 @@ public abstract class Method {
   * @note Only extracts a sinlge occurence
   * @param String tag - the tag to be extracted
   */
+  public String extractAgain(String tag) {
+    // Search header for tag
+    int begin = -1;
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains(tag)) {
+        begin = i;
+      }
+    }
+    System.out.println("Begin: " + begin);
+    // Determine if multi-line
+    int end = tagDifference(tag) + begin;
+    System.out.println("End: " + end);
+    // Error handling
+    if(begin == -1) {
+      System.out.println(tag + " could not be located");
+      return null;
+    } else {
+      // Determine if multi-line
+      if(end > begin + 1) {
+        // Multi-line == true
+        String temp = header.get(begin);
+        temp = temp.substring(3 + tag.length()) + " ";
+        for(int i = begin + 1; i < end; i++) {
+          temp += header.get(i).substring(2);
+        }
+        return temp;
+      } else {
+        return header.get(begin).substring(3 + tag.length());
+      }
+    }
+  }
+
   public String extractSingle(String tag) {
     // Search header for tag
     int begin = -1;
@@ -310,26 +342,32 @@ public abstract class Method {
         begin = i;
       }
     }
-    // Determine if multi-line
-    int end = tagDifference(tag);
+    System.out.println(tag + " begins at: " + begin);
+    // Find difference
+    int difference = tagDifference(tag);
+    int end = difference + begin;
+    System.out.println("New tag begins at: " + end);
+
     // Error handling
     if(begin == -1) {
-      System.out.println(tag + " could not be located");
+      System.out.println(tag + " could not be found");
       return null;
     } else {
-      // Determien if multi-line
-      if(end == 1) {
-        // Multi-line == true
-        String temp = header.get(begin);
-        temp = temp.substring(3 + tag.length());
-        for(int i = begin + 1; i < end + 1; i++) {
-          temp += header.get(i).substring(2);
+      // Get first line
+      String temp = header.get(begin).substring(3 + tag.length());
+      // Check if multi-line
+      if(end > begin) {
+        // Add spacing
+        temp += " ";
+        // Iterate through header until end
+        for(int i = begin; i <= end; i++) {
+          temp += header.get(i) + " ";
         }
-        return temp;
       } else {
-        return header.get(begin).substring(3 + tag.length());
+        return temp;
       }
     }
+    return null;
   }
 
   /**
@@ -368,46 +406,6 @@ public abstract class Method {
     } else {
       System.out.println(tag + " does not exist");
       return null;
-    }
-  }
-
-  /**
-  * Find line difference between tags
-  * @param String tag - origin tag
-  * @return Int - number of lines in between tags or ending
-  * @note Can only be used so far with tags with one occurence
-  */
-  public int tagDifference(String tag) {
-    // Get tag line number
-    int lineNumber = -1;
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains(tag)) {
-        lineNumber = i;
-        break;
-      }
-    }
-    // Error handling
-    if(lineNumber == -1) {
-      System.out.println(tag + " does not exist");
-      return 0;
-    } else {
-      // Find next tag
-      int nextTag = -1;
-      for(int i = lineNumber; i < header.size(); i++) {
-        if(header.get(i).contains("@")) {
-          nextTag = i;
-        }
-      }
-      // Error handling
-      if(nextTag == -1) {
-        // There could be no next tags, but you now just have to check until
-        // the end of the header
-        // You should know the end of the header...
-        int endOfHeader = header.size() - 1; // subtract 1 because of **/ on bottom
-        return endOfHeader - lineNumber;
-      } else {
-        return nextTag - lineNumber;
-      }
     }
   }
 
@@ -521,3 +519,4 @@ public abstract class Method {
   }
 
 }
+//

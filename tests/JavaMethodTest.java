@@ -1,9 +1,13 @@
 /**
 * Remove the tag from a specified string.
 * The tag must be included within the string
+* @thrown test test test 12345
+* 123455123
 * @param String tag - the tag to be removed
 * @param String s - the String that the tag must be removed from
-* @return String - the string sans tag
+* this is a test for the second line of a param
+* @return String - the string sans tag tests
+* test test test return
 * @date 1/2/12
 */
 public String removeTag(String tag, String s) {
