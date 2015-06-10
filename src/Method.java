@@ -284,6 +284,22 @@ public abstract class Method {
   }
 
   /**
+  * Extract all information from a method
+  */
+  public void extractInfo() {
+    extractHeader();
+    extractSignature();
+    extractBody();
+    extractParameters();
+    extractDescription();
+    extractReturned();
+    extractDate();
+    extractThrown();
+    extractSee();
+    extractNote();
+  }
+
+  /**
   * Extract the the text following the tag from the header
   * @note Only extracts a sinlge occurence
   * @param String tag - the tag to be extracted
