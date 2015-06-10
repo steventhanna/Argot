@@ -287,11 +287,11 @@ public abstract class Method {
     extractHeader();
     extractSignature();
     extractBody();
-    // extractParameters();
+    extractParameters();
     // extractDescription();
     // extractReturned();
     // extractDate();
-    // extractThrown();
+    extractThrown();
     // extractSee();
     // extractNote();
   }
@@ -312,7 +312,7 @@ public abstract class Method {
     }
     System.out.println("Begin: " + begin);
     // Determine if multi-line
-    int end = tagDifference(tag) + begin;
+    int end = nextTag(tag) + begin;
     System.out.println("End: " + end);
     // Error handling
     if(begin == -1) {
@@ -344,7 +344,7 @@ public abstract class Method {
     }
     System.out.println(tag + " begins at: " + begin);
     // Find difference
-    int difference = tagDifference(tag);
+    int difference = nextTag(tag);
     int end = difference + begin;
     System.out.println("New tag begins at: " + end);
 
@@ -360,7 +360,7 @@ public abstract class Method {
         // Add spacing
         temp += " ";
         // Iterate through header until end
-        for(int i = begin; i <= end; i++) {
+        for(int i = begin; i < end; i++) {
           temp += header.get(i) + " ";
         }
       } else {
@@ -406,6 +406,49 @@ public abstract class Method {
     } else {
       System.out.println(tag + " does not exist");
       return null;
+    }
+  }
+
+  /**
+  * Find the line number of the next tag start
+  * @param String tag - the origin tag
+  * @return int - line number of the next tag start
+  */
+  public int nextTag(String tag) {
+    // Find line number of tag
+    int origin = -1;
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains(tag)) {
+        origin = i;
+        break;
+      }
+    }
+    System.out.println("Origin: " + origin);
+    // Error handling
+    if(origin == -1) {
+      // Tag does not exist
+      System.out.println(tag + " does not exist");
+      return -1;
+    } else {
+      // Find next tag
+      int endTag = -1;
+      for(int i = origin + 1; i < header.size(); i++) {
+        String temp = header.get(i);
+        if(temp.indexOf("@") == 2) {
+          endTag = i;
+          break;
+        }
+      }
+      // Error handle
+      if(endTag == -1) {
+        // No end tag... Go to end of header
+        int size = header.size() - 1;
+        System.out.println("Header: " + size);
+        return size;
+      } else {
+        System.out.println("End tag: " + endTag);
+        return endTag - 1;
+      }
     }
   }
 
