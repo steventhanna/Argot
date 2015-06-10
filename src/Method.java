@@ -21,10 +21,7 @@ public abstract class Method {
   */
   public Method(ArrayList<String> contents) {
     this.contents = contents;
-    extractHeader();
-    extractSignature();
-    extractBody();
-    extractDescription();
+    extractInfo();
   }
 
   /**
@@ -301,26 +298,38 @@ public abstract class Method {
 
   /**
   * Extract the the text following the tag from the header
+  * @note Can extract multiple lines of text
   * @note Only extracts a sinlge occurence
   * @param String tag - the tag to be extracted
   */
   public String extractSingle(String tag) {
     // Search header for tag
-    int location = -1;
+    int begin = -1;
     for(int i = 0; i < header.size(); i++) {
       if(header.get(i).contains(tag)) {
-        location = i;
+        begin = i;
       }
     }
+    // Determine if multi-line
+    int end = tagDifference(tag);
     // Error handling
-    if(location == -1) {
+    if(begin == -1) {
       System.out.println(tag + " could not be located");
+      return null;
     } else {
-      // Strip tag
-      String temp = header.get(location);
-      return temp.substring(3 + tag.length());
+      // Determien if multi-line
+      if(end == 1) {
+        // Multi-line == true
+        String temp = header.get(begin);
+        temp = temp.substring(3 + tag.length());
+        for(int i = begin + 1; i < end + 1; i++) {
+          temp += header.get(i).substring(2);
+        }
+        return temp;
+      } else {
+        return header.get(begin).substring(3 + tag.length());
+      }
     }
-    return null;
   }
 
   /**
