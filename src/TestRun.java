@@ -36,13 +36,14 @@ public class TestRun {
       System.out.println(method.getReturned());
       System.out.println(method.getThrown());
       // System.out.println(method.tagDifference("@thrown"));
-      // String[] temp = method.getParameters();
-      // for(int i = 0; i < temp.length; i++) {
-      //   System.out.println(temp[i]);
-      // }
+      String[] temp = method.getParameters();
+      for(int i = 0; i < temp.length; i++) {
+        System.out.println(temp[i]);
+      }
       // System.out.println(method.getDate());
       // for(int i = 0; i < method.header.size(); i++) {
       //   System.out.println(method.header.get(i));
       // }
   }
 }
+//

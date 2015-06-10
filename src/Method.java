@@ -288,12 +288,12 @@ public abstract class Method {
     extractSignature();
     extractBody();
     extractParameters();
-    // extractDescription();
-    // extractReturned();
-    // extractDate();
+    extractDescription();
+    extractReturned();
+    extractDate();
     extractThrown();
-    // extractSee();
-    // extractNote();
+    extractSee();
+    extractNote();
   }
 
   /**
@@ -342,11 +342,10 @@ public abstract class Method {
         begin = i;
       }
     }
-    System.out.println(tag + " begins at: " + begin);
-    // Find difference
-    int difference = nextTag(tag);
-    int end = difference + begin;
-    System.out.println("New tag begins at: " + end);
+    // System.out.println(tag + " begins at: " + begin);
+    // Get next tag
+    int nextTag = nextTag(tag);
+    // System.out.println("New tag begins at: " + nextTag);
 
     // Error handling
     if(begin == -1) {
@@ -356,18 +355,18 @@ public abstract class Method {
       // Get first line
       String temp = header.get(begin).substring(3 + tag.length());
       // Check if multi-line
-      if(end > begin) {
+      if(nextTag > begin) {
         // Add spacing
         temp += " ";
-        // Iterate through header until end
-        for(int i = begin; i < end; i++) {
+        // Iterate through header until nextTag
+        for(int i = begin; i < nextTag; i++) {
           temp += header.get(i) + " ";
         }
+        return temp;
       } else {
         return temp;
       }
     }
-    return null;
   }
 
   /**
@@ -423,7 +422,7 @@ public abstract class Method {
         break;
       }
     }
-    System.out.println("Origin: " + origin);
+    // System.out.println("Origin: " + origin);
     // Error handling
     if(origin == -1) {
       // Tag does not exist
@@ -434,7 +433,7 @@ public abstract class Method {
       int endTag = -1;
       for(int i = origin + 1; i < header.size(); i++) {
         String temp = header.get(i);
-        if(temp.indexOf("@") == 2) {
+        if(temp.indexOf("@") > 0) {
           endTag = i;
           break;
         }
@@ -443,10 +442,11 @@ public abstract class Method {
       if(endTag == -1) {
         // No end tag... Go to end of header
         int size = header.size() - 1;
-        System.out.println("Header: " + size);
+        // System.out.println("Header: " + size);
         return size;
       } else {
-        System.out.println("End tag: " + endTag);
+        // System.out.println("Next tag: " + (endTag - 1));
+        // System.out.println("Next tag: " + header.get(endTag));
         return endTag - 1;
       }
     }
@@ -544,6 +544,7 @@ public abstract class Method {
   * Extract what method throws from header
   */
   public void extractThrown() {
+    System.out.println("thrown: " + extractSingle("@thrown"));
     thrown = extractSingle("@thrown");
   }
 
