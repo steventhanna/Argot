@@ -287,13 +287,13 @@ public abstract class Method {
     extractHeader();
     extractSignature();
     extractBody();
-    extractParameters();
-    extractDescription();
-    extractReturned();
-    extractDate();
+    // extractParameters();
+    // extractDescription();
+    // extractReturned();
+    // extractDate();
     extractThrown();
-    extractSee();
-    extractNote();
+    // extractSee();
+    // extractNote();
   }
 
   /**
@@ -310,10 +310,10 @@ public abstract class Method {
         begin = i;
       }
     }
-    System.out.println("Begin: " + begin);
+    // System.out.println("Begin: " + begin);
     // Determine if multi-line
     int end = nextTag(tag) + begin;
-    System.out.println("End: " + end);
+    // System.out.println("End: " + end);
     // Error handling
     if(begin == -1) {
       System.out.println(tag + " could not be located");
@@ -354,14 +354,18 @@ public abstract class Method {
     } else {
       // Get first line
       String temp = header.get(begin).substring(3 + tag.length());
+      // System.out.println("Temp: " + temp);
       // Check if multi-line
       if(nextTag > begin) {
         // Add spacing
         temp += " ";
         // Iterate through header until nextTag
-        for(int i = begin; i < nextTag; i++) {
-          temp += header.get(i) + " ";
+        for(int i = begin + 1; i <= nextTag; i++) {
+          // Slice off beginning of header
+          String sliced = header.get(i).substring(2) + " ";
+          temp += sliced;
         }
+        // System.out.println("End of stream: " + temp);
         return temp;
       } else {
         return temp;
@@ -544,7 +548,7 @@ public abstract class Method {
   * Extract what method throws from header
   */
   public void extractThrown() {
-    System.out.println("thrown: " + extractSingle("@thrown"));
+    // System.out.println("thrown: " + extractSingle("@thrown"));
     thrown = extractSingle("@thrown");
   }
 
