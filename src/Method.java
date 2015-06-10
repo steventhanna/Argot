@@ -287,13 +287,13 @@ public abstract class Method {
     extractHeader();
     extractSignature();
     extractBody();
-    // extractParameters();
-    // extractDescription();
-    // extractReturned();
-    // extractDate();
+    extractParameters();
+    extractDescription();
+    extractReturned();
+    extractDate();
     extractThrown();
-    // extractSee();
-    // extractNote();
+    extractSee();
+    extractNote();
   }
 
   /**
@@ -302,38 +302,6 @@ public abstract class Method {
   * @note Only extracts a sinlge occurence
   * @param String tag - the tag to be extracted
   */
-  public String extractAgain(String tag) {
-    // Search header for tag
-    int begin = -1;
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains(tag)) {
-        begin = i;
-      }
-    }
-    // System.out.println("Begin: " + begin);
-    // Determine if multi-line
-    int end = nextTag(tag) + begin;
-    // System.out.println("End: " + end);
-    // Error handling
-    if(begin == -1) {
-      System.out.println(tag + " could not be located");
-      return null;
-    } else {
-      // Determine if multi-line
-      if(end > begin + 1) {
-        // Multi-line == true
-        String temp = header.get(begin);
-        temp = temp.substring(3 + tag.length()) + " ";
-        for(int i = begin + 1; i < end; i++) {
-          temp += header.get(i).substring(2);
-        }
-        return temp;
-      } else {
-        return header.get(begin).substring(3 + tag.length());
-      }
-    }
-  }
-
   public String extractSingle(String tag) {
     // Search header for tag
     int begin = -1;
@@ -373,9 +341,25 @@ public abstract class Method {
     }
   }
 
+  public String[] extractMultiple(String tag) {
+    // Search header for tags
+    ArrayList<String> tags = new ArrayList<String>();
+    for(int i = 0; i < header.size(); i++) {
+      if(header.get(i).contains(tag)) {
+        tags.add(header.get(i));
+      }
+    }
+    String[] temp = new String[tags.size()];
+    for(int i = 0; i < temp.length; i++) {
+      temp[i] = extractSingle(tag, tags.get(i));
+    }
+
+  }
+
   /**
   * Extract the text following the tag from param text
   * @note Only extracts a single occurence
+  * @note Removes the tag.  Results unknown if tag is empty string
   * @param String tag - the tag to be extracted
   * @param String content - the content from which the tag is extracted
   */
@@ -393,7 +377,7 @@ public abstract class Method {
   * Extract multiple lines of text following the tag
   * @note Extracts one and multiple occurences
   */
-  public String[] extractMultiple(String tag) {
+  public String[] extractMultiple1(String tag) {
     ArrayList<String> temp = new ArrayList<String>();
     for(int i = 0; i < header.size(); i++) {
       if(header.get(i).contains(tag)) {
