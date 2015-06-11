@@ -288,12 +288,12 @@ public abstract class Method {
     extractSignature();
     extractBody();
     extractParameters();
-    extractDescription();
-    extractReturned();
-    extractDate();
-    extractThrown();
-    extractSee();
-    extractNote();
+    // extractDescription();
+    // extractReturned();
+    // extractDate();
+    // extractThrown();
+    // extractSee();
+    // extractNote();
   }
 
   /**
@@ -341,37 +341,64 @@ public abstract class Method {
     }
   }
 
-  public String[] extractMultiple(String tag) {
-    // Search header for tags
-    ArrayList<String> tags = new ArrayList<String>();
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains(tag)) {
-        tags.add(header.get(i));
-      }
-    }
-    String[] temp = new String[tags.size()];
-    for(int i = 0; i < temp.length; i++) {
-      temp[i] = extractSingle(tag, tags.get(i));
-    }
-
-  }
-
   /**
   * Extract the text following the tag from param text
   * @note Only extracts a single occurence
   * @note Removes the tag.  Results unknown if tag is empty string
   * @param String tag - the tag to be extracted
   * @param String content - the content from which the tag is extracted
+  * @param booelan t - if a tag exists, extract it
   */
-  public String extractSingle(String tag, String content) {
+  public String extractSingle(String tag, String content, boolean t) {
     // Search content for tag
     if(content.contains(tag)) {
-      return content.substring(3 + tag.length());
+      if(t) {
+        return content.substring(3 + tag.length());
+      } else {
+        return content.substring(3);
+      }
     } else {
       System.out.println(tag + " does not exist");
       return null;
     }
   }
+
+
+  public String[] extractMultiple(String tag) {
+    ArrayList<String> temp = new ArrayList<String>();
+    int totalTags = 0;
+    // Find tags
+    for(int i = 0; i < header.size(); i++) {
+      // Tag exists
+      if(header.get(i).contains(tag)) {
+        temp.add(header.get(i));
+        totalTags++;
+        // Check for multi-line
+        if(nextLineEscapePosition(i) != i) {
+          // Multi-line == true
+          for(int j = i; j < nextLineEscapePosition(i); j++) {
+            temp.add(header.get(j));
+          }
+        }
+      }
+    }
+    // Declare array
+    String[] array = new String[totalTags];
+    // Combine the multi-line
+    for(int i = 0; i < array.length; i++) {
+      for(int j = 0; j < temp.size(); j++) {
+        if(temp.get(j).contains("@")) {
+          array[i] = extractSingle(tag, temp.get(j), true);
+        } else {
+
+        }
+      }
+    }
+
+
+
+  }
+
 
   /**
   * Extract multiple lines of text following the tag
@@ -379,21 +406,65 @@ public abstract class Method {
   */
   public String[] extractMultiple1(String tag) {
     ArrayList<String> temp = new ArrayList<String>();
+    ArrayList<Integer> position = new ArrayList<Integer>();
     for(int i = 0; i < header.size(); i++) {
       if(header.get(i).contains(tag)) {
+        int p = i;
         temp.add(header.get(i));
+        // ERROR LIES HERE
+        int nextPosition = nextLineEscapePosition(i);
+        if(nextPosition == i) {
+          temp.add(header.get(i));
+        } else {
+          for(int j = i; j > nextPosition; j++) {
+            temp.add(header.get(j));
+          }
+        }
+
+        // END ERROR LIES
+        p = i;
+        position.add(i);
       }
     }
-    if(header.size() > 0) {
+    // Look inside header for debug
+    for(int i = 0; i < temp.size(); i++) {
+      System.out.println(temp.get(i));
+    }
+    for(int i = 0; i < position.size(); i++) {
+      System.out.println(position.get(i));
+    }
+
+    if(temp.size() > 0) {
       String[] array = new String[temp.size()];
       for(int i = 0; i < array.length; i++) {
-        array[i] = extractSingle(tag, temp.get(i));
+        // int x = position.get(i);
+        array[i] = extractSingle(tag, temp.get(i), true);
+        // System.out.println(array[i] + " " + array.length);
+        // Get end position
+
+        System.out.println(array[i]);
       }
       return array;
     } else {
       System.out.println(tag + " does not exist");
       return null;
     }
+  }
+
+  public boolean nextLineContainsEscape(int position) {
+    if(header.get(position).contains("@")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public int nextLineEscapePosition(int startingPosition) {
+    int endPosition = startingPosition;
+    while(!header.get(endPosition).contains("@")) {
+      endPosition++;
+    }
+    return endPosition;
   }
 
   /**
