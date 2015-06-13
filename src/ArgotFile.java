@@ -20,6 +20,7 @@ public abstract class ArgotFile implements FileBase {
     seperateClassnameExtension();
     read();
   }
+  /** @end */
 
   /**
   * @description Absolute path of file in type String
@@ -124,6 +125,7 @@ public abstract class ArgotFile implements FileBase {
   public String getFilename() {
     return filename;
   }
+  /** @end */
 
   /**
   * Get Complete File Path
@@ -132,6 +134,7 @@ public abstract class ArgotFile implements FileBase {
   public String getPath() {
     return path;
   }
+  /** @end */
 
   /**
   * Get extension
@@ -140,6 +143,7 @@ public abstract class ArgotFile implements FileBase {
   public String getExtension() {
     return extension;
   }
+  /** @end */
 
   /**
   * Get Classname
@@ -148,6 +152,7 @@ public abstract class ArgotFile implements FileBase {
   public String getClassname() {
     return classname;
   }
+  /** @end */
 
   /**
   * Get author
@@ -156,6 +161,7 @@ public abstract class ArgotFile implements FileBase {
   public String[] getAuthor() {
     return author;
   }
+  /** @end */
 
   /**
   * Get date
@@ -164,6 +170,7 @@ public abstract class ArgotFile implements FileBase {
   public String getDate() {
     return date;
   }
+  /** @end */
 
   /**
   * Get version
@@ -172,6 +179,7 @@ public abstract class ArgotFile implements FileBase {
   public String getVersion() {
     return version;
   }
+  /** @end */
 
   /**
   * Get see
@@ -180,6 +188,7 @@ public abstract class ArgotFile implements FileBase {
   public String[] getSee() {
     return see;
   }
+  /** @end */
 
   /**
   * Get class description
@@ -188,6 +197,7 @@ public abstract class ArgotFile implements FileBase {
   public String[] getDescription() {
     return description;
   }
+  /** @end */
 
   /**
   * Get Parent
@@ -196,6 +206,7 @@ public abstract class ArgotFile implements FileBase {
   public String getParent() {
     return parent;
   }
+  /** @end */
 
   /**
   * Get Children
@@ -204,6 +215,7 @@ public abstract class ArgotFile implements FileBase {
   public String[] getChildren() {
     return children;
   }
+  /** @end */
 
   /**
   * Seperates the extension and the classname from the absolute path
@@ -218,6 +230,7 @@ public abstract class ArgotFile implements FileBase {
     extension = complete.substring(periodPosition + 1);
     classname = complete.substring(0, periodPosition);
   }
+  /** @end */
 
   /**
   * Reads the contents of a file
@@ -236,6 +249,7 @@ public abstract class ArgotFile implements FileBase {
     }
     return null;
   }
+  /** @end */
 
   /**
   * Remove the tag from a specified string.
@@ -250,12 +264,14 @@ public abstract class ArgotFile implements FileBase {
     int tagLength = tag.length() + 3;
     return s.substring(tagLength);
   }
+  /** @end */
 
   /**
   * Strip all exterior comments out of the header, so all that remains are the
   * standard java docs.  Then I do not have to rewrite different shit all the time
   */
   public abstract void extractHeader();
+  /** @end */
 
   /**
   * Extact the authors of the class
@@ -276,6 +292,7 @@ public abstract class ArgotFile implements FileBase {
       System.out.println(author[i]);
     }
   }
+  /** @end */
 
   /**
   * Extract the user class
@@ -289,6 +306,7 @@ public abstract class ArgotFile implements FileBase {
       }
     }
   }
+  /** @end */
 
   /**
   * Extract version
@@ -300,6 +318,7 @@ public abstract class ArgotFile implements FileBase {
       }
     }
   }
+  /** @end */
 
   /**
   * Extrat see
@@ -316,6 +335,7 @@ public abstract class ArgotFile implements FileBase {
       see[i] = removeTag("@see", seeList.get(i));
     }
   }
+  /** @end */
 
   /**
   * Extract the date of the class
@@ -328,6 +348,7 @@ public abstract class ArgotFile implements FileBase {
         }
     }
   }
+  /** @end */
 
   /**
   * Extract the child / children of the class
@@ -345,6 +366,7 @@ public abstract class ArgotFile implements FileBase {
       children[i] = temp.get(i);
     }
   }
+  /** @end */
 
   /**
   * Extract the parent of the class
@@ -356,6 +378,7 @@ public abstract class ArgotFile implements FileBase {
       }
     }
   }
+  /** @end */
 
   /**
   * Check a specific line for the escape character in the header
@@ -370,6 +393,7 @@ public abstract class ArgotFile implements FileBase {
       return line;
     }
   }
+  /** @end */
 
   /**
   * Extract the description of the class
@@ -412,6 +436,7 @@ public abstract class ArgotFile implements FileBase {
       }
     }
   }
+  /** @end */
 
   /**
   * Combined all data extraction into one method
@@ -426,6 +451,7 @@ public abstract class ArgotFile implements FileBase {
     extractChild();
     extractParent();
   }
+  /** @end */
 
   /**
   * Print all relevant information
@@ -471,16 +497,19 @@ public abstract class ArgotFile implements FileBase {
     //   System.out.println(body.get(i));
     // }
   }
+  /** @end */
 
   /**
   * Extract body
   */
   public abstract void extractBody();
+  /** @end */
 
   /**
   * Recognize a method in a given block of code
   */
   // TODO Make new Method class with common method shit
   public abstract void extractMethods();
+  /** @end */
 
 }

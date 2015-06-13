@@ -26,6 +26,7 @@ public class JavaFile extends ArgotFile {
     harvestHeaderData();
     extractBody();
   }
+  /** @end */
 
   /**
   * Extract the header from the java doc
@@ -58,6 +59,7 @@ public class JavaFile extends ArgotFile {
       }
     }
   }
+  /** @end */
 
   /**
   * Extract body
@@ -110,4 +112,5 @@ public class JavaFile extends ArgotFile {
 
 
   }
+  /** @end */
 }

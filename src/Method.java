@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public abstract class Method {
 
+
   /**
   * @description Constructor for Method
   * @param ArrayList<String> contents - contents of method
@@ -23,6 +24,7 @@ public abstract class Method {
     this.contents = contents;
     extractInfo();
   }
+  /** @end */
 
   /**
   * @desciption Name of method as a String
@@ -96,6 +98,7 @@ public abstract class Method {
   public String getName() {
     return name;
   }
+  /** @end */
 
   /**
   * Set method name
@@ -104,6 +107,7 @@ public abstract class Method {
   public void setName(String name) {
     this.name = name;
   }
+  /** @end */
 
   /**
   * Get method signature
@@ -112,6 +116,7 @@ public abstract class Method {
   public String getMethodSignature() {
     return methodSignature;
   }
+  /** @end */
 
   /**
   * Set method signature
@@ -120,6 +125,7 @@ public abstract class Method {
   public void setMethodSignature(String methodSignature) {
     this.methodSignature = methodSignature;
   }
+  /** @end */
 
   /**
   * Get parameters
@@ -128,6 +134,7 @@ public abstract class Method {
   public String[] getParameters() {
     return parameters;
   }
+  /** @end */
 
   /**
   * Set parameters
@@ -136,6 +143,7 @@ public abstract class Method {
   public void setParameters(String[] params) {
     parameters = params;
   }
+  /** @end */
 
   /**
   * Get description
@@ -144,6 +152,7 @@ public abstract class Method {
   public String[] getDescription() {
     return description;
   }
+  /** @end */
 
   /**
   * Set description
@@ -152,6 +161,7 @@ public abstract class Method {
   public void setDescription(String[] description) {
     this.description = description;
   }
+  /** @end */
 
   /**
   * Get date
@@ -160,6 +170,7 @@ public abstract class Method {
   public String getDate() {
     return date;
   }
+  /** @end */
 
   /**
   * Set date
@@ -168,6 +179,7 @@ public abstract class Method {
   public void setDate(String date) {
     this.date = date;
   }
+  /** @end */
 
   /**
   * Get returned
@@ -176,6 +188,7 @@ public abstract class Method {
   public String getReturned() {
     return returned;
   }
+  /** @end */
 
   /**
   * Set returned
@@ -184,6 +197,7 @@ public abstract class Method {
   public void setReturned(String returned) {
     this.returned = returned;
   }
+  /** @end */
 
   /**
   * Get Thrown
@@ -192,6 +206,7 @@ public abstract class Method {
   public String getThrown() {
     return thrown;
   }
+  /** @end */
 
   /**
   * Set thrown
@@ -200,6 +215,7 @@ public abstract class Method {
   public void setThrown(String thrown) {
     this.thrown = thrown;
   }
+  /** @end */
 
   /**
   * Get Exception
@@ -208,6 +224,7 @@ public abstract class Method {
   public String getException() {
     return exception;
   }
+  /** @end */
 
   /**
   * Set exception
@@ -216,6 +233,7 @@ public abstract class Method {
   public void setException(String exception) {
     this.exception = exception;
   }
+  /** @end */
 
   /**
   * Get See
@@ -224,6 +242,7 @@ public abstract class Method {
   public String[] getSee() {
     return see;
   }
+  /** @end */
 
   /**
   * Set see
@@ -232,6 +251,7 @@ public abstract class Method {
   public void setSee(String[] see) {
     this.see = see;
   }
+  /** @end */
 
   /**
   * Get notes
@@ -240,6 +260,7 @@ public abstract class Method {
   public String[] getNote() {
     return note;
   }
+  /** @end */
 
   /**
   * Set notes
@@ -248,23 +269,27 @@ public abstract class Method {
   public void setNote(String[] note) {
     this.note = note;
   }
+  /** @end */
 
   /**
   * Extract the header from the method
   */
   public abstract void extractHeader();
+  /** @end */
 
   /**
   * Extract the method signature from the rest of the method
   * Use header to get the method... Should be the last line
   */
   public abstract void extractSignature();
+  /** @end */
 
   /**
   * Extract the body from the method
   * Harvest everything after the method signature
   */
   public abstract void extractBody();
+  /** @end */
 
   /**
   * Remove the tag from a specified string.
@@ -279,6 +304,7 @@ public abstract class Method {
     int tagLength = tag.length() + 3;
     return s.substring(tagLength);
   }
+  /** @end */
 
   /**
   * Extract all information from a method
@@ -295,6 +321,7 @@ public abstract class Method {
     // extractSee();
     // extractNote();
   }
+  /** @end */
 
   /**
   * Extract the the text following the tag from the header
@@ -340,6 +367,7 @@ public abstract class Method {
       }
     }
   }
+  /** @end */
 
   /**
   * Extract the text following the tag from param text
@@ -396,6 +424,7 @@ public abstract class Method {
     }
     return array;
   }
+  /** @end */
 
   /**
   * Extract multiple lines of text following the tag
@@ -447,6 +476,7 @@ public abstract class Method {
       return null;
     }
   }
+  /** @end */
 
   public boolean nextLineContainsEscape(int position) {
     if(header.get(position).contains("@")) {
@@ -455,6 +485,7 @@ public abstract class Method {
       return false;
     }
   }
+  /** @end */
 
   public int nextLineEscapePosition(int startingPosition) {
     int endPosition = startingPosition;
@@ -463,6 +494,7 @@ public abstract class Method {
     }
     return endPosition;
   }
+  /** @end */
 
   /**
   * Find the line number of the next tag start
@@ -507,6 +539,7 @@ public abstract class Method {
       }
     }
   }
+  /** @end */
 
   /**
   * Extract parameters from method header
@@ -581,6 +614,7 @@ public abstract class Method {
       }
     }
   }
+  /** @end */
 
   /**
   * Extract the returned tag from method header
@@ -588,35 +622,44 @@ public abstract class Method {
   public void extractReturned() {
     returned = extractSingle("@return");
   }
+  /** @end */
 
   /**
   * Extract the date from the method header
   */
   public void extractDate() {
+
     date = extractSingle("@date");
   }
+  /** @end */
 
   /**
   * Extract what method throws from header
   */
   public void extractThrown() {
+
     // System.out.println("thrown: " + extractSingle("@thrown"));
     thrown = extractSingle("@thrown");
   }
+  /** @end */
 
   /**
   * Extract see from the header
   */
   public void extractSee() {
+
     see = extractMultiple("@see");
   }
+  /** @end */
 
   /**
   * Extract note from the header
   */
   public void extractNote() {
+
     note = extractMultiple("@note");
   }
+  /** @end */
 
 }
 //
