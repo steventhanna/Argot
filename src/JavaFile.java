@@ -25,6 +25,10 @@ public class JavaFile extends ArgotFile {
     extractHeader();
     harvestHeaderData();
     extractBody();
+    extractMethods();
+    for(int i = 0; i < methods.size(); i++) {
+      methods.get(i).print();
+    }
   }
   /** @end */
 
@@ -109,16 +113,32 @@ public class JavaFile extends ArgotFile {
         endingPosition.add(i);
       }
     }
-    for(int i = 0; i < startingPosition.size(); i++) {
-      ArrayList<String> content = new ArrayList<String>();
-      int end = endingPosition.get(i);
-      int begin = startingPosition.get(i);
-      while(begin < end) {
-        content.add(body.get(begin));
-        begin++;
+    System.out.println("StartinPosition size: " + startingPosition.size());
+    System.out.println("EndingPosition size: " + endingPosition.size());
+    if(startingPosition.size() > endingPosition.size()) {
+      for(int i = 0; i < endingPosition.size(); i++) {
+        ArrayList<String> content = new ArrayList<String>();
+        int end = endingPosition.get(i);
+        int begin = startingPosition.get(i);
+        while(begin < end - 1) {
+          content.add(body.get(begin));
+          begin++;
+        }
+        methods.add(new JavaMethod(content));
       }
-      methods.add(new JavaMethod(content));
+    } else {
+      for(int i = 0; i < startingPosition.size(); i++) {
+        ArrayList<String> content = new ArrayList<String>();
+        int end = endingPosition.get(i);
+        int begin = startingPosition.get(i);
+        while(begin < end - 1) {
+          content.add(body.get(begin));
+          begin++;
+        }
+        methods.add(new JavaMethod(content));
+      }
     }
+
   }
   /** @end */
 }

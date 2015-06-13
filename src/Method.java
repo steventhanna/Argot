@@ -661,5 +661,13 @@ public abstract class Method {
   }
   /** @end */
 
+  public void print() {
+    System.out.println(getName());
+    for(int i = 0; i < contents.size(); i++) {
+      System.out.println(contents.get(i));
+    }
+  }
+  /** @end */
+
 }
 //
