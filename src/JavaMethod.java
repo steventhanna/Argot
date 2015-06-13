@@ -23,6 +23,7 @@ public class JavaMethod extends Method {
   public JavaMethod(ArrayList<String> c) {
     super(c);
   }
+  /** @end */
 
   /**
   * @desciption Return type of method in type String as specified by method signature itself
@@ -58,6 +59,7 @@ public class JavaMethod extends Method {
       }
     }
   }
+  /** @end */
 
   /**
   * Extract the method signature from the rest of the method
@@ -66,6 +68,7 @@ public class JavaMethod extends Method {
   public void extractSignature() {
       setMethodSignature(header.get(header.size() - 1));
   }
+  /** @end */
 
   /**
   * Extract the body from the method
@@ -77,6 +80,7 @@ public class JavaMethod extends Method {
       body.add(contents.get(i));
     }
   }
+  /** @end */
 
   /**
   * Remove the tag from a specified string.
@@ -91,5 +95,6 @@ public class JavaMethod extends Method {
     int tagLength = tag.length() + 3;
     return s.substring(tagLength);
   }
+  /** @end */
 
 }
