@@ -83,12 +83,31 @@ public class JavaFile extends ArgotFile {
       }
     }
   }
+  /** @end */
 
   /**
-  * Recognize a method in a given block of code
+  * Recognize a method in a given block of code.
+  * Methods will always have a opening an closing parenthese.
+  * Additioanlly, methods should also have a public or a private.
   */
   // TODO Make new Method class with common method shit
   public void extractMethods() {
+    ArrayList<Integer> startingPosition = new ArrayList<Integer>();
+    ArrayList<Integer> lines = new ArrayList<Integer>();
+    // Search through body to find lines that have both ( and ), and public or private
+    for(int i = 0; i < body.size(); i++) {
+      if(body.get(i).equals("}")) {
+        lines.add(i);
+      }
+      if(body.get(i).length() > 0) {
+        if(body.get(i).contains("(") && body.get(i).contains(")")) {
+          if(body.get(i).contains("public") || body.get(i).contains("private")) {
+            startingPosition.add(i);
+          }
+        }
+      }
+    }
+
 
   }
 }

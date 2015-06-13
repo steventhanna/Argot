@@ -57,6 +57,8 @@ Documentation for methods must begin before the method starts.
 
 `@note` - notes any important information relevant to the method
 
+`@end` - ends a method - place after the closing tag of a method
+
 ```java
 /** Provides a sample method for this example.
 * @param String text - text to be returned
@@ -66,6 +68,7 @@ public String sampleMethod(String text) {
   ...
   return text;
 }
+/** @end */
 ```
 
 ### Variables / Instance Variables

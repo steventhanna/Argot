@@ -109,6 +109,12 @@ public abstract class ArgotFile implements FileBase {
   */
   public ArrayList<String> body = new ArrayList<String>();
 
+  /**
+  * @description ArrayList of type Method holding all methods in a file
+  * @note Children can modify
+  */
+  public ArrayList<Method> methods = new ArrayList<Method>();
+
 
 
   /**
