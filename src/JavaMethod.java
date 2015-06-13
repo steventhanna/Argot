@@ -72,7 +72,10 @@ public class JavaMethod extends Method {
   * Harvest everything after the method signature
   */
   public void extractBody() {
-
+    int signaturePositon = header.size() - 1;
+    for(int i = signaturePositon; i > contents.size(); i++) {
+      body.add(contents.get(i));
+    }
   }
 
   /**

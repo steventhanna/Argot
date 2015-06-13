@@ -390,15 +390,12 @@ public abstract class Method {
         if(temp.get(j).contains("@")) {
           array[i] = extractSingle(tag, temp.get(j), true);
         } else {
-
+          array[i] += extractSingle(tag, temp.get(j), false);
         }
       }
     }
-
-
-
+    return array;
   }
-
 
   /**
   * Extract multiple lines of text following the tag
