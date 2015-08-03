@@ -29,6 +29,7 @@ public class TestRun {
 
   public static void main(String[] args) {
       JavaFile file = new JavaFile("JavaMethod.java");
+      // Should print all methods in above file
 
 
   }

@@ -96,7 +96,42 @@ public class JavaFile extends ArgotFile {
   * Methods will always have a opening an closing parenthese.
   * Additioanlly, methods should also have a public or a private.
   */
-  // TODO Make new Method class with common method shit
+  public void extractMethods() {
+    // Gather the starting and ending position of each method
+    ArrayList<Integer> startingPosition = new ArrayList<Integer>();
+    ArrayList<Integer> endingPosition = new ArrayList<Integer>();
+    // Search the body to find lines that have both ( and ), and either public or private
+    // Although, interfaces do not need a public or private...
+    for(int i = 0; i < body.size(); i++) {
+      String content = body.get(i);
+      if(content.length() > 0) {
+        if(content.contains("(") && content.contains(")")) {
+          if(content.contains("public") || content.contains("private")) {
+            startingPosition.add(i);
+          }
+        }
+        if(content.contains("@end")) {
+          endingPosition.add(i);
+        }
+      }
+    }
+    // Check that startin position and ending position ararylists are same size
+    if(startingPosition.size() == endingPosition.size()) {
+      System.out.println("Starting position and Ending Position size: " + startingPosition.size());
+      for(int i = 0; i < startingPosition.size(); i++) {
+        ArrayList<String> methodContent = new ArrayList<String>();
+        int begin = startingPosition.get(i);
+        int end = endingPosition.get(i);
+        while(begin < end) {
+          methodContent.add(body.get(begin));
+          begin++;
+        }
+        methods.add(new JavaMethod(methodContent));
+      }
+    }
+  }
+
+  /*
   public void extractMethods() {
     ArrayList<Integer> startingPosition = new ArrayList<Integer>();
     ArrayList<Integer> endingPosition = new ArrayList<Integer>();
@@ -113,7 +148,7 @@ public class JavaFile extends ArgotFile {
         endingPosition.add(i);
       }
     }
-    System.out.println("StartinPosition size: " + startingPosition.size());
+    System.out.println("StartingPosition size: " + startingPosition.size());
     System.out.println("EndingPosition size: " + endingPosition.size());
     if(startingPosition.size() > endingPosition.size()) {
       for(int i = 0; i < endingPosition.size(); i++) {
@@ -140,5 +175,6 @@ public class JavaFile extends ArgotFile {
     }
 
   }
+  */
   /** @end */
 }
