@@ -22,10 +22,18 @@ public class JavaFile extends ArgotFile {
   */
   public JavaFile(String path) {
     super(path);
+    System.out.println("Starting Extract Header");
     extractHeader();
+    System.out.println("Finished Extract Header");
+    System.out.println("Starting Harvest Header Data");
     harvestHeaderData();
+    System.out.println("Finished Harvest Header Data");
+    System.out.println("Started Extract Body");
     extractBody();
+    System.out.println("Finished Extract Body");
+    System.out.println("Starting Extract Methods");
     extractMethods();
+    System.out.println("Finished Extract Methods");
     for(int i = 0; i < methods.size(); i++) {
       methods.get(i).print();
     }
@@ -83,7 +91,7 @@ public class JavaFile extends ArgotFile {
       System.out.println("Class declaration does not exist.");
       return;
     } else {
-      // Transfer body including class declaration
+      // Transfer the body without the class declaration
       for(int i = firstInstance; i < contents.size(); i++) {
         body.add(contents.get(i));
       }
@@ -92,127 +100,67 @@ public class JavaFile extends ArgotFile {
   /** @end */
 
   /**
-  * Find the nearest matching bracket
-  * @param int lineNumber - the line number of the opening bracket
-  * @return
-  */
-  public int nextBracket(int openBracketLineNumber, int beginCounter, int endCounter) {
-    int result = 0;
-    // Find next line number
-    for(int i = openBracketLineNumber; i < body.size(); i++) {
-      // Check the last char for a bracket.  Comments not excluded
-      String content = body.get(i);
-      if(content.charAt(content.length()) == '{') {
-        beginCounter++;
-        return nextBracket(i, beginCounter, endCounter);
-      } else if(content.charAt(content.length()) == '}') {
-        endCounter++;
-        result = i;
-        if(endCounter == beginCounter) {
-          return result;
-        } else {
-          System.out.println("There was an error identifying the next bracket.");
-        }
-      } else {
-        return nextBracket(openBracketLineNumber++, beginCounter, endCounter);
-      }
-    }
-    return 0;
-  }
-
-  /**
   * Recognize a method in a given block of code.
   * Methods will always have a opening an closing parenthese.
   * Additioanlly, methods should also have a public or a private.
   */
   public void extractMethods() {
-    // Gather the starting and ending position of each method
+    // Gather the starting and ending positions of each method
     ArrayList<Integer> startingPosition = new ArrayList<Integer>();
     ArrayList<Integer> endingPosition = new ArrayList<Integer>();
-    // Search the body to find lines that have both ( and ), and either public or private
-    // Although, interfaces do not need a public or private...
+    // Search the body for an open bracket. That should be the beggining of a method
     for(int i = 0; i < body.size(); i++) {
       String content = body.get(i);
-      if(content.length() > 0) {
-        if(content.contains("(") && content.contains(")")) {
-          if(content.contains("public") || content.contains("private")) {
-            startingPosition.add(i);
-          }
-        }
-        // if(content.contains("@end")) {
-          // endingPosition.add(i);
-        // }
+      // Assuming that the given line contains the {, and has one more char then that
+      // then it is probably a method
+      if (content.length() > 1 && content.contains("{")) {
+        startingPosition.add(i);
       }
     }
+    System.out.println("Got Starting Positions");
 
-    // Here is where it gets interesting
-    // We need to match the brackets {}
-
-    for(int i = startingPosition.get(0); i > startingPosition.size(); i++) {
-      nextBracket(i);
-    }
-
-
-    // Check that startin position and ending position ararylists are same size
-    if(startingPosition.size() == endingPosition.size()) {
-      System.out.println("Starting position and Ending Position size: " + startingPosition.size());
-      for(int i = 0; i < startingPosition.size(); i++) {
-        ArrayList<String> methodContent = new ArrayList<String>();
-        int begin = startingPosition.get(i);
-        int end = endingPosition.get(i);
-        while(begin < end) {
-          methodContent.add(body.get(begin));
-          begin++;
+    // For each item in the starting position, iterate through and look for the final open bracket.
+    // The idea is that for each {, increase, and for each } decrease. The end of the method should
+    // give 0, providing the user does not make any mistakes
+    for(int i = 0; i < startingPosition.size(); i++) {
+      int bracketCounter = 0;
+      boolean changed = false;
+      for(int j = startingPosition.get(i); j < body.size(); j++) {
+        System.out.println(body.get(j));
+        if(body.get(j).contains("{")) {
+          System.out.println("HAS BRACKET");
+          bracketCounter++;
+          changed = true;
         }
-        methods.add(new JavaMethod(methodContent));
-      }
-    }
-  }
-
-  /*
-  public void extractMethods() {
-    ArrayList<Integer> startingPosition = new ArrayList<Integer>();
-    ArrayList<Integer> endingPosition = new ArrayList<Integer>();
-    // Search through body to find lines that have both ( and ), and public or private
-    for(int i = 0; i < body.size(); i++) {
-      if(body.get(i).length() > 0) {
-        if(body.get(i).contains("(") && body.get(i).contains(")")) {
-          if(body.get(i).contains("public") || body.get(i).contains("private")) {
-            startingPosition.add(i);
-          }
+        if(body.get(j).contains("}")) {
+          System.out.println("DOES NOT HAVE BRACKET");
+          bracketCounter--;
+          changed = true;
+        }
+        if(changed == true && bracketCounter == 0) {
+          System.out.println("DONE");
+          endingPosition.add(j);
+          break;
         }
       }
-      if(body.get(i).contains("@end")) {
-        endingPosition.add(i);
-      }
     }
-    System.out.println("StartingPosition size: " + startingPosition.size());
-    System.out.println("EndingPosition size: " + endingPosition.size());
-    if(startingPosition.size() > endingPosition.size()) {
-      for(int i = 0; i < endingPosition.size(); i++) {
-        ArrayList<String> content = new ArrayList<String>();
-        int end = endingPosition.get(i);
-        int begin = startingPosition.get(i);
-        while(begin < end - 1) {
-          content.add(body.get(begin));
-          begin++;
-        }
-        methods.add(new JavaMethod(content));
-      }
+    System.out.println("Got ending positions");
+
+    // Harvest all of the methods based off the start and end positions
+    // Check to make sure the end and the start have the same length
+    if(startingPosition.size() != endingPosition.size()) {
+      System.out.println("There was an error getting starting and ending positions.");
+      System.out.println("startingPosition Size: " + startingPosition.size());
+      System.out.println("endingPosition Size: " + endingPosition.size());
     } else {
       for(int i = 0; i < startingPosition.size(); i++) {
-        ArrayList<String> content = new ArrayList<String>();
-        int end = endingPosition.get(i);
-        int begin = startingPosition.get(i);
-        while(begin < end - 1) {
-          content.add(body.get(begin));
-          begin++;
+        ArrayList<String> methodContents = new ArrayList<String>();
+        for(int j = startingPosition.get(i); j < endingPosition.get(i); j++) {
+          methodContents.add(body.get(j));
         }
-        methods.add(new JavaMethod(content));
+        JavaMethod method = new JavaMethod(methodContents);
+        methods.add(method);
       }
     }
-
   }
-  */
-  /** @end */
 }

@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+// TODO :: Change all arrays to ArrayLists for ease later
+
 
 public abstract class ArgotFile implements FileBase {
 
@@ -442,14 +444,30 @@ public abstract class ArgotFile implements FileBase {
   * Combined all data extraction into one method
   */
   public void harvestHeaderData() {
+    System.out.println("Starting Extract Author");
     extractAuthor();
+    System.out.println("Finished Extract Author");
+    System.out.println("Starting Extract Class");
     extractClass();
+    System.out.println("Finished Extract Class");
+    System.out.println("Starting Extract Version");
     extractVersion();
+    System.out.println("Finished Extract Version");
+    System.out.println("Starting Extract See");
     extractSee();
+    System.out.println("Finished Extract See");
+    System.out.println("Starting Extract Date");
     extractDate();
+    System.out.println("Finished Extract Date");
+    System.out.println("Starting Extract Description");
     extractDescription();
+    System.out.println("Finished Extract Description");
+    System.out.println("Starting Extract Child");
     extractChild();
+    System.out.println("Finished Extract Child");
+    System.out.println("Starting Extract Parent");
     extractParent();
+    System.out.println("Finished Extract Parent");
   }
   /** @end */
 
