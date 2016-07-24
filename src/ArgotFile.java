@@ -1,8 +1,8 @@
 /**
-* @author Steven T Hanna
-* @date 5/5/15
-* @class ArgotFile
-* @description Abstract class for a basic ArgotFile
+* @author :: Steven T Hanna
+* @date :: 7/16/16
+* @class ::  ArgotFile
+* @description :: A general wrapper class for the file operations
 */
 
 import java.util.ArrayList;
@@ -12,522 +12,61 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-// TODO :: Change all arrays to ArrayLists for ease later
-
-
-public abstract class ArgotFile implements FileBase {
-
-  public ArgotFile(String pathname) {
-    path = pathname;
-    seperateClassnameExtension();
-    read();
-  }
-  /** @end */
+public class ArgotFile {
 
   /**
-  * @description Absolute path of file in type String
+  * @description :: The path of the specific file
   */
   private String path;
-
   /**
-  * @description Filename in type String
+  * @description :: The filename of the specific file
   */
   private String filename;
-
   /**
-  * @description Extension of the file in type String
+  * @description :: The extension of the file
   */
   private String extension;
 
   /**
-  * @description classname of file in type String
+  * @description :: The contents of the file
   */
-  private String classname;
-
-  /**
-  * @description System specified class
-  */
-  private String systemClass;
-
-  /**
-  * @description User specified class
-  */
-  private String userClass;
-
-  /**
-  * @description Authors in type String array in case more than one author
-  */
-  private String[] author;
-
-  /**
-  * @description See in type String array in case more than one see
-  */
-  private String[] see;
-
-  /**
-  * @description Version of file
-  */
-  private String version;
-
-  /**
-  * @description Date of file
-  */
-  private String date;
-
-  /**
-  * @description Description of a file
-  */
-  private String[] description;
-
-  /**
-  * @description Parent of the file
-  */
-  private String parent;
-
-  /**
-  * @description Children of file
-  */
-  private String[] children;
-
-  /**
-  * @description Notes any important information in the file
-  */
-  private String[] note;
-
-  /**
-  * @description ArrayList of type String holding contents of header
-  * @note Children can modify
-  */
-  public ArrayList<String> header = new ArrayList<String>();
-
-  /**
-  * @description ArrayList of type String holding contents of file
-  * @note Children can modify
-  */
-  public ArrayList<String> contents = new ArrayList<String>();
-
-  /**
-  * @description ArrayList of type String holding contents of body
-  * @note Children can modify
-  */
-  public ArrayList<String> body = new ArrayList<String>();
-
-  /**
-  * @description ArrayList of type Method holding all methods in a file
-  * @note Children can modify
-  */
-  public ArrayList<Method> methods = new ArrayList<Method>();
+  private ArrayList<String> contents = new ArrayList<String>();
 
 
 
   /**
-  * Get Filename
-  * @return String name of file
+  * @description :: The body of the file
   */
-  public String getFilename() {
-    return filename;
+  private ArrayList<String> body = new ArrayList<String>();
+
+  /**
+  * Constructor for ArgotFile
+  * @param :: String path - the path of the given file
+  */
+  public ArgotFile(String path) {
+    this.path = path;
+    extractContents();
   }
-  /** @end */
 
   /**
-  * Get Complete File Path
-  * @return String name of absolute path
+  * Extracts the contents from the filename
   */
-  public String getPath() {
-    return path;
-  }
-  /** @end */
+  public void extractContents() {
+    // Harvest filename
+    String[] pathArray = path.split("/");
+    filename = pathArray[pathArray.length - 1];
+    String[] filenameArray = filename.split(".");
+    extension = filenameArray[filenameArray.length - 1];
 
-  /**
-  * Get extension
-  * @return String name of extension of class
-  */
-  public String getExtension() {
-    return extension;
-  }
-  /** @end */
-
-  /**
-  * Get Classname
-  * @return String name of class
-  */
-  public String getClassname() {
-    return classname;
-  }
-  /** @end */
-
-  /**
-  * Get author
-  * @return String array of authors
-  */
-  public String[] getAuthor() {
-    return author;
-  }
-  /** @end */
-
-  /**
-  * Get date
-  * @return String date
-  */
-  public String getDate() {
-    return date;
-  }
-  /** @end */
-
-  /**
-  * Get version
-  * @return String version
-  */
-  public String getVersion() {
-    return version;
-  }
-  /** @end */
-
-  /**
-  * Get see
-  * @return String array of see
-  */
-  public String[] getSee() {
-    return see;
-  }
-  /** @end */
-
-  /**
-  * Get class description
-  * @return String array of descriptions
-  */
-  public String[] getDescription() {
-    return description;
-  }
-  /** @end */
-
-  /**
-  * Get Parent
-  * @return String parent of class
-  */
-  public String getParent() {
-    return parent;
-  }
-  /** @end */
-
-  /**
-  * Get Children
-  * @return String array of Children
-  */
-  public String[] getChildren() {
-    return children;
-  }
-  /** @end */
-
-  /**
-  * Seperates the extension and the classname from the absolute path
-  * @note Does not return anything, but stores in instance variables
-  */
-  public void seperateClassnameExtension() {
-    // Split path at /
-    String[] pathSplit = path.split("/");
-    String complete = pathSplit[pathSplit.length - 1];
-    // Get period position to seperate extension
-    int periodPosition = complete.lastIndexOf(".");
-    extension = complete.substring(periodPosition + 1);
-    classname = complete.substring(0, periodPosition);
-  }
-  /** @end */
-
-  /**
-  * Reads the contents of a file
-  * @return ArrayList<String> of file contents
-  */
-  public ArrayList<String> read() {
+    // Read the actual file
     try {
       BufferedReader in = new BufferedReader(new FileReader(new File(path)));
       while(in.ready()) {
         contents.add(in.readLine());
       }
       in.close();
-      return contents;
     } catch(IOException e) {
       System.out.println("File could not be read: " + e);
     }
-    return null;
   }
-  /** @end */
-
-  /**
-  * Remove the tag from a specified string.
-  * The tag must be included within the string
-  * @param String tag - the tag to be removed
-  * @param String s - the String that the tag must be removed from
-  * @return String - the string sans tag
-  */
-  public String removeTag(String tag, String s) {
-    // There should be a white space after the tag... If not the user fucked up
-    // Take into account the * space
-    int tagLength = tag.length() + 3;
-    return s.substring(tagLength);
-  }
-  /** @end */
-
-  /**
-  * Strip all exterior comments out of the header, so all that remains are the
-  * standard java docs.  Then I do not have to rewrite different shit all the time
-  */
-  public abstract void extractHeader();
-  /** @end */
-
-  /**
-  * Extact the authors of the class
-  */
-  public void extractAuthor() {
-    ArrayList<String> authors = new ArrayList<String>();
-    for(int i = 0; i < header.size(); i++) {
-      // System.out.println(header.get(i).contains("@author"));
-      if(header.get(i).contains("@author")) {
-        authors.add(header.get(i));
-        // System.out.println(header.get(i));
-      }
-    }
-    author = new String[authors.size()];
-    for(int i = 0; i < authors.size(); i++) {
-      // Remove @author
-      author[i] = removeTag("@author", authors.get(i));
-      System.out.println(author[i]);
-    }
-  }
-  /** @end */
-
-  /**
-  * Extract the user class
-  * Check user class against system class... Present error to user?
-  */
-  // TODO Check user class against system class... Present error to user?
-  public void extractClass() {
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains("@class")) {
-        userClass = removeTag("@class", header.get(i));
-      }
-    }
-  }
-  /** @end */
-
-  /**
-  * Extract version
-  */
-  public void extractVersion() {
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains("@version")) {
-        version = removeTag("@version", header.get(i));
-      }
-    }
-  }
-  /** @end */
-
-  /**
-  * Extrat see
-  */
-  public void extractSee() {
-    ArrayList<String> seeList = new ArrayList<String>();
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains("@see")) {
-        seeList.add(header.get(i));
-      }
-    }
-    see = new String[seeList.size()];
-    for(int i = 0; i < see.length; i++) {
-      see[i] = removeTag("@see", seeList.get(i));
-    }
-  }
-  /** @end */
-
-  /**
-  * Extract the date of the class
-  * If multiple occurences of date found, take last occurence
-  */
-  public void extractDate() {
-    for(int i = 0; i < header.size(); i++) {
-        if(header.get(i).contains("@date")) {
-          date = removeTag("@date", header.get(i));
-        }
-    }
-  }
-  /** @end */
-
-  /**
-  * Extract the child / children of the class
-  */
-  public void extractChild() {
-    // Find all lines with child
-    ArrayList<String> temp = new ArrayList<String>();
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains("@child")) {
-        temp.add(removeTag("@child", header.get(i)));
-      }
-    }
-    children = new String[temp.size()];
-    for(int i = 0; i < children.length; i++) {
-      children[i] = temp.get(i);
-    }
-  }
-  /** @end */
-
-  /**
-  * Extract the parent of the class
-  */
-  public void extractParent() {
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains("@parent")) {
-        parent = removeTag("@parent", header.get(i));
-      }
-    }
-  }
-  /** @end */
-
-  /**
-  * Check a specific line for the escape character in the header
-  * @note Meant to be used recursively
-  * @param Integer line - the line to be checked for the escape character
-  * @return Integer - the line number that contains the escape character
-  */
-  public int checkLineForEscapeCharHeader(int line) {
-    if(!(header.get(line).contains("@"))) {
-      return checkLineForEscapeCharHeader(line + 1);
-    } else {
-      return line;
-    }
-  }
-  /** @end */
-
-  /**
-  * Extract the description of the class
-  * I have to probably handle multi-line inputs... Crap
-  * Using an array to handle multi-line inputs
-  */
-  public void extractDescription() {
-    // Get total amount of description lines
-    // find first instance in header
-    int begin = -1;
-    int end = -1;
-    // Determine beginning of description
-    for(int i = 0; i < header.size(); i++) {
-      if(header.get(i).contains("@description")) {
-        begin = i;
-      }
-    }
-    end = checkLineForEscapeCharHeader(begin + 1);
-    System.out.println("Begin: " + begin);
-    System.out.println("End: " + end);
-
-    // Add Description from header lines
-    if(begin != -1 && end != -1) {
-      description = new String[end - begin];
-      // While loop might be better
-      int arrayCounter = 0;
-      int headerCounter = begin;
-      while(arrayCounter < description.length && headerCounter <= end) {
-        description[arrayCounter] = header.get(headerCounter);
-        arrayCounter++;
-        headerCounter++;
-      }
-
-      // Clean up data in array
-      description[0] = removeTag("@description", description[0]);
-      // For rest of the array, remove the *_
-      // Java specific?
-      for(int i = 1; i < description.length; i++) {
-        description[i] = description[i].substring(2);
-      }
-    }
-  }
-  /** @end */
-
-  /**
-  * Combined all data extraction into one method
-  */
-  public void harvestHeaderData() {
-    System.out.println("Starting Extract Author");
-    extractAuthor();
-    System.out.println("Finished Extract Author");
-    System.out.println("Starting Extract Class");
-    extractClass();
-    System.out.println("Finished Extract Class");
-    System.out.println("Starting Extract Version");
-    extractVersion();
-    System.out.println("Finished Extract Version");
-    System.out.println("Starting Extract See");
-    extractSee();
-    System.out.println("Finished Extract See");
-    System.out.println("Starting Extract Date");
-    extractDate();
-    System.out.println("Finished Extract Date");
-    System.out.println("Starting Extract Description");
-    extractDescription();
-    System.out.println("Finished Extract Description");
-    System.out.println("Starting Extract Child");
-    extractChild();
-    System.out.println("Finished Extract Child");
-    System.out.println("Starting Extract Parent");
-    extractParent();
-    System.out.println("Finished Extract Parent");
-  }
-  /** @end */
-
-  /**
-  * Print all relevant information
-  */
-  public void printInfo() {
-    System.out.println("Filename: " + filename);
-    System.out.println("Path: " + path);
-    System.out.println("Class: " + classname);
-    System.out.println("Extension: " + extension);
-    System.out.println("Description: ");
-    for(int i = 0; i < description.length; i++) {
-      System.out.println(description[i]);
-    }
-    System.out.print("Author: ");
-    for(int i = 0; i < author.length; i++) {
-      System.out.print(author[i] + ", ");
-    }
-    System.out.println();
-    System.out.print("See: ");
-    for(int i = 0; i < see.length; i++) {
-      System.out.print(see[i] + ", ");
-    }
-    System.out.println();
-    System.out.println("Version: " + version);
-    System.out.println("Date: " + date);
-    System.out.println("Parent: " + parent);
-    System.out.print("Children: ");
-    for(int i = 0; i < children.length; i++) {
-      System.out.print(children[i] + ", ");
-    }
-    System.out.println();
-
-    // // Raw Data
-    // System.out.println("RAW DATA");
-    // System.out.println("HEADER");
-    // System.out.println();
-    // for(int i = 0; i < header.size(); i++) {
-    //   System.out.println(header.get(i));
-    // }
-    // System.out.println("BODY");
-    // System.out.println();
-    // for(int i = 0; i < body.size(); i++) {
-    //   System.out.println(body.get(i));
-    // }
-  }
-  /** @end */
-
-  /**
-  * Extract body
-  */
-  public abstract void extractBody();
-  /** @end */
-
-  /**
-  * Recognize a method in a given block of code
-  */
-  // TODO Make new Method class with common method shit
-  public abstract void extractMethods();
-  /** @end */
-
 }

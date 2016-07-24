@@ -15,60 +15,62 @@ Comment blocks for this system will begin with `/**`.  Each preceding line will 
 */
 ```
 
+** NOTE: ** Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
+
 ### Beginning the file
 When beginning the file, you can use any of the following in any combination at the start of your class, before any declarations.
 
-`@class` - The classname for the file
+`@class :: ` - The classname for the file
 
-`@description` - Description of what the file does in relation to the project as a whole
+`@description :: ` - Description of what the file does in relation to the project as a whole
 
-`@date` - Date file was last modified
+`@date :: ` - Date file was last modified
 
-`@version` - Current version of file
+`@version :: ` - Current version of file
 
-`@author` - the author of the file
+`@author :: ` - the author of the file
 
-`@see` - provides a link to another file in reference
+`@see :: ` - provides a link to another file in reference
 
-`@child` - indicate the child of the class.  Multiple children should have their own `@child` tag
+`@child :: ` - indicate the child of the class.  Multiple children should have their own `@child` tag
 
-`@parent` indicate the parent of the class
+`@parent :: ` indicate the parent of the class
 
-`@note` - notes any important information relevant to the file
+`@note :: ` - notes any important information relevant to the file
 
 ### Methods
 Documentation for methods must begin before the method starts.
 
-`@description` - description of the method in relation to the rest of the class
+`@description :: ` - description of the method in relation to the rest of the class
 
-`@author` - author of the method
+`@author :: ` - author of the method
 
-`@date` - date method was last updated
+`@date :: ` - date method was last updated
 
-`@param` - one parameter the method takes.  For each parameter, an new `@param` is used.
+`@param :: ` - one parameter the method takes.  For each parameter, an new `@param` is used.
 
-`@return` - what the method returns. If void, omit this doc.
+`@return :: ` - what the method returns. If void, omit this doc.
 
-`@exception` - an exception that might be thrown from this method
+`@exception :: ` - an exception that might be thrown from this method
 
-`@thrown` - an error that might be thrown from this method
+`@thrown :: ` - an error that might be thrown from this method
 
-`@see` - provides a link to another method in reference
+`@see :: ` - provides a link to another method in reference
 
-`@note` - notes any important information relevant to the method
+`@note :: ` - notes any important information relevant to the method
 
-`@end` - ends a method - place after the closing tag of a method
 
 ```java
 /** Provides a sample method for this example.
-* @param String text - text to be returned
-* @return String text - text that is returned
+* Overflow text can continue here, but cannot go
+* underneath `@`
+* @param :: String text - text to be returned
+* @return :: String text - text that is returned
 */
 public String sampleMethod(String text) {
   ...
   return text;
 }
-/** @end */
 ```
 
 ### Variables / Instance Variables
@@ -78,14 +80,10 @@ Like methods, documentation for variables must begin before the variable is decl
 
 `@see` - provides a link to another variable in reference
 
-`@scope` - the scope of the variable.  Scope can be defined as a classname, or as project wide.
 
 ```java
 /**
-* @description example integer variable
-* @scope ExampleClass.java
+* @description :: example integer variable
 */
 private int exampleInt;
 ```
-
-## HTML and EJS
