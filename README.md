@@ -28,7 +28,7 @@ When beginning the file, you can use any of the following in any combination at 
 
 `@version :: ` - Current version of file
 
-`@author :: ` - the author of the file
+`@author :: ` - the author of the file. Multiple authors should be separated by a comma
 
 `@see :: ` - provides a link to another file in reference
 
@@ -38,10 +38,22 @@ When beginning the file, you can use any of the following in any combination at 
 
 `@note :: ` - notes any important information relevant to the file
 
+```java
+/**
+* @class :: Example File
+* @author :: Steven Hanna, Other People
+* @date :: 7/25/16
+* @version :: 0.1.0
+*/
+```
+
 ### Methods
 Documentation for methods must begin before the method starts.
+**Note:** The actual body of the method is not analyzed, just the commented documentation.
 
-`@description :: ` - description of the method in relation to the rest of the class
+`@name :: ` - the name of the method. **Note:** If no name is given, the system will attempt to extract the name from method signature.
+
+`@description :: ` - description of the method in relation to the rest of the class. The description can span multiple lines
 
 `@author :: ` - author of the method
 
@@ -55,13 +67,15 @@ Documentation for methods must begin before the method starts.
 
 `@thrown :: ` - an error that might be thrown from this method
 
-`@see :: ` - provides a link to another method in reference
+`@see :: ` - provides a link to external documentation
 
 `@note :: ` - notes any important information relevant to the method
 
 
 ```java
-/** Provides a sample method for this example.
+/**
+* @name :: sampleMethod
+* @description :: Provides a sample method for this example.
 * Overflow text can continue here, but cannot go
 * underneath `@`
 * @param :: String text - text to be returned
@@ -76,13 +90,17 @@ public String sampleMethod(String text) {
 ### Variables / Instance Variables
 Like methods, documentation for variables must begin before the variable is declared.  Variables should only be documented upon declaration.
 
+`@name` - the name of the instance variable **Note:** If no name is given, the system will attempt to extract the name from variable signature.
+
 `@description` - description of the variable in relation to rest of the class
 
-`@see` - provides a link to another variable in reference
+`@see` - provides a link to external documentation
 
 
 ```java
 /**
+* @name :: exampleInt
+* @type :: the type of the variable
 * @description :: example integer variable
 */
 private int exampleInt;
