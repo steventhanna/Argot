@@ -4,14 +4,15 @@ Parse documentation from codebases into markdown for easy doc creation.  With th
 ## / Comment Languages
 
 ### Escape Character
-For this system, the character that will be used to denote specific information to be extracted is `@`.  To keep this system operating correctly, `@` cannot be used in any documentation.  If `@` is used intermittently, the validity of the outputs can not be assured.
+For this system, the character that will be used to denote specific information to be extracted is `@`.  To keep this system operating correctly, `@` cannot be used in any documentation.  If `@` is used intermittently in other comment blocks, the validity of the outputs can not be assured.
 
-Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.  After the `/**`, a tag should be given, allowing the system to identify what component each part of the documentation is.
+Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.  With each piece of documentation, a tag should be given in the form `@tag :: ` so that the system can distinguish between methods, vars, etc.
 
 ```java
-/**tag
+/**
 * Sample documentation here
 * A second line of documentation
+* @tag
 */
 ```
 

@@ -1,4 +1,5 @@
 /**
+* @type :: CLASS
 * @author :: Steven T Hanna
 * @date :: 7/16/16
 * @class :: ArgotFile
@@ -15,36 +16,42 @@ import java.io.IOException;
 public class ArgotFile {
 
   /**
+  * @type :: VAR
   * @name :: path
   * @description :: The path of the specific file
   */
   private String path;
 
-  /**
+  /**VAR
+  * @type :: VAR
   * @name :: filename
   * @description :: The filename of the specific file
   */
   private String filename;
 
   /**
+  * @type :: VAR
   * @name :: extension
   * @description :: The extension of the file
   */
   private String extension;
 
   /**
+  * @type :: VAR
   * @name :: contents
   * @description :: The contents of the file
   */
   private ArrayList<String> contents = new ArrayList<String>();
 
   /**
+  * @type :: VAR
   * @name :: markdown
   * @description :: the raw Markdown representation of the file
   */
   private ArrayList<String> markdown = new ArrayList<String>();
 
   /**
+  * @type :: FUNC
   * @name :: ArgotFile
   * @description :: Constructor for ArgotFile
   * @param :: String path - the path of the given file
@@ -52,9 +59,11 @@ public class ArgotFile {
   public ArgotFile(String path) {
     this.path = path;
     extractContents();
+    delegateLanguages();
   }
 
   /**
+  * @type :: FUNC
   * @name :: extractContents
   * @description :: Extracts the contents from the given filename.
   * This is where the actual file is read
@@ -85,6 +94,7 @@ public class ArgotFile {
   }
 
   /**
+  * @type :: FUNC
   * @name :: getContents
   * @description :: Getter method for the raw contents of the file
   * @return :: ArrayList<String> - the raw content of the file
@@ -94,6 +104,7 @@ public class ArgotFile {
   }
 
   /**
+  * @type :: FUNC
   * @name :: delegateLanguages
   * @description :: Determines through a switch statement the type of
   * commenting language used in the langauge.  From there, the
