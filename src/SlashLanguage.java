@@ -24,6 +24,7 @@ public class SlashLanguage {
   */
   public SlashLanguage(ArrayList<String> contents) {
     extractComments(contents);
+    stripComments();
   }
 
   /**FUNC
@@ -54,11 +55,19 @@ public class SlashLanguage {
 
   /**FUNC
   * @name :: stripComments
-  * @description :: Strip the language specific comment langauge out of the comments
+  * @description :: Strip the language specific comment langauge out of the comments.
+  * Also removes blank comments
   */
   public void stripComments() {
-    for(int i = 0; i < comments.size(); i++) {
-      comments.set(i, strip(comments.get(i)));
+    int counter = 0;
+    while(counter < comments.size()) {
+      String afterStrip = strip(comments.get(counter));
+      if(!afterStrip.equals("")) {
+        comments.remove(counter);
+      } else {
+        comments.set(counter, afterStrip);
+        counter++;
+      }
     }
   }
 
@@ -70,6 +79,60 @@ public class SlashLanguage {
   * @return :: String - The cleaned string
   */
   public String strip(String s) {
-    
+    // Strip the whitespace from the beginning
+    int counter = 0;
+    char letter = s.charAt(counter);
+    while(letter == ' ') {
+      s = s.substring(1);
+      counter++;
+      letter = s.charAt(counter);
+    }
+
+    // Strip the whitespace from the end
+    letter = s.charAt(s.length() - 1);
+    while(letter == ' ') {
+      s = s.substring(s.length() - 1);
+      letter = s.charAt(s.length() - 1);
+    }
+
+    // Specific conditions
+    if(s.length() >= 3 && s.substring(0, 3).equals("/**")) {
+      s = s.substring(3);
+    } else if(s.length() >= 2 && s.substring(0, 2).equals("/*")) {
+      s = s.substring(2);
+    } else if (s.equals("*/")) {
+      s = "";
+    } else if (s.length() >= 1 && s.substring(0, 1).equals("*")) {
+      s = s.substring(1);
+    }
+
+    // Remove whitespace again
+    if(s.length() > 0) {
+      counter = 0;
+      letter = s.charAt(counter);
+      while(letter == ' ') {
+        s = s.substring(1);
+        counter++;
+        letter = s.charAt(counter);
+      }
+    }
+    if (s.length() > 0) {
+      // Strip the whitespace from the end
+      letter = s.charAt(s.length() - 1);
+      while(letter == ' ') {
+        s = s.substring(s.length() - 1);
+        letter = s.charAt(s.length() - 1);
+      }
+    }
+    return s;
+  }
+
+  /**
+  * @name :: getComments
+  * @description :: Getter for the comment ArrayList
+  * @return :: ArrayList<String> - the comments to return
+  */
+  public ArrayList<String> getComments() {
+    return comments;
   }
 }

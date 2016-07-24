@@ -104,24 +104,29 @@ public class ArgotFile {
     switch(extension) {
       case "java": {
         SlashLanguage slash = new SlashLanguage(contents);
-        return slash.generateMarkdown();
+        // return slash.generateMarkdown();
+        break;
       }
       case "c": {
         SlashLanguage slash = new SlashLanguage(contents);
-        return slash.generateMarkdown();
+        // return slash.generateMarkdown();
+        break;
       }
       case "cpp": {
         SlashLanguage slash = new SlashLanguage(contents);
-        return slash.generateMarkdown();
+        // return slash.generateMarkdown();
+        break;
       }
       case "js": {
         SlashLanguage slash = new SlashLanguage(contents);
-        return slash.generateMarkdown();
+        // return slash.generateMarkdown();
+        break;
       }
       default: {
         System.out.println("Extension " + extension + " is not supported yet.");
         return null;
       }
     }
+    return null;
   }
 }
