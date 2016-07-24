@@ -1,8 +1,8 @@
 /**
 * @author :: Steven T Hanna
 * @date :: 7/16/16
-* @class ::  ArgotFile
-* @description :: A general wrapper class for the file operations
+* @class :: ArgotFile
+* @description :: A general wrapper class for file operations.
 */
 
 import java.util.ArrayList;
@@ -15,32 +15,38 @@ import java.io.IOException;
 public class ArgotFile {
 
   /**
+  * @name :: path
   * @description :: The path of the specific file
   */
   private String path;
+
   /**
+  * @name :: filename
   * @description :: The filename of the specific file
   */
   private String filename;
+
   /**
+  * @name :: extension
   * @description :: The extension of the file
   */
   private String extension;
 
   /**
+  * @name :: contents
   * @description :: The contents of the file
   */
   private ArrayList<String> contents = new ArrayList<String>();
 
-
-
   /**
-  * @description :: The body of the file
+  * @name :: markdown
+  * @description :: the raw Markdown representation of the file
   */
-  private ArrayList<String> body = new ArrayList<String>();
+  private ArrayList<String> markdown = new ArrayList<String>();
 
   /**
-  * Constructor for ArgotFile
+  * @name :: ArgotFile
+  * @description :: Constructor for ArgotFile
   * @param :: String path - the path of the given file
   */
   public ArgotFile(String path) {
@@ -49,14 +55,22 @@ public class ArgotFile {
   }
 
   /**
-  * Extracts the contents from the filename
+  * @name :: extractContents
+  * @description :: Extracts the contents from the given filename.
+  * This is where the actual file is read
   */
   public void extractContents() {
     // Harvest filename
-    String[] pathArray = path.split("/");
-    filename = pathArray[pathArray.length - 1];
-    String[] filenameArray = filename.split(".");
-    extension = filenameArray[filenameArray.length - 1];
+    if(path.contains("/")) {
+      String[] pathArray = path.split("/");
+      filename = pathArray[pathArray.length - 1];
+    } else {
+      filename = path;
+    }
+    // Harvest extension
+    System.out.println("FILENAME: " + filename);
+    int periodLoc = filename.indexOf(".");
+    extension = filename.substring(periodLoc + 1);
 
     // Read the actual file
     try {
@@ -67,6 +81,47 @@ public class ArgotFile {
       in.close();
     } catch(IOException e) {
       System.out.println("File could not be read: " + e);
+    }
+  }
+
+  /**
+  * @name :: getContents
+  * @description :: Getter method for the raw contents of the file
+  * @return :: ArrayList<String> - the raw content of the file
+  */
+  public ArrayList<String> getContents() {
+    return contents;
+  }
+
+  /**
+  * @name :: delegateLanguages
+  * @description :: Determines through a switch statement the type of
+  * commenting language used in the langauge.  From there, the
+  * appropriate worker can be started
+  * @return :: ArrayList<String> - the Markdown representation of the class
+  */
+  public ArrayList<String> delegateLanguages() {
+    switch(extension) {
+      case "java": {
+        SlashLanguage slash = new SlashLanguage(contents);
+        return slash.generateMarkdown();
+      }
+      case "c": {
+        SlashLanguage slash = new SlashLanguage(contents);
+        return slash.generateMarkdown();
+      }
+      case "cpp": {
+        SlashLanguage slash = new SlashLanguage(contents);
+        return slash.generateMarkdown();
+      }
+      case "js": {
+        SlashLanguage slash = new SlashLanguage(contents);
+        return slash.generateMarkdown();
+      }
+      default: {
+        System.out.println("Extension " + extension + " is not supported yet.");
+        return null;
+      }
     }
   }
 }

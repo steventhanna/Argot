@@ -6,16 +6,21 @@ Parse documentation from codebases into markdown for easy doc creation.  With th
 ### Escape Character
 For this system, the character that will be used to denote specific information to be extracted is `@`.  To keep this system operating correctly, `@` cannot be used in any documentation.  If `@` is used intermittently, the validity of the outputs can not be assured.
 
-Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.
+Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.  After the `/**`, a tag should be given, allowing the system to identify what component each part of the documentation is.
 
 ```java
-/**
+/**tag
 * Sample documentation here
 * A second line of documentation
 */
 ```
 
 ** NOTE: ** Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
+
+### Tags
+- `FUNC` - Tag for a function or method
+- `VAR` - Tag for a variable
+- `CLASS` - Tag for a class
 
 ### Beginning the file
 When beginning the file, you can use any of the following in any combination at the start of your class, before any declarations.
@@ -39,7 +44,7 @@ When beginning the file, you can use any of the following in any combination at 
 `@note :: ` - notes any important information relevant to the file
 
 ```java
-/**
+/**CLASS
 * @class :: Example File
 * @author :: Steven Hanna, Other People
 * @date :: 7/25/16
@@ -73,7 +78,7 @@ Documentation for methods must begin before the method starts.
 
 
 ```java
-/**
+/**FUNC
 * @name :: sampleMethod
 * @description :: Provides a sample method for this example.
 * Overflow text can continue here, but cannot go
@@ -98,7 +103,7 @@ Like methods, documentation for variables must begin before the variable is decl
 
 
 ```java
-/**
+/**VAR
 * @name :: exampleInt
 * @type :: the type of the variable
 * @description :: example integer variable
