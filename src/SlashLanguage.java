@@ -24,7 +24,7 @@ public class SlashLanguage {
   * @name :: comments
   * @description :: Object representation of comments
   */
-  private ArrayList<Comment> comments = new ArrayList<Comment>();
+  private ArrayList<SlashComment> comments = new ArrayList<SlashComment>();
 
   /**
   * @type :: FUNC
@@ -65,7 +65,7 @@ public class SlashLanguage {
           } else {
             // System.out.println(contents.get(j));
             // System.out.println("Something probably went wrong.");
-            comments.add(new Comment(commentBuffer));
+            comments.add(new SlashComment(commentBuffer));
             i = j;
             break;
           }

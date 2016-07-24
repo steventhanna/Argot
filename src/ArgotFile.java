@@ -134,6 +134,7 @@ public class ArgotFile {
         break;
       }
       default: {
+        // TODO :: Throw an exception here
         System.out.println("Extension " + extension + " is not supported yet.");
         return null;
       }

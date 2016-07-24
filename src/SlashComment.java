@@ -2,14 +2,14 @@
 * @type :: CLASS
 * @author :: Steven T Hanna
 * @date :: 7/24/16
-* @class :: Comment
+* @class :: SlashComment
 * @description :: A container class to hold comment information for an entire file.
 * All of the language specific commenting has been stripped
 */
 
 import java.util.ArrayList;
 
-public class Comment {
+public class SlashComment {
 
   /**
   * @type :: VAR
@@ -32,22 +32,43 @@ public class Comment {
   * @param :: ArrayList<String> - the data without the individual comments language from the
   * main set of classes
   */
-  public Comment(ArrayList<String> data) {
+  public SlashComment(ArrayList<String> data) {
     rawData = data;
-    for(int i = 0; i < rawData.size(); i++) {
-      // System.out.println("BEOFRE: " + rawData.get(i));
-      String afterStrip = removeWhitespace(strip(rawData.get(i)));
-      // System.out.println("AFTER: " + afterStrip);
-      if(!afterStrip.equals("")) {
-        cleanedComments.add(afterStrip);
-      }
-    }
-    System.out.println("CLEANED: ");
+    clean();
     for(int i = 0; i < cleanedComments.size(); i++) {
       System.out.println(cleanedComments.get(i));
       // System.out.println("DIFF");
       // System.out.println(removeWhitespace(cleanedComments.get(i)));
     }
+    System.out.println();
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: clean
+  * @description :: Cleans the comments, removes whitespace, tabs, and
+  */
+  public void clean() {
+    for(int i = 0; i < rawData.size(); i++) {
+      // System.out.println("BEOFRE: " + rawData.get(i));
+      String afterStrip = removeWhitespace(strip(rawData.get(i)));
+      // System.out.println("AFTER: " + afterStrip);
+      if(!afterStrip.equals("") && !afterStrip.contains("/**") && !afterStrip.contains("*/")) {
+        cleanedComments.add(afterStrip);
+      }
+    }
+    // For comments inbetween escape chars, combine them into one
+    if (cleanedComments.size() > 1) {
+      for(int i = 1; i < cleanedComments.size(); i++) {
+        // Chances are it is a mutli-line comment, so combine them
+        if(!cleanedComments.get(i).contains("@")) {
+          cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
+          cleanedComments.remove(i);
+          i--;
+        }
+      }
+    }
+
   }
 
   /**
@@ -65,11 +86,18 @@ public class Comment {
       while(letter == ' ' || letter == '\t') {
         s = s.substring(1);
         counter++;
-        letter = s.charAt(counter);
+        if(s.length() > 0) {
+          letter = s.charAt(counter);
+        } else {
+          break;
+        }
       }
-
-      // Strip the whitespace from the end
-      letter = s.charAt(s.length() - 1);
+    } else {
+      return "";
+    }
+    // Strip the whitespace from the end
+    if(s.length() > 0) {
+      char letter = s.charAt(s.length() - 1);
       while(letter == ' ') {
         s = s.substring(s.length() - 1);
         letter = s.charAt(s.length() - 1);
@@ -94,17 +122,14 @@ public class Comment {
 
     // Specific conditions
     if(s.length() >= 3 && s.substring(0, 3).equals("/**")) {
-      s = s.substring(3);
+      s = " ";
     } else if(s.length() >= 2 && s.substring(0, 2).equals("/*")) {
       s = s.substring(2);
     } else if (s.equals("*/")) {
-      s = "";
+      s = " ";
     } else if (s.length() >= 1 && s.substring(0, 1).equals("*")) {
       s = s.substring(1);
     }
-
-    // System.out.println("AFTER COMMENT: " + s);
-
     s = removeWhitespace(s);
     return s;
   }
