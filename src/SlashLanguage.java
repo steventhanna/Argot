@@ -34,9 +34,20 @@ public class SlashLanguage {
   */
   public SlashLanguage(ArrayList<String> contents) {
     extractComments(contents);
-    // for(int i = 0; i < rawComments.size(); i++) {
-    //   System.out.println(rawComments.get(i));
-    // }
+    delegateComments();
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: delegateComments
+  * @description :: Based on the type of the comment, build the associated
+  * object.
+  */
+  public void delegateComments() {
+    for(int i = 0; i < comments.size(); i++) {
+      // Look for the tag
+      ArrayList<String> commentData = comments.get(i);
+    }
   }
 
   /**

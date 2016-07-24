@@ -13,6 +13,13 @@ public class SlashComment {
 
   /**
   * @type :: VAR
+  * @name :: type
+  * @description :: The type of the specific comment
+  */
+  private String type;
+
+  /**
+  * @type :: VAR
   * @name :: rawData
   * @description :: the raw strings directly from the constructor
   */
@@ -35,12 +42,44 @@ public class SlashComment {
   public SlashComment(ArrayList<String> data) {
     rawData = data;
     clean();
+    extractTag();
     for(int i = 0; i < cleanedComments.size(); i++) {
       System.out.println(cleanedComments.get(i));
       // System.out.println("DIFF");
       // System.out.println(removeWhitespace(cleanedComments.get(i)));
     }
     System.out.println();
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: extractType
+  * @description :: Extracts the type of the function.
+  */
+  public void extractType() {
+    String gettingTag = "";
+    for(int i = 0; i < cleanedComments.size(); i++) {
+      if(cleanedComments.get(i).toLowerCase().contains("@type")) {
+        gettingTag = cleanedComments.get(i).toLowerCase();
+        break;
+      }
+    }
+    if(!gettingTag.equals("")) {
+      String[] tagArr = gettingTag.split("::");
+      if(tagArr.length == 2) {
+        tag = Utility.removeWhitespace(tagArr[1].toLowerCase());
+      }
+    }
+  }
+
+  /**
+  * @type :: Func
+  * @name :: getType
+  * @description :: Getter for the type
+  * @return :: String - returns the type of the comment
+  */
+  public String getType() {
+    return type;
   }
 
   /**
