@@ -3,6 +3,7 @@
 * @author :: Steven T Hanna
 * @date :: 7/24/16
 * @class :: VariableComment
+* @implements :: Comment
 * @description :: A general variable class that stores all
 * attributes about a variable. Also can transform a variable
 * into markdown
@@ -11,7 +12,7 @@
 import java.util.ArrayList;
 
 
-public class VariableComment {
+public class VariableComment implements Comment {
 
   /**
   * @type :: VAR
@@ -56,6 +57,7 @@ public class VariableComment {
   */
   public VariableComment(ArrayList<String> content) {
     raw = content;
+    extract();
   }
 
   /**
@@ -77,7 +79,7 @@ public class VariableComment {
         String content = Utility.removeWhitespace(commentArr[1]);
         // Make sure that the escape actually exists
         if(tag.charAt(0) == '@') {
-          tag = tag.substring(0);
+          tag = tag.substring(1);
           // For consistency, make sure all the tags are lowercase
           tag = tag.toLowerCase();
           switch(tag) {

@@ -3,14 +3,16 @@
 * @author :: Steven T Hanna
 * @date :: 7/24/16
 * @class :: SlashLanguage
+* @implements :: Language
 * @description :: The specific worker class for Slash based commenting
-* langauges. All extraction, and analysis is performed here, while
-* markdown generation is perfomed elsewhere.
+* langauges. Basic extraction from the source file is done here, while
+* stripping, whitespace removal, and type identification is done in SlashComment.
+* The rendered markdown is gathered here however.
 */
 
 import java.util.ArrayList;
 
-public class SlashLanguage {
+public class SlashLanguage implements Language {
 
   /**
   * @type :: VAR
@@ -51,6 +53,13 @@ public class SlashLanguage {
   private ArrayList<ClassComment> classes = new ArrayList<ClassComment>();
 
   /**
+  * @type :: VAR
+  * @name :: renderedMarkdown
+  * @description :: The rendered markdown in the order that the comments appear in the target file.
+  */
+  private ArrayList<String> renderedMarkdown = new ArrayList<String>();
+
+  /**
   * @type :: FUNC
   * @name :: SlashLanguage
   * @description :: The constructor for the class
@@ -59,6 +68,10 @@ public class SlashLanguage {
   public SlashLanguage(ArrayList<String> contents) {
     extractComments(contents);
     delegateComments();
+    renderMarkdown();
+    for(int i = 0; i < renderedMarkdown.size(); i++) {
+      System.out.println(renderedMarkdown.get(i));
+    }
   }
 
   /**
@@ -71,20 +84,29 @@ public class SlashLanguage {
     for(int i = 0; i < comments.size(); i++) {
       // Look for the tag
       String type = comments.get(i).getType();
-      switch(type) {
-        case "FUNC": {
-          FunctionComment function = new FunctionComment(comments.get(i).getCleanedComments());
-          functions.add(function);
-          break;
-        }
-        case "VAR": {
-          VariableComment variable = new VariableComment(comments.get(i).getCleanedComments());
-          variables.add(variable);
-          break;
-        }
-        case "CLASS": {
-          ClassComment classComment = new ClassComment(comments.get(i).getCleanedComments());
-          classes.add(classComment);
+      // Check to make sure the tag exists
+      if(type != null) {
+        // Lowercase for consistency
+        type = type.toLowerCase();
+        switch(type) {
+          case "func": {
+            FunctionComment function = new FunctionComment(comments.get(i).getCleanedComments());
+            functions.add(function);
+            break;
+          }
+          case "var": {
+            VariableComment variable = new VariableComment(comments.get(i).getCleanedComments());
+            variables.add(variable);
+            break;
+          }
+          case "class": {
+            ClassComment classComment = new ClassComment(comments.get(i).getCleanedComments());
+            classes.add(classComment);
+            break;
+          }
+          default: {
+            System.out.println("The Type " + type + " is not yet supported.");
+          }
         }
       }
     }
@@ -133,5 +155,32 @@ public class SlashLanguage {
   */
   public ArrayList<String> getRawComments() {
     return rawComments;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: renderMarkdown
+  * @description :: Renders the markdown for the language
+  */
+  public void renderMarkdown() {
+    if(classes.size() > 0) {
+      for(int i = 0; i < classes.size(); i++) {
+        renderedMarkdown.add(classes.get(i).generateMarkdown());
+      }
+      renderedMarkdown.add("\n");
+    }
+    if(variables.size() > 0) {
+      renderedMarkdown.add("## Variables \n");
+      for(int i = 0; i < variables.size(); i++) {
+        renderedMarkdown.add(variables.get(i).generateMarkdown());
+      }
+      renderedMarkdown.add("\n");
+    }
+    if(functions.size() > 0) {
+      renderedMarkdown.add("## Functions \n");
+      for(int i = 0; i < functions.size(); i++) {
+        renderedMarkdown.add(functions.get(i).generateMarkdown());
+      }
+    }
   }
 }

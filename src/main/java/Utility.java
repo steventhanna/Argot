@@ -17,32 +17,6 @@ public class Utility {
   * @return :: String - cleanded string
   */
   public static String removeWhitespace(String s) {
-    // Strip the whitespace from the beginning
-    if (s.length() > 0) {
-      int counter = 0;
-      char letter = s.charAt(counter);
-      while(letter == ' ' || letter == '\t') {
-        s = s.substring(1);
-        counter++;
-        if(s.length() > 0) {
-          letter = s.charAt(counter);
-        } else {
-          break;
-        }
-      }
-    } else {
-      return "";
-    }
-    // Strip the whitespace from the end
-    if(s.length() > 0) {
-      char letter = s.charAt(s.length() - 1);
-      while(letter == ' ') {
-        s = s.substring(s.length() - 1);
-        letter = s.charAt(s.length() - 1);
-      }
-      return s;
-    } else {
-      return "";
-    }
+    return s.trim();
   }
 }

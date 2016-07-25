@@ -3,6 +3,7 @@
 * @author :: Steven T Hanna
 * @date :: 7/24/16
 * @class :: FunctionComment
+* @implements :: Comment
 * @description :: A general function class that stores all
 * attributes about a function. Also can transform a function
 * into markdown
@@ -11,7 +12,7 @@
 import java.util.ArrayList;
 
 
-public class FunctionComment {
+public class FunctionComment implements Comment {
 
   /**
   * @type :: VAR
@@ -98,6 +99,7 @@ public class FunctionComment {
   */
   public FunctionComment(ArrayList<String> content) {
     raw = content;
+    extract();
   }
 
   /**
@@ -119,7 +121,7 @@ public class FunctionComment {
         String content = Utility.removeWhitespace(commentArr[1]);
         // Make sure that the escape actually exists
         if(tag.charAt(0) == '@') {
-          tag = tag.substring(0);
+          tag = tag.substring(1);
           // For consistency, make sure all the tags are lowercase
           tag = tag.toLowerCase();
           switch(tag) {
@@ -192,6 +194,7 @@ public class FunctionComment {
     // Description
     if (description != null) {
       builder += "#### Description \n " + description;
+      builder += '\n';
     }
     // Params
     if (params.size() != 0) {

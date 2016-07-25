@@ -3,6 +3,7 @@
 * @author :: Steven T Hanna
 * @date :: 7/24/16
 * @class :: ClassComment
+* @implements :: Comment
 * @description :: A general class class that stores all
 * attributes about a class. Also can transform a class
 * into markdown
@@ -11,7 +12,7 @@
 import java.util.ArrayList;
 
 
-public class ClassComment {
+public class ClassComment implements Comment {
 
   /**
   * @type :: VAR
@@ -84,6 +85,7 @@ public class ClassComment {
   */
   public ClassComment(ArrayList<String> content) {
     raw = content;
+    extract();
   }
 
   /**
@@ -105,7 +107,7 @@ public class ClassComment {
         String content = Utility.removeWhitespace(commentArr[1]);
         // Make sure that the escape actually exists
         if(tag.charAt(0) == '@') {
-          tag = tag.substring(0);
+          tag = tag.substring(1);
           // For consistency, make sure all the tags are lowercase
           tag = tag.toLowerCase();
           switch(tag) {
@@ -164,8 +166,12 @@ public class ClassComment {
       builder += "# " + className + "\n";
     }
     // author
-    if (author != null) {
-      builder += "**" + date + "** *" + author + "*\n";
+    if (author != null && date != null) {
+      builder += "**" + date + " -- ** *" + author + "*\n";
+    } else if (author != null) {
+      builder += "**" + author +"**\n";
+    } else {
+      builder += date + "\n";
     }
     // Description
     if (description != null) {
