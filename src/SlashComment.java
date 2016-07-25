@@ -42,7 +42,7 @@ public class SlashComment {
   public SlashComment(ArrayList<String> data) {
     rawData = data;
     clean();
-    extractTag();
+    extractType();
     for(int i = 0; i < cleanedComments.size(); i++) {
       System.out.println(cleanedComments.get(i));
       // System.out.println("DIFF");
@@ -67,19 +67,29 @@ public class SlashComment {
     if(!gettingTag.equals("")) {
       String[] tagArr = gettingTag.split("::");
       if(tagArr.length == 2) {
-        tag = Utility.removeWhitespace(tagArr[1].toLowerCase());
+        type = Utility.removeWhitespace(tagArr[1].toLowerCase());
       }
     }
   }
 
   /**
-  * @type :: Func
+  * @type :: FUNC
   * @name :: getType
   * @description :: Getter for the type
   * @return :: String - returns the type of the comment
   */
   public String getType() {
     return type;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: getCleanedComments
+  * @description :: Returns the cleaned comments
+  * @return :: Arraylist<String> - the cleaned comments
+  */
+  public ArrayList<String> getCleanedComments() {
+    return cleanedComments;
   }
 
   /**

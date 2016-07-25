@@ -2,7 +2,7 @@
 * @type :: CLASS
 * @author :: Steven T Hanna
 * @date :: 7/24/16
-* @class :: Function
+* @class :: FunctionComment
 * @description :: A general function class that stores all
 * attributes about a function. Also can transform a function
 * into markdown
@@ -11,7 +11,7 @@
 import java.util.ArrayList;
 
 
-public class Function {
+public class FunctionComment {
 
   /**
   * @type :: VAR
@@ -92,11 +92,11 @@ public class Function {
 
   /**
   * @type :: FUNC
-  * @name :: Function
-  * @description :: The constructor for the Function class
+  * @name :: FunctionComment
+  * @description :: The constructor for the FunctionComment class
   * @param :: ArrayList<String> - the cleaned comment content
   */
-  public Function(ArrayList<String> content) {
+  public FunctionComment(ArrayList<String> content) {
     raw = content;
   }
 

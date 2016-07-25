@@ -27,6 +27,30 @@ public class SlashLanguage {
   private ArrayList<SlashComment> comments = new ArrayList<SlashComment>();
 
   /**
+  * @type :: VAR
+  * @name :: functions
+  * @description :: Oject representation of all the function comments. Used
+  * as staging before Markdown creation.
+  */
+  private ArrayList<FunctionComment> functions = new ArrayList<FunctionComment>();
+
+  /**
+  * @type :: VAR
+  * @name :: variables
+  * @description :: Object representation of all the variable comments.  Used
+  * as a staging before Markdown creation.
+  */
+  private ArrayList<VariableComment> variables = new ArrayList<VariableComment>();
+
+  /**
+  * @type :: VAR
+  * @name :: classes
+  * @description :: Object representation of all the class comments.  Used
+  * as a staging before Markdown creation.
+  */
+  private ArrayList<ClassComment> classes = new ArrayList<ClassComment>();
+
+  /**
   * @type :: FUNC
   * @name :: SlashLanguage
   * @description :: The constructor for the class
@@ -46,7 +70,23 @@ public class SlashLanguage {
   public void delegateComments() {
     for(int i = 0; i < comments.size(); i++) {
       // Look for the tag
-      ArrayList<String> commentData = comments.get(i);
+      String type = comments.get(i).getType();
+      switch(type) {
+        case "FUNC": {
+          FunctionComment function = new FunctionComment(comments.get(i).getCleanedComments());
+          functions.add(function);
+          break;
+        }
+        case "VAR": {
+          VariableComment variable = new VariableComment(comments.get(i).getCleanedComments());
+          variables.add(variable);
+          break;
+        }
+        case "CLASS": {
+          ClassComment classComment = new ClassComment(comments.get(i).getCleanedComments());
+          classes.add(classComment);
+        }
+      }
     }
   }
 
