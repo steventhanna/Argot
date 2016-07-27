@@ -9,9 +9,18 @@
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
-apply plugin: 'application'
+/*apply plugin: 'application'*/
 
-mainClassName = 'Main'
+/*mainClassName = 'Main'*/
+
+task runApp(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'Main'
+  // Arguments to pass to the application
+  args '-help'
+  args '-d testing123'
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
