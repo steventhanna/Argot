@@ -26,6 +26,14 @@ public class Main {
   */
   private static String docDest;
 
+  /**
+  * @type :: VAR
+  * @name :: logLevel
+  * @description :: Sets the systmem wide log level. Other options include
+  * verbose, and quiet.
+  */
+  private static String logLevel = "normal";
+
   public static void main(String[] args) {
 
     Options options = new Options();
@@ -36,11 +44,15 @@ public class Main {
     Option help = new Option("h", "help", false, "print this message");
     Option version = new Option("v", "version", false, "print the version information");
     Option recursive = new Option("r", "recursive", false, "recursively parses docs through the given dir");
+    Option verbose = new Option("vb", "verbose", false, "be extra verbose");
+    Option quiet = new Option("q", "quit", false, "be extra quiet");
     options.addOption(parse);
     options.addOption(destination);
     options.addOption(help);
     options.addOption(version);
     options.addOption(recursive);
+    options.addOption(verbose);
+    options.addOption(quiet);
 
     // Create the parser
     CommandLineParser parser = new DefaultParser();
@@ -69,11 +81,23 @@ public class Main {
           // Take the first destination
           if(dest.length > 0) {
             docDest = dest[0];
-          }  
+          } else {
+            // Just give the same location as the src
+            docDest = docSrc;
+          }
         }
+      }
+      if(line.hasOption("verbose")) {
+        logLevel = "verbose";
+      }
+      if(line.hasOption("quiet")) {
+        logLevel = "quiet";
       }
     } catch(ParseException e) {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
     }
+    // After the CommandLineParser has finished, send info to the delegate class
+    Delegate delegate = new Delegate(docSrc, docDest, logLevel);
+
   }
 }
