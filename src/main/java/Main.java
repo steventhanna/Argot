@@ -28,6 +28,14 @@ public class Main {
 
   /**
   * @type :: VAR
+  * @name :: recursive
+  * @description :: Flag to recursively walk the filetree.
+  * @note :: Defaults to false
+  */
+  private static boolean recursiveFlag = false;
+
+  /**
+  * @type :: VAR
   * @name :: logLevel
   * @description :: Sets the systmem wide log level. Other options include
   * verbose, and quiet.
@@ -93,11 +101,16 @@ public class Main {
       if(line.hasOption("quiet")) {
         logLevel = "quiet";
       }
+      if(line.hasOption("recursive")) {
+        recursiveFlag = true;
+      }
     } catch(ParseException e) {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
     }
+    System.out.println("DOCSRC: " + docSrc);
+    System.out.println("DOCDEST: " + docDest);
     // After the CommandLineParser has finished, send info to the delegate class
-    Delegate delegate = new Delegate(docSrc, docDest, logLevel);
+    Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
 
   }
 }

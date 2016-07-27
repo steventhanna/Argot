@@ -183,4 +183,14 @@ public class SlashLanguage implements Language {
       }
     }
   }
+
+  /**
+  * @type :: FUNC
+  * @name :: getRenderedMarkdown
+  * @description :: Returns the rendered markdown
+  * @return :: ArrayList<String> - returns the rendered markdown
+  */
+  public ArrayList<String> getRenderedMarkdown() {
+    return renderedMarkdown;
+  }
 }

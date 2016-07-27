@@ -19,7 +19,8 @@ task runApp(type: JavaExec) {
   main = 'Main'
   // Arguments to pass to the application
   args '-help'
-  args '-d testing123'
+  args '-p /Users/steventhanna/Desktop/Programming/Java/Argot/src/main/java'
+  args '-d /Users/steventhanna/Desktop/Programming/Java/Argot/src/main/java'
 }
 
 // In this section you declare where to find the dependencies of your project

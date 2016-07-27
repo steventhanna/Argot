@@ -22,6 +22,13 @@ public class ArgotFile {
   */
   private String path;
 
+  /**
+  * @type :: VAR
+  * @name :: file
+  * @description :: The file representation of the input
+  */
+  private File file;
+
   /**VAR
   * @type :: VAR
   * @name :: filename
@@ -56,8 +63,9 @@ public class ArgotFile {
   * @description :: Constructor for ArgotFile
   * @param :: String path - the path of the given file
   */
-  public ArgotFile(String path) {
-    this.path = path;
+  public ArgotFile(File file) {
+    this.file = file;
+    this.path = file.getAbsolutePath();
     extractContents();
     delegateLanguages();
   }
@@ -112,33 +120,59 @@ public class ArgotFile {
   * @return :: ArrayList<String> - the Markdown representation of the class
   */
   public ArrayList<String> delegateLanguages() {
+    SlashLanguage slash;
     switch(extension) {
       case "java": {
-        SlashLanguage slash = new SlashLanguage(contents);
+        slash = new SlashLanguage(contents);
         // return slash.generateMarkdown();
         break;
       }
       case "c": {
-        SlashLanguage slash = new SlashLanguage(contents);
+        slash = new SlashLanguage(contents);
         // return slash.generateMarkdown();
         break;
       }
       case "cpp": {
-        SlashLanguage slash = new SlashLanguage(contents);
+        slash = new SlashLanguage(contents);
         // return slash.generateMarkdown();
         break;
       }
       case "js": {
-        SlashLanguage slash = new SlashLanguage(contents);
+        slash = new SlashLanguage(contents);
         // return slash.generateMarkdown();
         break;
       }
       default: {
         // TODO :: Throw an exception here
-        System.out.println("Extension " + extension + " is not supported yet.");
+        System.err.println("Extension " + extension + " is not supported yet.");
         return null;
       }
     }
+    markdown = slash.getRenderedMarkdown();
+    System.out.println("GOT MARKDOWN");
+    for(int i = 0; i < markdown.size(); i++) {
+      System.out.println(markdown.get(i));
+    }
     return null;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: getFilename
+  * @description :: Returns the filename of the current ArgotFile
+  * @return :: String filename - the filename of the current ArgotFile
+  */
+  public String getFilename() {
+    return filename;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: getMarkdown
+  * @description :: Returns the rendered markdown
+  * @return ArrayList<String> - returns the redered markdown
+  */
+  public ArrayList<String> getMarkdown() {
+    return markdown;
   }
 }
