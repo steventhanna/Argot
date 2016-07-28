@@ -105,7 +105,7 @@ public class SlashLanguage implements Language {
             break;
           }
           default: {
-            System.out.println("The Type " + type + " is not yet supported.");
+            System.err.println("The Type " + type + " is not yet supported.");
           }
         }
       }

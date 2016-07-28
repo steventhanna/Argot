@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.apache.commons.io.FilenameUtils;
 
 public class ArgotFile {
 
@@ -85,9 +86,7 @@ public class ArgotFile {
       filename = path;
     }
     // Harvest extension
-    System.out.println("FILENAME: " + filename);
-    int periodLoc = filename.indexOf(".");
-    extension = filename.substring(periodLoc + 1);
+    extension = FilenameUtils.getExtension(filename);
 
     // Read the actual file
     try {
@@ -97,7 +96,7 @@ public class ArgotFile {
       }
       in.close();
     } catch(IOException e) {
-      System.out.println("File could not be read: " + e);
+      System.err.println("File could not be read: " + e);
     }
   }
 
@@ -149,10 +148,6 @@ public class ArgotFile {
       }
     }
     markdown = slash.getRenderedMarkdown();
-    System.out.println("GOT MARKDOWN");
-    for(int i = 0; i < markdown.size(); i++) {
-      System.out.println(markdown.get(i));
-    }
     return null;
   }
 
@@ -163,7 +158,7 @@ public class ArgotFile {
   * @return :: String filename - the filename of the current ArgotFile
   */
   public String getFilename() {
-    return filename;
+    return FilenameUtils.removeExtension(filename);
   }
 
   /**

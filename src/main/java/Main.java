@@ -110,9 +110,6 @@ public class Main {
     } catch(ParseException e) {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
     }
-    System.out.println("DOCSRC: " + docSrc);
-    File file = new File(docSrc);
-    System.out.println(file.getAbsolutePath());
     // After the CommandLineParser has finished, send info to the delegate class
     Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
 

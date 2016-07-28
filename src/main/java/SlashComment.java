@@ -43,12 +43,6 @@ public class SlashComment {
     rawData = data;
     clean();
     extractType();
-    for(int i = 0; i < cleanedComments.size(); i++) {
-      System.out.println(cleanedComments.get(i));
-      // System.out.println("DIFF");
-      // System.out.println(removeWhitespace(cleanedComments.get(i)));
-    }
-    System.out.println();
   }
 
   /**

@@ -58,8 +58,6 @@ public class Delegate {
   public Delegate(String src, String dest, String logLevel, boolean recursive) {
     docSrc = new File(src);
     docDest = new File(dest);
-    System.out.println("ABS: " + docSrc.getAbsolutePath());
-    System.out.println("ABS: " + docDest.getAbsolutePath());
     this.logLevel = logLevel;
     this.recursive = recursive;
     parse();
@@ -95,19 +93,15 @@ public class Delegate {
 
     // @todo :: Compose threads here for handling the amount of files in the target
     if(recursive == false) {
-      System.out.println("RUNNING NOT RECURSIVE");
       if(docSrc.isFile()) {
-        System.out.println("RUNNING SINGLE");
         ArgotFile file = new ArgotFile(docSrc);
-        writeToFile(new File(docDest + file.getFilename() + ".md"), file.getMarkdown());
+        writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
       } else {
-        System.out.println("RUNNING MULTIPLE");
-        System.out.println("FILE: " + docSrc.getPath());
         File[] fileArray = docSrc.listFiles();
         for(int i = 0; i < fileArray.length; i++) {
           ArgotFile file = new ArgotFile(fileArray[i]);
           if(file.getMarkdown().size() != 0) {
-            writeToFile(new File(docDest + file.getFilename() + ".md"), file.getMarkdown());  
+            writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
           }
         }
       }
