@@ -111,6 +111,12 @@ public class Main {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
     }
     // After the CommandLineParser has finished, send info to the delegate class
+    if(docSrc == null) {
+      System.err.println("No input files given. View the help:");
+      HelpFormatter formatter = new HelpFormatter();
+      formatter.printHelp("Argot", options);
+      return;
+    }
     Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
 
   }

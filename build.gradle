@@ -9,9 +9,8 @@
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
-/*apply plugin: 'application'*/
 
-/*mainClassName = 'Main'*/
+version = '1.0'
 
 task runApp(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
@@ -22,6 +21,18 @@ task runApp(type: JavaExec) {
   args '-p src'
   args '-d src'
   args '-r'
+}
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'Argot',
+        	'Implementation-Version': version,
+        	'Main-Class': 'Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 // In this section you declare where to find the dependencies of your project

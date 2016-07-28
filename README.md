@@ -1,6 +1,33 @@
 # Argot
 Parse documentation from codebases into markdown for easy doc creation.  With the exception of markup languages and stylesheets, languages with / notation will follow a modified version of the Java documentation system
 
+## Installation and Building
+- Clone the Repo
+- Make sure Gradle is installed on your system
+- In the command line ...
+
+```shell
+$ cd $path_to_argot$
+$ gradle run
+```
+
+### Different CLI Arguments During Testing
+Parameters and all other options are handled through Gradle.
+
+In the `build.gradle` file, there should be a snippet that looks like this:
+
+```
+// Arguments to pass to the application
+args '-help'
+```
+
+Simply add whichever argument you need, followed by its parameter.
+
+```
+args '-p $path_to_src$
+args '-d $path_to_dest$
+```
+
 ## / Comment Languages
 
 ### Escape Character
