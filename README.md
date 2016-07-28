@@ -38,14 +38,6 @@ For this system, the character that will be used to denote specific information 
 
 Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.  With each piece of documentation, a tag should be given in the form `@tag :: ` so that the system can distinguish between methods, vars, etc.
 
-```java
-/**
-* Sample documentation here
-* A second line of documentation
-* @tag
-*/
-```
-
 ** NOTE: ** Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
 
 ### Tags
@@ -75,7 +67,8 @@ When beginning the file, you can use any of the following in any combination at 
 `@note :: ` - notes any important information relevant to the file
 
 ```java
-/**CLASS
+/**
+* @tag :: CLASS
 * @class :: Example File
 * @author :: Steven Hanna, Other People
 * @date :: 7/25/16
@@ -109,7 +102,8 @@ Documentation for methods must begin before the method starts.
 
 
 ```java
-/**FUNC
+/**
+* @tag :: FUNC
 * @name :: sampleMethod
 * @description :: Provides a sample method for this example.
 * Overflow text can continue here, but cannot go
@@ -134,7 +128,8 @@ Like methods, documentation for variables must begin before the variable is decl
 
 
 ```java
-/**VAR
+/**
+* @tag :: VAR
 * @name :: exampleInt
 * @type :: the type of the variable
 * @description :: example integer variable
