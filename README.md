@@ -1,5 +1,8 @@
 # Argot
-Parse documentation from codebases into markdown for easy doc creation.  With the exception of markup languages and stylesheets, languages with / notation will follow a modified version of the Java documentation system
+Parse documentation from codebases into markdown for easy doc creation.  With the exception of markup languages and stylesheets, languages with / notation will follow a modified version of the Java documentation system.
+
+## Argot in Action
+Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against its own codebase.
 
 ## Installation and Building
 - Clone the Repo
