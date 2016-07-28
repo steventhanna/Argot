@@ -74,12 +74,22 @@ public class Delegate {
       System.err.println("The file: " + docSrc.getAbsolutePath() + " does not exsit.");
       return;
     }
+    // Check read permissions for docSrc
+    if(!docSrc.canRead()) {
+      System.err.println("The file: " + docSrc.getAbsolutePath() + " cannot be read becuase Argot does not have access.");
+      return;
+    }
     if(docDest == null) {
       // Set the docDest to the src
       docDest = docSrc;
     }
     if(!docDest.exists() && docDest.isFile()) {
       System.err.println("The file: " + docDest.getAbsolutePath() + " is a file.");
+      return;
+    }
+    // Check write permissions for docDest
+    if(!docDest.canWrite()) {
+      System.err.println("The file: " + docDest.getAbsolutePath() + " cannot be written to becuase Argot does not have access.");
       return;
     }
     if(!docDest.exists() && docDest.isDirectory()) {
@@ -99,7 +109,9 @@ public class Delegate {
       } else {
         File[] fileArray = docSrc.listFiles();
         for(int i = 0; i < fileArray.length; i++) {
-          if(!fileArray[i].isDirectory()) {
+          if(!fileArray[i].canRead()) {
+            System.err.println("The file: " + fileArray[i].getAbsolutePath() + " cannot be read becuase Argot does not have access.");
+          } else if(!fileArray[i].isDirectory()) {
             ArgotFile file = new ArgotFile(fileArray[i]);
             if(file.getMarkdown().size() != 0) {
               writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
@@ -120,6 +132,10 @@ public class Delegate {
   * @param :: File file - the file to recursively check
   */
   public void recursiveWalk(File file) {
+    if(!file.canRead()) {
+      System.err.println("The file: " + file.getAbsolutePath() + " cannot be read becuase Argot does not have access.");
+      return;
+    }
     if(file.isDirectory()) {
       File[] files = file.listFiles();
       for(int i = 0; i < files.length; i++) {
