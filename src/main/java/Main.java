@@ -9,6 +9,7 @@
 
 import java.util.ArrayList;
 import org.apache.commons.cli.*;
+import java.io.File;
 
 public class Main {
 
@@ -53,7 +54,7 @@ public class Main {
     Option version = new Option("v", "version", false, "print the version information");
     Option recursive = new Option("r", "recursive", false, "recursively parses docs through the given dir");
     Option verbose = new Option("vb", "verbose", false, "be extra verbose");
-    Option quiet = new Option("q", "quit", false, "be extra quiet");
+    Option quiet = new Option("q", "quiet", false, "be extra quiet");
     options.addOption(parse);
     options.addOption(destination);
     options.addOption(help);
@@ -76,6 +77,7 @@ public class Main {
         // Just take the first path
         if(filepath.length > 0) {
           docSrc = filepath[0];
+          docSrc = docSrc.trim();
         } else {
           throw new ParseException("No SRC files given.");
         }
@@ -89,6 +91,7 @@ public class Main {
           // Take the first destination
           if(dest.length > 0) {
             docDest = dest[0];
+            docDest = docDest.trim();
           } else {
             // Just give the same location as the src
             docDest = docSrc;
@@ -108,7 +111,8 @@ public class Main {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
     }
     System.out.println("DOCSRC: " + docSrc);
-    System.out.println("DOCDEST: " + docDest);
+    File file = new File(docSrc);
+    System.out.println(file.getAbsolutePath());
     // After the CommandLineParser has finished, send info to the delegate class
     Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
 

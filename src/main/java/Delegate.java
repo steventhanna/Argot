@@ -58,8 +58,8 @@ public class Delegate {
   public Delegate(String src, String dest, String logLevel, boolean recursive) {
     docSrc = new File(src);
     docDest = new File(dest);
-    System.out.println("ABS: " + docSrc.getPath());
-    System.out.println("ABS: " + docDest.getPath());
+    System.out.println("ABS: " + docSrc.getAbsolutePath());
+    System.out.println("ABS: " + docDest.getAbsolutePath());
     this.logLevel = logLevel;
     this.recursive = recursive;
     parse();
@@ -72,26 +72,26 @@ public class Delegate {
   */
   public void parse() {
     // Check to make sure that the files actually exists
-    // if(!docSrc.exists()) {
-    //   System.err.println("The file: " + docSrc.getPath() + " does not exsit.");
-    //   return;
-    // }
-    // if(docDest == null) {
-    //   // Set the docDest to the src
-    //   docDest = docSrc;
-    // }
-    // if(!docDest.exists() && docDest.isFile()) {
-    //   System.err.println("The file: " + docDest.getAbsolutePath() + " is a file.");
-    //   return;
-    // }
-    // if(!docDest.exists() && docDest.isDirectory()) {
-    //   // Create the folder since it does not exist, and it is a dir
-    //   docDest.mkdir();
-    // }
-    // // If the given destination is a file, walk up the tree until there is a dir
-    // while(!docDest.isDirectory()) {
-    //   docDest = docDest.getParentFile();
-    // }
+    if(!docSrc.exists()) {
+      System.err.println("The file: " + docSrc.getAbsolutePath() + " does not exsit.");
+      return;
+    }
+    if(docDest == null) {
+      // Set the docDest to the src
+      docDest = docSrc;
+    }
+    if(!docDest.exists() && docDest.isFile()) {
+      System.err.println("The file: " + docDest.getAbsolutePath() + " is a file.");
+      return;
+    }
+    if(!docDest.exists() && docDest.isDirectory()) {
+      // Create the folder since it does not exist, and it is a dir
+      docDest.mkdir();
+    }
+    // If the given destination is a file, walk up the tree until there is a dir
+    while(!docDest.isDirectory()) {
+      docDest = docDest.getParentFile();
+    }
 
     // @todo :: Compose threads here for handling the amount of files in the target
     if(recursive == false) {
@@ -106,7 +106,9 @@ public class Delegate {
         File[] fileArray = docSrc.listFiles();
         for(int i = 0; i < fileArray.length; i++) {
           ArgotFile file = new ArgotFile(fileArray[i]);
-          writeToFile(new File(docDest + file.getFilename() + ".md"), file.getMarkdown());
+          if(file.getMarkdown().size() != 0) {
+            writeToFile(new File(docDest + file.getFilename() + ".md"), file.getMarkdown());  
+          }
         }
       }
     } else {
