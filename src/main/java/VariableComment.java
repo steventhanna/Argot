@@ -119,15 +119,15 @@ public class VariableComment implements Comment {
     String builder = "";
     // Name
     if(name != null) {
-      builder += "\n ### " + name + "\n";
+      builder += "\n### " + name + "\n";
     }
     // Description
     if (description != null) {
-      builder += "\n #### Description \n " + description + " \n";
+      builder += "\n#### Description \n " + description + " \n";
     }
     // See
     if(see.size() != 0) {
-      builder += "\n #### See \n";
+      builder += "\n#### See \n";
       builder += "\n";
       for(int i = 0; i < see.size(); i++) {
         builder += "- " + see.get(i) + " \n";
@@ -135,7 +135,7 @@ public class VariableComment implements Comment {
     }
     // Notes
     if(notes.size() != 0) {
-      builder += "\n #### Notes \n";
+      builder += "\n#### Notes \n";
       builder += "\n";
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";

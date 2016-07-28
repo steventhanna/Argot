@@ -167,7 +167,7 @@ public class ClassComment implements Comment {
     }
     // author
     if (author != null && date != null) {
-      builder += "**" + date + " -- ** *" + author + "*\n";
+      builder += "**" + date + " --** *" + author + "*\n";
     } else if (author != null) {
       builder += "**" + author +"**\n";
     } else {
@@ -175,11 +175,11 @@ public class ClassComment implements Comment {
     }
     // Description
     if (description != null) {
-      builder += "\n ### Description \n " + description + " \n";
+      builder += "\n### Description \n " + description + " \n";
     }
     // Parents
     if(parents.size() > 0) {
-      builder += "\n #### Parents \n ";
+      builder += "\n#### Parents \n ";
       builder += "\n";
       for(int i = 0; i < parents.size(); i++) {
         builder += "- " + parents.get(i) + " \n";
@@ -187,7 +187,7 @@ public class ClassComment implements Comment {
     }
     // Children
     if(children.size() > 0) {
-      builder += "\n #### Children \n ";
+      builder += "\n#### Children \n ";
       builder += "\n";
       for(int i = 0; i < children.size(); i++) {
         builder += "- " + children.get(i) + " \n";
@@ -195,7 +195,7 @@ public class ClassComment implements Comment {
     }
     // See
     if(see.size() > 0) {
-      builder += "\n #### See \n";
+      builder += "\n#### See \n";
       builder += "\n";
       for(int i = 0; i < see.size(); i++) {
         builder += "- " + see.get(i) + " \n";
@@ -203,7 +203,7 @@ public class ClassComment implements Comment {
     }
     // Notes
     if(notes.size() > 0) {
-      builder += "\n #### Notes \n";
+      builder += "\n#### Notes \n";
       builder += "\n";
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";

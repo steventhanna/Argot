@@ -19,7 +19,7 @@ task runApp(type: JavaExec) {
   // Arguments to pass to the application
   args '-help'
   args '-p src'
-  args '-d src'
+  args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'
   args '-r'
 }
 

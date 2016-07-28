@@ -193,12 +193,12 @@ public class FunctionComment implements Comment {
     }
     // Description
     if (description != null) {
-      builder += "\n #### Description \n " + description + " \n";
+      builder += "\n#### Description \n " + description + " \n";
       builder += '\n';
     }
     // Params
     if (params.size() != 0) {
-      builder += "\n #### Parameters \n ";
+      builder += "\n#### Parameters \n ";
       builder += "\n";
       for(int i = 0; i < params.size(); i++) {
         builder += "- " + params.get(i) + " \n";
@@ -207,12 +207,12 @@ public class FunctionComment implements Comment {
     }
     // Return Element
     if(returnElement != null) {
-      builder += "\n #### Returns \n";
+      builder += "\n#### Returns \n";
       builder += "**" + returnElement + "** \n";
     }
     // Exceptions
     if(exceptions.size() != 0) {
-      builder += "\n #### Exceptions \n";
+      builder += "\n#### Exceptions \n";
       builder += "\n";
       for(int i = 0; i < exceptions.size(); i++) {
         builder += "- " + exceptions.get(i) + " \n";
@@ -220,7 +220,7 @@ public class FunctionComment implements Comment {
     }
     // Thrown
     if(thrown.size() != 0) {
-      builder += "\n #### Thrown \n";
+      builder += "\n#### Thrown \n";
       builder += "\n";
       for(int i = 0; i < thrown.size(); i++) {
         builder += "- " + thrown.get(i) + " \n";
@@ -228,7 +228,7 @@ public class FunctionComment implements Comment {
     }
     // See
     if(see.size() != 0) {
-      builder += "\n #### See \n";
+      builder += "\n#### See \n";
       builder += "\n";
       for(int i = 0; i < see.size(); i++) {
         builder += "- " + see.get(i) + " \n";
@@ -236,7 +236,7 @@ public class FunctionComment implements Comment {
     }
     // Notes
     if(notes.size() != 0) {
-      builder += "\n #### Notes \n";
+      builder += "\n#### Notes \n";
       builder += "\n";
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";
