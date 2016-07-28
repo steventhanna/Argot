@@ -14,6 +14,22 @@ $ cd $path_to_argot$
 $ gradle run
 ```
 
+### Build a JAR
+Simply run the following:
+
+```shell
+$ gradle clean
+$ gradle fatJar
+```
+
+Then check under the `/build/libs/` directory.
+
+Run the jar using
+
+```shell
+java -jar $jar_name$
+```
+
 ### Different CLI Arguments During Testing
 Parameters and all other options are handled through Gradle.
 
