@@ -27,7 +27,7 @@ Then check under the `/build/libs/` directory.
 Run the jar using
 
 ```shell
-java -jar $jar_name$
+$ java -jar $jar_name$
 ```
 
 ### Different CLI Arguments During Testing
