@@ -54,7 +54,7 @@ For this system, the character that will be used to denote specific information 
 
 Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.  With each piece of documentation, a tag should be given in the form `@tag :: ` so that the system can distinguish between methods, vars, etc.
 
-** NOTE: ** Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
+** NOTE:**  Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
 
 ### Tags
 - `FUNC` - Tag for a function or method
