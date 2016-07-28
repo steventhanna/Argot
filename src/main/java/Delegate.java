@@ -99,16 +99,38 @@ public class Delegate {
       } else {
         File[] fileArray = docSrc.listFiles();
         for(int i = 0; i < fileArray.length; i++) {
-          ArgotFile file = new ArgotFile(fileArray[i]);
-          if(file.getMarkdown().size() != 0) {
-            writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
+          if(!fileArray[i].isDirectory()) {
+            ArgotFile file = new ArgotFile(fileArray[i]);
+            if(file.getMarkdown().size() != 0) {
+              writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
+            }
           }
         }
       }
     } else {
       // Walk the file tree here
+      recursiveWalk(docSrc);
     }
+  }
 
+  /**
+  * @type :: FUNC
+  * @name :: recursiveWalk
+  * @description :: Recursively walk a file tree creating documentation.
+  * @param :: File file - the file to recursively check
+  */
+  public void recursiveWalk(File file) {
+    if(file.isDirectory()) {
+      File[] files = file.listFiles();
+      for(int i = 0; i < files.length; i++) {
+        recursiveWalk(files[i]);
+      }
+    } else {
+      ArgotFile af = new ArgotFile(file);
+      if(af.getMarkdown().size() != 0) {
+        writeToFile(new File(docDest + "/" + af.getFilename() + ".md"), af.getMarkdown());
+      }
+    }
   }
 
   /**

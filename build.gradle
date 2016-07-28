@@ -19,8 +19,9 @@ task runApp(type: JavaExec) {
   main = 'Main'
   // Arguments to pass to the application
   args '-help'
-  args '-p src/main/java'
-  args '-d src/main/java'
+  args '-p src'
+  args '-d src'
+  args '-r'
 }
 
 // In this section you declare where to find the dependencies of your project

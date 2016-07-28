@@ -193,44 +193,51 @@ public class FunctionComment implements Comment {
     }
     // Description
     if (description != null) {
-      builder += "#### Description \n " + description;
+      builder += "\n #### Description \n " + description + " \n";
       builder += '\n';
     }
     // Params
     if (params.size() != 0) {
-      builder += "#### Parameters \n ";
+      builder += "\n #### Parameters \n ";
+      builder += "\n";
       for(int i = 0; i < params.size(); i++) {
         builder += "- " + params.get(i) + " \n";
       }
+      builder += "\n";
     }
     // Return Element
     if(returnElement != null) {
+      builder += "\n #### Returns \n";
       builder += "**" + returnElement + "** \n";
     }
     // Exceptions
     if(exceptions.size() != 0) {
-      builder += "#### Exceptions \n";
+      builder += "\n #### Exceptions \n";
+      builder += "\n";
       for(int i = 0; i < exceptions.size(); i++) {
         builder += "- " + exceptions.get(i) + " \n";
       }
     }
     // Thrown
     if(thrown.size() != 0) {
-      builder += "#### Thrown \n";
+      builder += "\n #### Thrown \n";
+      builder += "\n";
       for(int i = 0; i < thrown.size(); i++) {
         builder += "- " + thrown.get(i) + " \n";
       }
     }
     // See
     if(see.size() != 0) {
-      builder += "#### See \n";
+      builder += "\n #### See \n";
+      builder += "\n";
       for(int i = 0; i < see.size(); i++) {
         builder += "- " + see.get(i) + " \n";
       }
     }
     // Notes
     if(notes.size() != 0) {
-      builder += "#### Notes \n";
+      builder += "\n #### Notes \n";
+      builder += "\n";
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";
       }

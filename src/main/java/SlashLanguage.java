@@ -69,9 +69,6 @@ public class SlashLanguage implements Language {
     extractComments(contents);
     delegateComments();
     renderMarkdown();
-    for(int i = 0; i < renderedMarkdown.size(); i++) {
-      System.out.println(renderedMarkdown.get(i));
-    }
   }
 
   /**

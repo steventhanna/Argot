@@ -119,22 +119,24 @@ public class VariableComment implements Comment {
     String builder = "";
     // Name
     if(name != null) {
-      builder += "### " + name + "\n";
+      builder += "\n ### " + name + "\n";
     }
     // Description
     if (description != null) {
-      builder += "#### Description \n " + description;
+      builder += "\n #### Description \n " + description + " \n";
     }
     // See
     if(see.size() != 0) {
-      builder += "#### See \n";
+      builder += "\n #### See \n";
+      builder += "\n";
       for(int i = 0; i < see.size(); i++) {
         builder += "- " + see.get(i) + " \n";
       }
     }
     // Notes
     if(notes.size() != 0) {
-      builder += "#### Notes \n";
+      builder += "\n #### Notes \n";
+      builder += "\n";
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";
       }

@@ -175,32 +175,36 @@ public class ClassComment implements Comment {
     }
     // Description
     if (description != null) {
-      builder += "### Description \n " + description;
+      builder += "\n ### Description \n " + description + " \n";
     }
     // Parents
-    if(parents.size() != 0) {
-      builder += "#### Parents \n ";
+    if(parents.size() > 0) {
+      builder += "\n #### Parents \n ";
+      builder += "\n";
       for(int i = 0; i < parents.size(); i++) {
         builder += "- " + parents.get(i) + " \n";
       }
     }
     // Children
-    if(children.size() != 0) {
-      builder += "#### Children \n ";
+    if(children.size() > 0) {
+      builder += "\n #### Children \n ";
+      builder += "\n";
       for(int i = 0; i < children.size(); i++) {
         builder += "- " + children.get(i) + " \n";
       }
     }
     // See
-    if(see.size() != 0) {
-      builder += "#### See \n";
+    if(see.size() > 0) {
+      builder += "\n #### See \n";
+      builder += "\n";
       for(int i = 0; i < see.size(); i++) {
         builder += "- " + see.get(i) + " \n";
       }
     }
     // Notes
-    if(notes.size() != 0) {
-      builder += "#### Notes \n";
+    if(notes.size() > 0) {
+      builder += "\n #### Notes \n";
+      builder += "\n";
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";
       }
