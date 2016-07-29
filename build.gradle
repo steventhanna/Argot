@@ -10,17 +10,18 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-version = '1.0'
+version = '0.1.0'
 
 task runApp(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
 
   main = 'Main'
   // Arguments to pass to the application
-  args '-help'
-  args '-p src'
-  args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'
-  args '-r'
+  /*args '--help'*/
+  /*args '-v'*/
+  /*args '-p src'*/
+  /*args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'*/
+  /*args '-r'*/
 }
 
 //create a single Jar with all dependencies
@@ -30,7 +31,7 @@ task fatJar(type: Jar) {
         	'Implementation-Version': version,
         	'Main-Class': 'Main'
     }
-    baseName = project.name + '-all'
+    baseName = project.name
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

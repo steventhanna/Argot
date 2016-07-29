@@ -15,6 +15,13 @@ public class Main {
 
   /**
   * @type :: VAR
+  * @name :: versionInformation
+  * @description :: The version information for Argot
+  */
+  private static String versionInformation = "0.1.0";
+
+  /**
+  * @type :: VAR
   * @name :: docSrc
   * @description :: The src file / dir to be parsed
   */
@@ -60,8 +67,8 @@ public class Main {
     options.addOption(help);
     options.addOption(version);
     options.addOption(recursive);
-    options.addOption(verbose);
-    options.addOption(quiet);
+    // options.addOption(verbose);
+    // options.addOption(quiet);
 
     // Create the parser
     CommandLineParser parser = new DefaultParser();
@@ -81,7 +88,6 @@ public class Main {
         } else {
           throw new ParseException("No SRC files given.");
         }
-
       }
       if(line.hasOption("destination")) {
         if(!line.hasOption("parse")) {
@@ -107,17 +113,15 @@ public class Main {
       if(line.hasOption("recursive")) {
         recursiveFlag = true;
       }
+      if(line.hasOption("version")) {
+        System.out.println("Argot Version: " + versionInformation);
+      }
     } catch(ParseException e) {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
     }
     // After the CommandLineParser has finished, send info to the delegate class
-    if(docSrc == null) {
-      System.err.println("No input files given. View the help:");
-      HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp("Argot", options);
-      return;
+    if(docSrc != null) {
+      Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
     }
-    Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
-
   }
 }
