@@ -77,7 +77,7 @@ public class Main {
       CommandLine line = parser.parse(options, args);
       if(line.hasOption("help")) {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("Argot", options);
+        formatter.printHelp("argot", options);
       }
       if(line.hasOption("parse")) {
         String[] filepath = line.getOptionValues("parse");
@@ -85,6 +85,10 @@ public class Main {
         if(filepath.length > 0) {
           docSrc = filepath[0];
           docSrc = docSrc.trim();
+          if(docSrc == ".") {
+            docSrc = System.getProperty("user.dir");
+            System.out.println("SYSTEM PROP: " + System.getProperty("user.dir"));
+          }
         } else {
           throw new ParseException("No SRC files given.");
         }
@@ -103,6 +107,8 @@ public class Main {
             docDest = docSrc;
           }
         }
+      } else {
+        docDest = docSrc;
       }
       if(line.hasOption("verbose")) {
         logLevel = "verbose";
@@ -115,12 +121,14 @@ public class Main {
       }
       if(line.hasOption("version")) {
         System.out.println("Argot Version: " + versionInformation);
+        return;
       }
     } catch(ParseException e) {
       System.err.println("Parsing failed. Reason: " + e.getMessage());
+      return;
     }
     // After the CommandLineParser has finished, send info to the delegate class
-    if(docSrc != null) {
+    if(docSrc != null && docDest != null) {
       Delegate delegate = new Delegate(docSrc, docDest, logLevel, recursiveFlag);
     }
   }

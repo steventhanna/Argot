@@ -19,19 +19,19 @@ task runApp(type: JavaExec) {
   // Arguments to pass to the application
   /*args '--help'*/
   /*args '-v'*/
-  /*args '-p src'*/
+  args '-p .'
   /*args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'*/
-  /*args '-r'*/
+  args '-r'
 }
 
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
 	manifest {
-        attributes 'Implementation-Title': 'Argot',
+        attributes 'Implementation-Title': 'argot',
         	'Implementation-Version': version,
         	'Main-Class': 'Main'
     }
-    baseName = project.name
+    baseName = "argot"
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
