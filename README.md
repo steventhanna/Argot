@@ -4,7 +4,31 @@ Parse documentation from codebases into markdown for easy doc creation.  With th
 ## Argot in Action
 Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against its own codebase.
 
-## Installation and Building
+## Installation (for stable use) (manually)
+- Download the latest [release](https://github.com/steventhanna/Argot/releases)
+- Move the jar to `/usr/local`
+- Add argot to your path. An example:
+
+```
+export PATH="/usr/local/argot"
+```
+
+- Then add an alias
+
+```
+alias argot='java -jar argot.jar'
+```
+
+**NOTE:** On MacOS, all these changes took place in my `.profile`
+
+- Then reload your .profile in the terminal
+```
+$ . ~/.profile  
+```
+
+
+
+## Installation (for development) and Building
 - Clone the Repo
 - Make sure Gradle is installed on your system
 - In the command line ...
