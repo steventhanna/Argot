@@ -9,7 +9,7 @@
 
 import java.util.ArrayList;
 
-public class SlashComment {
+public class SlashComment implements Comment {
 
   /**
   * @type :: VAR
