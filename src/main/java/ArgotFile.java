@@ -154,8 +154,10 @@ public class ArgotFile {
   /**
   * @type :: FUNC
   * @name :: getFilename
-  * @description :: Returns the filename of the current ArgotFile
-  * @return :: String filename - the filename of the current ArgotFile
+  * @description :: Returns the filename of the current ArgotFile.
+  * @note :: Returns the filename without the extension
+  * @return :: String filename - the filename of the current ArgotFile sans
+  * extension
   */
   public String getFilename() {
     return FilenameUtils.removeExtension(filename);

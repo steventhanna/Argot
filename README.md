@@ -16,7 +16,7 @@ export PATH="/usr/local/argot"
 - Then add an alias
 
 ```
-alias argot='java -jar argot.jar'
+alias argot="java -jar /usr/local/argot.jar"
 ```
 
 **NOTE:** On MacOS, all these changes took place in my `.profile`

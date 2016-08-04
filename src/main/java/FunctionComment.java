@@ -208,7 +208,7 @@ public class FunctionComment implements Comment {
     // Return Element
     if(returnElement != null) {
       builder += "\n#### Returns \n";
-      builder += "**" + returnElement + "** \n";
+      builder += "*" + returnElement + "* \n";
     }
     // Exceptions
     if(exceptions.size() != 0) {
@@ -241,6 +241,7 @@ public class FunctionComment implements Comment {
       for(int i = 0; i < notes.size(); i++) {
         builder += "- " + notes.get(i) + " \n";
       }
+      builder += "\n";
     }
     return builder;
   }
