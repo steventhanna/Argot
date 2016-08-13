@@ -12,52 +12,7 @@
 
 import java.util.ArrayList;
 
-public class SlashLanguage implements Language {
-
-  /**
-  * @type :: VAR
-  * @name :: rawComments
-  * @description :: String Representaion of the comments
-  */
-  private ArrayList<String> rawComments = new ArrayList<String>();
-
-  /**
-  * @type :: VAR
-  * @name :: comments
-  * @description :: Object representation of comments
-  */
-  private ArrayList<SlashComment> comments = new ArrayList<SlashComment>();
-
-  /**
-  * @type :: VAR
-  * @name :: functions
-  * @description :: Oject representation of all the function comments. Used
-  * as staging before Markdown creation.
-  */
-  private ArrayList<FunctionComment> functions = new ArrayList<FunctionComment>();
-
-  /**
-  * @type :: VAR
-  * @name :: variables
-  * @description :: Object representation of all the variable comments.  Used
-  * as a staging before Markdown creation.
-  */
-  private ArrayList<VariableComment> variables = new ArrayList<VariableComment>();
-
-  /**
-  * @type :: VAR
-  * @name :: classes
-  * @description :: Object representation of all the class comments.  Used
-  * as a staging before Markdown creation.
-  */
-  private ArrayList<ClassComment> classes = new ArrayList<ClassComment>();
-
-  /**
-  * @type :: VAR
-  * @name :: renderedMarkdown
-  * @description :: The rendered markdown in the order that the comments appear in the target file.
-  */
-  private ArrayList<String> renderedMarkdown = new ArrayList<String>();
+public class SlashLanguage extends Language {
 
   /**
   * @type :: FUNC
@@ -142,52 +97,5 @@ public class SlashLanguage implements Language {
         }
       }
     }
-  }
-
-  /**
-  * @type :: FUNC
-  * @name :: getRawComments
-  * @description :: Getter for the rawComment ArrayList
-  * @return :: ArrayList<String> - the comments to return
-  */
-  public ArrayList<String> getRawComments() {
-    return rawComments;
-  }
-
-  /**
-  * @type :: FUNC
-  * @name :: renderMarkdown
-  * @description :: Renders the markdown for the language
-  */
-  public void renderMarkdown() {
-    if(classes.size() > 0) {
-      for(int i = 0; i < classes.size(); i++) {
-        renderedMarkdown.add(classes.get(i).generateMarkdown());
-      }
-      renderedMarkdown.add("\n");
-    }
-    if(variables.size() > 0) {
-      renderedMarkdown.add("## Variables \n");
-      for(int i = 0; i < variables.size(); i++) {
-        renderedMarkdown.add(variables.get(i).generateMarkdown());
-      }
-      renderedMarkdown.add("\n");
-    }
-    if(functions.size() > 0) {
-      renderedMarkdown.add("## Functions \n");
-      for(int i = 0; i < functions.size(); i++) {
-        renderedMarkdown.add(functions.get(i).generateMarkdown());
-      }
-    }
-  }
-
-  /**
-  * @type :: FUNC
-  * @name :: getRenderedMarkdown
-  * @description :: Returns the rendered markdown
-  * @return :: ArrayList<String> - returns the rendered markdown
-  */
-  public ArrayList<String> getRenderedMarkdown() {
-    return renderedMarkdown;
   }
 }

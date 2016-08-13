@@ -20,7 +20,7 @@ task runApp(type: JavaExec) {
   /*args '--help'*/
   /*args '-v'*/
   args '-p .'
-  /*args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'*/
+  args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'
   args '-r'
 }
 
