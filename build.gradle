@@ -19,8 +19,8 @@ task runApp(type: JavaExec) {
   // Arguments to pass to the application
   /*args '--help'*/
   /*args '-v'*/
-  args '-p .'
-  args '-d /Users/steventhanna/Desktop/Programming/Java/Argot.wiki'
+  args '-p /Users/steventhanna/Desktop/Programming/Python/PicBac'
+  args '-d /Users/steventhanna/Desktop/Programming/Python/PicBac'
   args '-r'
 }
 

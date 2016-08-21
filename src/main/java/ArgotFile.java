@@ -118,6 +118,9 @@ public class ArgotFile {
   * appropriate worker can be started
   */
   public void delegateLanguages() {
+    if(extension.equals("")) {
+      return;
+    }
     Language lang;
     switch(extension) {
       case "java": {
@@ -140,13 +143,16 @@ public class ArgotFile {
         // return slash.generateMarkdown();
         break;
       }
+      case "py": {
+        lang = new Language(contents, "#");
+        break;
+      }
       default: {
         // TODO :: Throw an exception here
         System.err.println("Extension " + extension + " is not supported yet.");
         return;
       }
     }
-    System.out.println(lang.getRenderedMarkdown());
     markdown = lang.getRenderedMarkdown();
   }
 

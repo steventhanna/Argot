@@ -34,35 +34,20 @@ public class Comment {
   private ArrayList<String> cleanedComments = new ArrayList<String>();
 
   public Comment(ArrayList<String> rawData, String commentStyle) {
-    System.out.println("FIRE");
     this.rawData = rawData;
     clean(commentStyle);
-    System.out.println("COMMENT EXTRACT: " + cleanedComments.size());
-    for(int i = 0; i < cleanedComments.size(); i++) {
-      System.out.println(cleanedComments.get(i));
-    }
     extractType();
   }
 
   public Comment(ArrayList<String> rawData, String commentStyle, String beginStyle, String endStyle) {
-    System.out.println("FIRE");
     this.rawData = rawData;
     clean(commentStyle, beginStyle, endStyle);
     extractType();
-    System.out.println("COMMENT EXTRACT: " + cleanedComments.size());
-    for(int i = 0; i < cleanedComments.size(); i++) {
-      System.out.println(cleanedComments.get(i));
-    }
   }
 
   public Comment(ArrayList<String> rawData, String commentStyle, String beginStyle, String endStyle, String commentEndStyle) {
-    System.out.println("FIRE");
     this.rawData = rawData;
     clean(commentStyle, beginStyle, endStyle, commentEndStyle);
-    System.out.println("COMMENT EXTRACT: " + cleanedComments.size());
-    for(int i = 0; i < cleanedComments.size(); i++) {
-      System.out.println(cleanedComments.get(i));
-    }
     extractType();
   }
 
@@ -166,7 +151,6 @@ public class Comment {
   */
   public void clean(String commentStyle, String beginStyle, String endStyle) {
     for(int i = 0; i < rawData.size(); i++) {
-      System.out.println("TEST: " + strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim());
       String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim();
       if(!afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
@@ -184,10 +168,6 @@ public class Comment {
           i--;
         }
       }
-    }
-    System.out.println("ALL CLEAN");
-    for(int i = 0; i < cleanedComments.size(); i++) {
-      System.out.println(cleanedComments.get(i));
     }
   }
 
