@@ -27,7 +27,7 @@ public class Language {
   * @description :: Object representation of comments
   * @end
   */
-  public ArrayList<SlashComment> comments = new ArrayList<SlashComment>();
+  public ArrayList<Comment> comments = new ArrayList<Comment>();
 
   /**
   * @type :: VAR

@@ -121,6 +121,24 @@ public class Comment {
   * @param :: String commentStyle - the comment style to remove from the string
   */
   public void clean(String commentStyle) {
+    for(int i = 0; i < rawData.size(); i++) {
+      String afterStrip = strip(rawData.get(i), commentStyle, null, null, null).trim();
+      if(commentStyle != "" && !commentStyle.contains(commentStyle)) {
+        cleanedComments.add(afterStrip);
+      }
+    }
+    // For comments inbetween escape chars, combine them into one large comment
+    if(cleanedComments.size() > 1) {
+      for(int i = 0; i < cleanedComments.size(); i++) {
+        // Check to see if there are any type notations
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::")) {
+          // Chances are its a multi-line comment
+          cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
+          cleanedComments.remove(i);
+          i--;
+        }
+      }
+    }
   }
 
   /**
@@ -132,7 +150,24 @@ public class Comment {
   * @param :: String endStyle - the style that ends the comment set
   */
   public void clean(String commentStyle, String beginStyle, String endStyle) {
-
+    for(int i = 0; i < rawData.size(); i++) {
+      String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim();
+      if(commentStyle != "" && !commentStyle.contains(commentStyle)) {
+        cleanedComments.add(afterStrip);
+      }
+    }
+    // For comments inbetween escape chars, combine them into one large comment
+    if(cleanedComments.size() > 1) {
+      for(int i = 0; i < cleanedComments.size(); i++) {
+        // Check to see if there are any type notations
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::")) {
+          // Chances are its a multi-line comment
+          cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
+          cleanedComments.remove(i);
+          i--;
+        }
+      }
+    }
   }
 
   /**
@@ -145,18 +180,24 @@ public class Comment {
   * @param :: String commentEndStyle - the specific ending of a comment like in HTML
   */
   public void clean(String commentStyle, String beginStyle, String endStyle, String commentEndStyle) {
-
-  }
-
-  /**
-  * @type :: FUNC
-  * @name :: extract
-  * @description :: Extracts the individual tags from the cleaned
-  * comments from the constructor
-  * @note :: Big ass switch statement here
-  */
-  public void extract() {
-
+    for(int i = 0; i < rawData.size(); i++) {
+      String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, commentEndStyle).trim();
+      if(commentStyle != "" && !commentStyle.contains(commentStyle)) {
+        cleanedComments.add(afterStrip);
+      }
+    }
+    // For comments inbetween escape chars, combine them into one large comment
+    if(cleanedComments.size() > 1) {
+      for(int i = 0; i < cleanedComments.size(); i++) {
+        // Check to see if there are any type notations
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::")) {
+          // Chances are its a multi-line comment
+          cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
+          cleanedComments.remove(i);
+          i--;
+        }
+      }
+    }
   }
 
   /**
@@ -168,7 +209,44 @@ public class Comment {
   * a String might not be large enough
   */
   public String generateMarkdown() {
-    return null;
+    switch(type) {
+      case "func": {
+        FunctionComment com = new FunctionComment(cleanedComments);
+        return com.generateMarkdown();
+      }
+      case "var": {
+        VariableComment com = new VariableComment(cleanedComments);
+        return com.generateMarkdown();
+      }
+      case "class": {
+        ClassComment com = new ClassComment(cleanedComments);
+        return com.generateMarkdown();
+      }
+      default: {
+        System.out.println("That type is not yet supported.");
+        return null;
+      }
+    }
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: getType
+  * @description :: Getter for the type
+  * @return :: String - returns the type of the comment
+  */
+  public String getType() {
+    return type;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: getCleanedComments
+  * @description :: Returns the cleaned comments
+  * @return :: Arraylist<String> - the cleaned comments
+  */
+  public ArrayList<String> getCleanedComments() {
+    return cleanedComments;
   }
 
 }

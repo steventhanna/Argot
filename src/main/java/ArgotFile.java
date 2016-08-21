@@ -116,39 +116,36 @@ public class ArgotFile {
   * @description :: Determines through a switch statement the type of
   * commenting language used in the langauge.  From there, the
   * appropriate worker can be started
-  * @return :: ArrayList<String> - the Markdown representation of the class
   */
-  public ArrayList<String> delegateLanguages() {
-    SlashLanguage slash;
+  public void delegateLanguages() {
+    Language lang;
     switch(extension) {
       case "java": {
-        slash = new SlashLanguage(contents);
+        lang = new Language(contents, "*", "/**", "*/");
         // return slash.generateMarkdown();
         break;
       }
       case "c": {
-        slash = new SlashLanguage(contents);
+        lang = new Language(contents, "*", "/**", "*/");
         // return slash.generateMarkdown();
         break;
       }
       case "cpp": {
-        slash = new SlashLanguage(contents);
+        lang = new Language(contents, "*", "/**", "*/");
         // return slash.generateMarkdown();
         break;
       }
       case "js": {
-        slash = new SlashLanguage(contents);
+        lang = new Language(contents, "*", "/**", "*/");
         // return slash.generateMarkdown();
         break;
       }
       default: {
         // TODO :: Throw an exception here
         System.err.println("Extension " + extension + " is not supported yet.");
-        return null;
       }
     }
-    markdown = slash.getRenderedMarkdown();
-    return null;
+    markdown = lang.getRenderedMarkdown();
   }
 
   /**
