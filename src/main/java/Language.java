@@ -173,7 +173,7 @@ public class Language {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
-        for(int j = i; j < contents.size(); j++) {
+        for(int j = i + 1; j < contents.size(); j++) {
           if (contents.get(j).contains(commentStyle) && contents.get(j).contains("@end") == false) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
@@ -214,16 +214,14 @@ public class Language {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
-        for(int j = i; j < contents.size(); j++) {
-          if (contents.get(j).contains(commentStyle)) {
-            rawComments.add(contents.get(j));
-            commentBuffer.add(contents.get(j));
-          } else if (contents.get(j).contains(endStyle)) {
+        for(int j = i + 1; j < contents.size(); j++) {
+          if(contents.get(j).contains(endStyle)) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
             comments.add(new Comment(commentBuffer, commentStyle, beginStyle, endStyle));
-            i = j;
-            break;
+          } else if (contents.get(j).contains(commentStyle)) {
+            rawComments.add(contents.get(j));
+            commentBuffer.add(contents.get(j));
           } else {
             i = j;
             break;
@@ -256,16 +254,16 @@ public class Language {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
-        for(int j = i; j < contents.size(); j++) {
-          if (contents.get(j).contains(commentStyle)) {
-            rawComments.add(contents.get(j));
-            commentBuffer.add(contents.get(j));
-          } else if (contents.get(j).contains(endStyle)) {
+        for(int j = i + 1; j < contents.size(); j++) {
+          if (contents.get(j).contains(endStyle)) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
             comments.add(new Comment(commentBuffer, commentStyle, beginStyle, endStyle, commentEndStyle));
             i = j;
             break;
+          } else if (contents.get(j).contains(commentStyle)) {
+            rawComments.add(contents.get(j));
+            commentBuffer.add(contents.get(j));
           } else {
             i = j;
             break;

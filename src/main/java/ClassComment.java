@@ -12,7 +12,7 @@
 import java.util.ArrayList;
 
 
-public class ClassComment implements Comment {
+public class ClassComment implements TypeComment {
 
   /**
   * @type :: VAR

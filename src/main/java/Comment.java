@@ -34,20 +34,35 @@ public class Comment {
   private ArrayList<String> cleanedComments = new ArrayList<String>();
 
   public Comment(ArrayList<String> rawData, String commentStyle) {
+    System.out.println("FIRE");
     this.rawData = rawData;
     clean(commentStyle);
+    System.out.println("COMMENT EXTRACT: " + cleanedComments.size());
+    for(int i = 0; i < cleanedComments.size(); i++) {
+      System.out.println(cleanedComments.get(i));
+    }
     extractType();
   }
 
   public Comment(ArrayList<String> rawData, String commentStyle, String beginStyle, String endStyle) {
+    System.out.println("FIRE");
     this.rawData = rawData;
     clean(commentStyle, beginStyle, endStyle);
     extractType();
+    System.out.println("COMMENT EXTRACT: " + cleanedComments.size());
+    for(int i = 0; i < cleanedComments.size(); i++) {
+      System.out.println(cleanedComments.get(i));
+    }
   }
 
   public Comment(ArrayList<String> rawData, String commentStyle, String beginStyle, String endStyle, String commentEndStyle) {
+    System.out.println("FIRE");
     this.rawData = rawData;
     clean(commentStyle, beginStyle, endStyle, commentEndStyle);
+    System.out.println("COMMENT EXTRACT: " + cleanedComments.size());
+    for(int i = 0; i < cleanedComments.size(); i++) {
+      System.out.println(cleanedComments.get(i));
+    }
     extractType();
   }
 
@@ -123,7 +138,7 @@ public class Comment {
   public void clean(String commentStyle) {
     for(int i = 0; i < rawData.size(); i++) {
       String afterStrip = strip(rawData.get(i), commentStyle, null, null, null).trim();
-      if(commentStyle != "" && !commentStyle.contains(commentStyle)) {
+      if(!commentStyle.equals("") && !commentStyle.contains(commentStyle) && !afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
       }
     }
@@ -131,7 +146,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
-        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::")) {
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && cleanedComments.get(i).contains("")) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);
@@ -151,8 +166,9 @@ public class Comment {
   */
   public void clean(String commentStyle, String beginStyle, String endStyle) {
     for(int i = 0; i < rawData.size(); i++) {
+      System.out.println("TEST: " + strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim());
       String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim();
-      if(commentStyle != "" && !commentStyle.contains(commentStyle)) {
+      if(!commentStyle.equals("") && !commentStyle.contains(commentStyle) && !afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
       }
     }
@@ -160,7 +176,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
-        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::")) {
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);
@@ -182,7 +198,7 @@ public class Comment {
   public void clean(String commentStyle, String beginStyle, String endStyle, String commentEndStyle) {
     for(int i = 0; i < rawData.size(); i++) {
       String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, commentEndStyle).trim();
-      if(commentStyle != "" && !commentStyle.contains(commentStyle)) {
+      if(!commentStyle.equals("") && !commentStyle.contains(commentStyle) && !afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
       }
     }
@@ -190,7 +206,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
-        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::")) {
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);

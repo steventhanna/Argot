@@ -143,8 +143,10 @@ public class ArgotFile {
       default: {
         // TODO :: Throw an exception here
         System.err.println("Extension " + extension + " is not supported yet.");
+        return;
       }
     }
+    System.out.println(lang.getRenderedMarkdown());
     markdown = lang.getRenderedMarkdown();
   }
 
