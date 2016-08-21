@@ -138,7 +138,7 @@ public class Comment {
   public void clean(String commentStyle) {
     for(int i = 0; i < rawData.size(); i++) {
       String afterStrip = strip(rawData.get(i), commentStyle, null, null, null).trim();
-      if(!commentStyle.equals("") && !commentStyle.contains(commentStyle) && !afterStrip.equals("")) {
+      if(!afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
       }
     }
@@ -168,7 +168,7 @@ public class Comment {
     for(int i = 0; i < rawData.size(); i++) {
       System.out.println("TEST: " + strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim());
       String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, null).trim();
-      if(!commentStyle.equals("") && !commentStyle.contains(commentStyle) && !afterStrip.equals("")) {
+      if(!afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
       }
     }
@@ -176,6 +176,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
+        cleanedComments.set(i, cleanedComments.get(i).trim());
         if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
@@ -183,6 +184,10 @@ public class Comment {
           i--;
         }
       }
+    }
+    System.out.println("ALL CLEAN");
+    for(int i = 0; i < cleanedComments.size(); i++) {
+      System.out.println(cleanedComments.get(i));
     }
   }
 
@@ -198,7 +203,7 @@ public class Comment {
   public void clean(String commentStyle, String beginStyle, String endStyle, String commentEndStyle) {
     for(int i = 0; i < rawData.size(); i++) {
       String afterStrip = strip(rawData.get(i), commentStyle, beginStyle, endStyle, commentEndStyle).trim();
-      if(!commentStyle.equals("") && !commentStyle.contains(commentStyle) && !afterStrip.equals("")) {
+      if(!afterStrip.equals("")) {
         cleanedComments.add(afterStrip);
       }
     }
