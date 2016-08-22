@@ -71,6 +71,34 @@ args '-p $path_to_src$
 args '-d $path_to_dest$
 ```
 
+## All Supported Languages
+The system is being designed to adjust parsing based on the supplied commenting style. Whether it be for Slash based languages like Java of C, to other commenting systems used in Python or Haskell. Instead of designing a specific language class and filling in the holes provided by the abstract class, new languages would be supplied through a simple constructor.
+
+All tags must begin with a type tag, and end with a end tag.
+
+**Java**
+```java
+/**
+* @type :: example
+* @name :: test
+* @end
+*/
+```
+
+**Python**
+```py
+# @type :: example
+# @name :: test
+# @end
+```
+
+**HTML**
+```html
+<!-- @type :: example -->
+<!-- @name :: test -->
+<!-- end -->
+```
+
 ## / Comment Languages
 
 ### Escape Character
@@ -80,7 +108,7 @@ Comment blocks for this system will begin with `/**`.  Each preceding line will 
 
 ** NOTE:**  Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
 
-### Tags
+### Types
 - `FUNC` - Tag for a function or method
 - `VAR` - Tag for a variable
 - `CLASS` - Tag for a class
@@ -108,11 +136,12 @@ When beginning the file, you can use any of the following in any combination at 
 
 ```java
 /**
-* @tag :: CLASS
+* @type :: CLASS
 * @class :: Example File
 * @author :: Steven Hanna, Other People
 * @date :: 7/25/16
 * @version :: 0.1.0
+* @end
 */
 ```
 
@@ -143,13 +172,14 @@ Documentation for methods must begin before the method starts.
 
 ```java
 /**
-* @tag :: FUNC
+* @type :: FUNC
 * @name :: sampleMethod
 * @description :: Provides a sample method for this example.
 * Overflow text can continue here, but cannot go
 * underneath `@`
 * @param :: String text - text to be returned
 * @return :: String text - text that is returned
+* @end
 */
 public String sampleMethod(String text) {
   ...
@@ -169,7 +199,7 @@ Like methods, documentation for variables must begin before the variable is decl
 
 ```java
 /**
-* @tag :: VAR
+* @type :: VAR
 * @name :: exampleInt
 * @type :: the type of the variable
 * @description :: example integer variable
