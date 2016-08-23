@@ -125,22 +125,18 @@ public class ArgotFile {
     switch(extension) {
       case "java": {
         lang = new Language(contents, "*", "/**", "*/");
-        // return slash.generateMarkdown();
         break;
       }
       case "c": {
         lang = new Language(contents, "*", "/**", "*/");
-        // return slash.generateMarkdown();
         break;
       }
       case "cpp": {
         lang = new Language(contents, "*", "/**", "*/");
-        // return slash.generateMarkdown();
         break;
       }
       case "js": {
         lang = new Language(contents, "*", "/**", "*/");
-        // return slash.generateMarkdown();
         break;
       }
       case "py": {

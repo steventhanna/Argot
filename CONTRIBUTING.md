@@ -53,24 +53,31 @@ When the feature branch is merged into master, it is the feature's assignee(s) j
 
 
 ## Adding New Languages
-Language support is paramount to the success of Argot as a documentation system, and new languages will always be suggested.  In order to cover the most ground in the shortest period of time, a single language should not be added, but rather a language group. For example Java, Javascript, C++, C, etc. all use the same commenting system. Other examples of language groups include but do not limit languages using `#`, `-`, or `;`. When building additional systems, it is a lot easier on the developers part if the language system has a standardized multi-line comment system such as in the Slash Languages, as Argot in languages with multi-line systems only works when contained within multi-line comments.  All other comments are ignored, speeding up parsing and analysis.
+Language support is paramount to the success of Argot as a documentation system, and new languages will always be suggested.  Adding new languages in Argot takes only a few lines of code, and knowing Java is not critical.
+
+1. Add a new case to the switch statement in the file `ArgotFile` under the function `delegateLanguages`. The case should be the extension of the file of your language you want to add.
+1. Fill in the following:
+
 ```java
-/**
-*
-*/
+lang = new Language(contents, [...]);
 ```
-Methods for parsing languages that do not utilize multi-line comments is still up for discussion.
 
-- New file name `YourLangLanguage.java`
-- Must extend `Language`
-- Must fill out all abstract methods required
-- In `ArgotFile` in the Function `delegateLanguages`, add your language to the switch statement
-- Write Tests
+The `Language` constructor has been overloaded to accept multiple types of comment configurations.  For a complete description, check out the documentation [here](https://github.com/steventhanna/Argot/wiki/Language#language-1). In brief:
 
+- Single comment style [docs](https://github.com/steventhanna/Argot/wiki/Language#language-1)
+```java
+// Python
+lang = new Language(contents, "#");
+```
+- Differing Begin and End Multi-line Style (Normal for Multi-line comments) [docs](https://github.com/steventhanna/Argot/wiki/Language#language-2)
+```java
+// Java
+lang = new Language(contents, "*", "/**", "*/");
+```
 ## Adding new Argot Types
 An Argot Type is what comes after `@type :: `. In order to add a type:
 
 - New file named `YourtypeComment.java`
-- Must implement `Comment`
-- Must fill out all methods required from `Comment`
+- Must implement `TypeComment`
+- Must fill out all methods required from `TypeComment`
 - In `Language.java` add your type to the switch statement in `delegateComments`

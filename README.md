@@ -1,8 +1,8 @@
 # Argot
-Parse documentation from codebases into markdown for easy doc creation.  With the exception of markup languages and stylesheets, languages with / notation will follow a modified version of the Java documentation system.
+Parse documentation from codebases into markdown for easy doc creation. Argot is inspired by the traditional JavaDoc system.
 
 ## Argot in Action
-Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against its own codebase.
+Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against this repo.
 
 ## Installation (for stable use) (manually)
 - Download the latest [release](https://github.com/steventhanna/Argot/releases)
@@ -99,14 +99,18 @@ All tags must begin with a type tag, and end with a end tag.
 <!-- end -->
 ```
 
-## / Comment Languages
+## The Markup
 
 ### Escape Character
 For this system, the character that will be used to denote specific information to be extracted is `@`.  To keep this system operating correctly, `@` cannot be used in any documentation.  If `@` is used intermittently in other comment blocks, the validity of the outputs can not be assured.
 
-Comment blocks for this system will begin with `/**`.  Each preceding line will being with `*`, and the finishing line will be end with `*/`.  With each piece of documentation, a tag should be given in the form `@tag :: ` so that the system can distinguish between methods, vars, etc.
+If your given language supports multi-line comments, then write all Argot documentation within those. If not, write single comments.
 
-** NOTE:**  Markdown can be parsed from within the documentation, simply include ` ` ` tags within the description.
+**IMPORTANT:** for languages that do not support multi-line comments like Java or C, the last tag in each set must have a `@end`.
+
+Tags should be given in the form `@tagName :: `. Some examples will straighten this all out.
+
+** NOTE:**  Markdown can be included within the documentation itself, and it will be rendered on the final page.
 
 ### Types
 - `FUNC` - Tag for a function or method
@@ -134,6 +138,7 @@ When beginning the file, you can use any of the following in any combination at 
 
 `@note :: ` - notes any important information relevant to the file
 
+**Java**
 ```java
 /**
 * @type :: CLASS
@@ -141,8 +146,17 @@ When beginning the file, you can use any of the following in any combination at 
 * @author :: Steven Hanna, Other People
 * @date :: 7/25/16
 * @version :: 0.1.0
-* @end
 */
+```
+
+**Python**
+```py
+# @type :: CLASS
+# @class :: Example File
+# @author :: Steven Hanna, Other People
+# @date :: 7/25/16
+# @version :: 0.1.0
+# @end
 ```
 
 ### Methods
@@ -179,7 +193,6 @@ Documentation for methods must begin before the method starts.
 * underneath `@`
 * @param :: String text - text to be returned
 * @return :: String text - text that is returned
-* @end
 */
 public String sampleMethod(String text) {
   ...
