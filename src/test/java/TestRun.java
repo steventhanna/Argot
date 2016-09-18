@@ -25,5 +25,4 @@ public class TestRun {
   public int testFunc(int a, int b) {
     return 0;
   }
-
 }

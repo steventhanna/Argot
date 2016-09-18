@@ -168,9 +168,19 @@ public class ArgotFile {
   * @type :: FUNC
   * @name :: getMarkdown
   * @description :: Returns the rendered markdown
-  * @return ArrayList<String> - returns the redered markdown
+  * @return ::  ArrayList<String> - returns the redered markdown
   */
   public ArrayList<String> getMarkdown() {
     return markdown;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: getExtension
+  * @description :: Returns the extension of the current file
+  * @return :: String - the extension of the file
+  */
+  public String getExtension() {
+    return extension;
   }
 }
