@@ -1,5 +1,6 @@
 # Argot
 ![Status](https://travis-ci.org/steventhanna/Argot.svg?branch=master)
+
 Parse documentation from codebases into markdown for easy doc creation. Argot is inspired by the traditional JavaDoc system.
 
 ## Argot in Action
