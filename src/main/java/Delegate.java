@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.apache.commons.io.FilenameUtils;
 
 public class Delegate {
 
@@ -104,18 +105,20 @@ public class Delegate {
     // @todo :: Compose threads here for handling the amount of files in the target
     if(recursive == false) {
       if(docSrc.isFile()) {
-        ArgotFile file = new ArgotFile(docSrc);
-        writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
+
+        ArgotFile file = new ArgotFile(docSrc, new File(docDest + "/" + getFilename(docSrc.toString()) + ".md"));
+        // writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
       } else {
         File[] fileArray = docSrc.listFiles();
         for(int i = 0; i < fileArray.length; i++) {
           if(!fileArray[i].canRead()) {
             System.err.println("The file: " + fileArray[i].getAbsolutePath() + " cannot be read becuase Argot does not have access.");
           } else if(!fileArray[i].isDirectory()) {
-            ArgotFile file = new ArgotFile(fileArray[i]);
-            if(file.getMarkdown().size() != 0) {
-              writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
-            }
+            ArgotFile file = new ArgotFile(fileArray[i], new File(docDest + "/" + getFilename(fileArray[i].toString()) + ".md"));
+            file.start();
+            // if(file.getMarkdown().size() != 0) {
+            //   writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
+            // }
           }
         }
       }
@@ -142,10 +145,11 @@ public class Delegate {
         recursiveWalk(files[i]);
       }
     } else {
-      ArgotFile af = new ArgotFile(file);
-      if(af.getMarkdown().size() != 0) {
-        writeToFile(new File(docDest + "/" + af.getFilename() + ".md"), af.getMarkdown());
-      }
+      ArgotFile af = new ArgotFile(file, new File(docDest + "/" + getFilename(file.toString()) + ".md"));
+      af.start();
+      // if(af.getMarkdown().size() != 0) {
+      //   writeToFile(new File(docDest + "/" + af.getFilename() + ".md"), af.getMarkdown());
+      // }
     }
   }
 
@@ -170,5 +174,17 @@ public class Delegate {
     } catch(IOException e) {
       System.err.println("There was an error writing to the file. Error: " + e.getMessage());
     }
+  }
+
+  private String getFilename(String path) {
+    // Harvest filename
+    String filename;
+    if(path.contains("/")) {
+      String[] pathArray = path.split("/");
+      filename = pathArray[pathArray.length - 1];
+    } else {
+      filename = path;
+    }
+    return FilenameUtils.removeExtension(filename);
   }
 }

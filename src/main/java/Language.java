@@ -340,6 +340,7 @@ public class Language {
   * @end
   */
   public ArrayList<String> getRenderedMarkdown() {
+    System.out.println("internal: " + renderedMarkdown.size());
     return renderedMarkdown;
   }
 
