@@ -89,6 +89,8 @@ public class Comment {
     s = s.trim();
 
     // Specific conditions
+    System.out.println("BEGIN");
+    System.out.println(s);
     if(beginStyle == null || endStyle == null) {
       if(s.length() >= commentStyle.length() && s.substring(0, commentStyle.length()).equals(commentStyle)) {
         s = s.substring(commentStyle.length());
@@ -97,9 +99,11 @@ public class Comment {
     } else {
       if(beginStyle != null && endStyle != null) {
         if(s.length() >= beginStyle.length() && s.substring(0, beginStyle.length()).equals(beginStyle)) {
-          s = " ";
+          s = "";
+        } else if(s.equals(beginStyle)) {
+          s = "";
         } else if(s.equals(endStyle)) {
-          s = " ";
+          s = "";
         } else if(s.length() >= commentStyle.length() && s.substring(0, commentStyle.length()).equals(commentStyle)) {
           s = s.substring(commentStyle.length());
         }
@@ -111,6 +115,7 @@ public class Comment {
       }
     }
     s = s.trim();
+    System.out.println(s);
     return s;
   }
 
@@ -160,7 +165,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
-        cleanedComments.set(i, cleanedComments.get(i).trim());
+        cleanedComments.set(i, cleanedComments.get(i));
         if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));

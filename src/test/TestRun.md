@@ -5,20 +5,7 @@
  The class to test the unit tests with 
 
 ## REST Endpoints 
-### CREATE test.com/test
-
-#### Parameters 
-
-- temp - this is a test param
-- temp - this is a test param
-
-
-#### Sample Responses 
-
-- `200` - all good
-- `404` - not found
-- `500` - shit
-
+### test.com/test
 
 ## Variables 
 

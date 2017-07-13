@@ -125,6 +125,7 @@ public class ArgotFile {
     switch(extension) {
       case "java": {
         lang = new Language(contents, "*", "/**", "*/");
+        System.out.println("JAVA");
         break;
       }
       case "c": {

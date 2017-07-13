@@ -58,6 +58,14 @@ public class Language {
 
   /**
   * @type :: VAR
+  * @name :: endpoints
+  * @desription :: Object representation of all the endpoint comments.  Used as a
+  * staging before Markdown creation
+  * @end
+  */
+  public ArrayList<EndpointComment> endpoints = new ArrayList<EndpointComment>();
+  /**
+  * @type :: VAR
   * @name :: renderedMarkdown
   * @description :: The rendered markdown in the order that the comments appear in the target file.
   * @end
@@ -147,6 +155,11 @@ public class Language {
             classes.add(classComment);
             break;
           }
+          case "rest": {
+            EndpointComment endpointComment = new EndpointComment(comments.get(i).getCleanedComments());
+            endpoints.add(endpointComment);
+            break;
+          }
           default: {
             System.err.println("The Type " + type + " is not yet supported.");
           }
@@ -169,15 +182,15 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      if (contents.get(i).contains(commentStyle) && contents.get(i).contains("@type")) {
+      if(contents.get(i).trim().length() >= commentStyle.length() && contents.get(i).trim().substring(0, commentStyle.length()).equals(commentStyle) && contents.get(i).contains("@type")) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
         for(int j = i + 1; j < contents.size(); j++) {
-          if (contents.get(j).contains(commentStyle) && contents.get(j).contains("@end") == false) {
+          if(contents.get(j).contains(commentStyle) && contents.get(j).contains("@end") == false) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
-          } else if (contents.get(j).contains(commentStyle) && contents.get(j).contains("@end")) {
+          } else if(contents.get(j).contains(commentStyle) && contents.get(j).contains("@end")) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
             comments.add(new Comment(commentBuffer, commentStyle));
@@ -210,12 +223,16 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      if (contents.get(i).contains(beginStyle)) {
+      // System.out.println(contents.get(i));
+      // System.out.println(contents.get(i).trim().length() >= beginStyle.length());
+      // System.out.println(contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle));
+      // System.out.println(contents.get(i).trim().substring(0, beginStyle.length()));
+      if (contents.get(i).trim().length() >= beginStyle.length() && contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle)) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
         for(int j = i + 1; j < contents.size(); j++) {
-          if(contents.get(j).contains(endStyle)) {
+          if(contents.get(j).trim().length() >= endStyle.length() && contents.get(j).trim().substring(0, endStyle.length()).equals(endStyle)) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
             comments.add(new Comment(commentBuffer, commentStyle, beginStyle, endStyle));
@@ -250,7 +267,7 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      if (contents.get(i).contains(beginStyle)) {
+      if (contents.get(i).trim().length() >= beginStyle.length() && contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle)) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
@@ -297,6 +314,13 @@ public class Language {
       }
       renderedMarkdown.add("\n");
     }
+    if (endpoints.size() > 0) {
+      renderedMarkdown.add("## REST Endpoints \n");
+      for(int i = 0; i < endpoints.size(); i++) {
+        renderedMarkdown.add(endpoints.get(i).generateMarkdown());
+      }
+      renderedMarkdown.add("\n");
+    }
     if(variables.size() > 0) {
       renderedMarkdown.add("## Variables \n");
       for(int i = 0; i < variables.size(); i++) {
@@ -320,6 +344,9 @@ public class Language {
   * @end
   */
   public ArrayList<String> getRenderedMarkdown() {
+    for(int i = 0; i < renderedMarkdown.size(); i++) {
+      System.out.println(renderedMarkdown.get(i));
+    }
     return renderedMarkdown;
   }
 
