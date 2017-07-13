@@ -133,7 +133,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
-        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && cleanedComments.get(i).contains("")) {
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && cleanedComments.get(i).contains("") && i > 0) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);
@@ -163,8 +163,9 @@ public class Comment {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
         cleanedComments.set(i, cleanedComments.get(i));
-        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("") && i > 0) {
           // Chances are its a multi-line comment
+          System.out.println(cleanedComments.get(i));
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);
           i--;
@@ -193,7 +194,7 @@ public class Comment {
     if(cleanedComments.size() > 1) {
       for(int i = 0; i < cleanedComments.size(); i++) {
         // Check to see if there are any type notations
-        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
+        if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("") && i > 0) {
           // Chances are its a multi-line comment
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);
