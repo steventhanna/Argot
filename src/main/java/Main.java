@@ -18,7 +18,7 @@ public class Main {
   * @name :: versionInformation
   * @description :: The version information for Argot
   */
-  private static String versionInformation = "0.1.0";
+  private static String versionInformation = "0.1.2";
 
   /**
   * @type :: VAR
