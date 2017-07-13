@@ -222,5 +222,29 @@ Like methods, documentation for variables must begin before the variable is decl
 private int exampleInt;
 ```
 
+### REST API's
+Document routes, endpoints, and other REST API segments.
+
+`@route` - the URL this documentation is about
+
+`@crud` - the type of CRUD operation (PUT, DELETE, etc)
+
+`@param` - parameters that this route might take
+
+`@sample` - sample responses that the route might send back
+
+```java
+/**
+   * @type :: REST
+   * @route :: test.com/test
+   * @crud :: CREATE
+   * @param :: temp - this is a test param
+   * @param :: temp - this is a test param
+   * @sample :: `200` - all good
+   * @sample :: `404` - not found
+   * @sample :: `500` - shit
+   */
+```
+
 ## Eventually
 - [ ] Add TODO support
