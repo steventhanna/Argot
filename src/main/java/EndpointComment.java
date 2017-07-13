@@ -38,7 +38,7 @@ public class EndpointComment implements TypeComment {
   * @name :: params
   * @description :: Parameters that the endpoint expects
   */
-  private ArrayList<String> params;
+  private ArrayList<String> params = new ArrayList<String>();
 
   /**
   * @type :: VAR
@@ -186,7 +186,6 @@ public class EndpointComment implements TypeComment {
       buff.append("\n");
     }
     return buff.toString();
-
   }
 
 }

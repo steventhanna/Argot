@@ -25,4 +25,15 @@ public class TestRun {
   public int testFunc(int a, int b) {
     return 0;
   }
+
+  /**
+  * @type :: REST
+  * @route :: test.com/test
+  * @description :: This is just a test
+  * @parameter :: temp - this is a test parameter
+  * @parameter :: temp - this is a test parameter
+  * @sample :: `200` - all good
+  * @sample :: `404` - not found
+  * @sample :: `500` - shit
+  */
 }

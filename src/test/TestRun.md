@@ -4,6 +4,9 @@
 ### Description 
  The class to test the unit tests with 
 
+## REST Endpoints 
+### test.com/test
+
 ## Variables 
 
 ### testVar

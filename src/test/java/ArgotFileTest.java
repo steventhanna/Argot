@@ -5,6 +5,7 @@
 * @class :: ArgotFileTest
 * @description :: Test suite for ArgotFile. Really not that much testing
 * is done here, a majority of it will be done in the other sub-divisions.
+* @end
 */
 
 import org.junit.Test;
@@ -55,6 +56,16 @@ public class ArgotFileTest {
     expected.add("public int testFunc(int a, int b) {");
     expected.add("return 0;");
     expected.add("}");
+    expected.add("/**");
+    expected.add("* @type :: REST");
+    expected.add("* @route :: test.com/test");
+    expected.add("* @description :: This is just a test");
+    expected.add("* @parameter :: temp - this is a test parameter");
+    expected.add("* @parameter :: temp - this is a test parameter");
+    expected.add("* @sample :: `200` - all good");
+    expected.add("* @sample :: `404` - not found");
+    expected.add("* @sample :: `500` - shit");
+    expected.add("*/");
     expected.add("}");
     ArrayList<String> actual = file.getContents();
     boolean error = true;
@@ -102,9 +113,10 @@ public class ArgotFileTest {
     for(int i = 0; i < actual.size(); i++) {
       if(!actual.get(i).equals(expected.get(i))) {
         error = false;
-        break;
+        assertTrue(false);
+        return;
       }
     }
-    assertTrue(error == true);
+    assertTrue(true);
   }
 }

@@ -182,15 +182,15 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      if (contents.get(i).contains(commentStyle) && contents.get(i).contains("@type")) {
+      if(contents.get(i).trim().length() >= commentStyle.length() && contents.get(i).trim().substring(0, commentStyle.length()).equals(commentStyle) && contents.get(i).contains("@type")) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
         for(int j = i + 1; j < contents.size(); j++) {
-          if (contents.get(j).contains(commentStyle) && contents.get(j).contains("@end") == false) {
+          if(contents.get(j).contains(commentStyle) && contents.get(j).contains("@end") == false) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
-          } else if (contents.get(j).contains(commentStyle) && contents.get(j).contains("@end")) {
+          } else if(contents.get(j).contains(commentStyle) && contents.get(j).contains("@end")) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
             comments.add(new Comment(commentBuffer, commentStyle));
@@ -223,7 +223,11 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      if (contents.get(i).contains(beginStyle)) {
+      // System.out.println(contents.get(i));
+      // System.out.println(contents.get(i).trim().length() >= beginStyle.length());
+      // System.out.println(contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle));
+      // System.out.println(contents.get(i).trim().substring(0, beginStyle.length()));
+      if (contents.get(i).trim().length() >= beginStyle.length() && contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle)) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
@@ -263,7 +267,7 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      if (contents.get(i).contains(beginStyle)) {
+      if (contents.get(i).trim().length() >= beginStyle.length() && contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle)) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
@@ -311,7 +315,7 @@ public class Language {
       renderedMarkdown.add("\n");
     }
     if (endpoints.size() > 0) {
-      renderedMarkdown.add("## REST Endpoints");
+      renderedMarkdown.add("## REST Endpoints \n");
       for(int i = 0; i < endpoints.size(); i++) {
         renderedMarkdown.add(endpoints.get(i).generateMarkdown());
       }
@@ -340,6 +344,9 @@ public class Language {
   * @end
   */
   public ArrayList<String> getRenderedMarkdown() {
+    for(int i = 0; i < renderedMarkdown.size(); i++) {
+      System.out.println(renderedMarkdown.get(i));
+    }
     return renderedMarkdown;
   }
 
