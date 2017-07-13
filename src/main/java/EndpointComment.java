@@ -102,8 +102,6 @@ public class EndpointComment implements TypeComment {
           tag = tag.substring(1);
           // For consistency, make sure all of the tags are lowercase
           tag = tag.toLowerCase();
-          System.out.println(tag);
-          System.out.println(content);
           switch(tag) {
             case "route": {
               route = content;

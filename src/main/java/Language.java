@@ -223,10 +223,6 @@ public class Language {
     for(int i = 0; i < contents.size(); i++) {
       ArrayList<String> commentBuffer = new ArrayList<String>();
       // Check if a valid comment
-      // System.out.println(contents.get(i));
-      // System.out.println(contents.get(i).trim().length() >= beginStyle.length());
-      // System.out.println(contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle));
-      // System.out.println(contents.get(i).trim().substring(0, beginStyle.length()));
       if (contents.get(i).trim().length() >= beginStyle.length() && contents.get(i).trim().substring(0, beginStyle.length()).equals(beginStyle)) {
         // Continue adding comments until a end tag is found
         rawComments.add(contents.get(i));
@@ -344,9 +340,6 @@ public class Language {
   * @end
   */
   public ArrayList<String> getRenderedMarkdown() {
-    for(int i = 0; i < renderedMarkdown.size(); i++) {
-      System.out.println(renderedMarkdown.get(i));
-    }
     return renderedMarkdown;
   }
 

@@ -89,8 +89,6 @@ public class Comment {
     s = s.trim();
 
     // Specific conditions
-    System.out.println("BEGIN");
-    System.out.println(s);
     if(beginStyle == null || endStyle == null) {
       if(s.length() >= commentStyle.length() && s.substring(0, commentStyle.length()).equals(commentStyle)) {
         s = s.substring(commentStyle.length());
@@ -115,7 +113,6 @@ public class Comment {
       }
     }
     s = s.trim();
-    System.out.println(s);
     return s;
   }
 
