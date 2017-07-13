@@ -143,6 +143,10 @@ public class ArgotFile {
         lang = new Language(contents, "#");
         break;
       }
+      case "go": {
+        lang = new Language(contents, "*", "/**", "*/");
+        break;
+      }
       default: {
         // TODO :: Throw an exception here
         System.err.println("Extension " + extension + " is not supported yet.");
