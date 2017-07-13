@@ -29,9 +29,9 @@ public class TestRun {
   /**
   * @type :: REST
   * @route :: test.com/test
-  * @description :: This is just a test
-  * @parameter :: temp - this is a test parameter
-  * @parameter :: temp - this is a test parameter
+  * @crud :: CREATE
+  * @param :: temp - this is a test param
+  * @param :: temp - this is a test param
   * @sample :: `200` - all good
   * @sample :: `404` - not found
   * @sample :: `500` - shit

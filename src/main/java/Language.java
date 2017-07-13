@@ -232,7 +232,7 @@ public class Language {
         rawComments.add(contents.get(i));
         commentBuffer.add(contents.get(i));
         for(int j = i + 1; j < contents.size(); j++) {
-          if(contents.get(j).contains(endStyle)) {
+          if(contents.get(j).trim().length() >= endStyle.length() && contents.get(j).trim().substring(0, endStyle.length()).equals(endStyle)) {
             rawComments.add(contents.get(j));
             commentBuffer.add(contents.get(j));
             comments.add(new Comment(commentBuffer, commentStyle, beginStyle, endStyle));

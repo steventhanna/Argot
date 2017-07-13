@@ -168,10 +168,6 @@ public class Comment {
         cleanedComments.set(i, cleanedComments.get(i));
         if(!cleanedComments.get(i).contains("@") && !cleanedComments.get(i).contains("::") && !cleanedComments.get(i).equals("")) {
           // Chances are its a multi-line comment
-          System.out.println("start");
-          System.out.println(cleanedComments.get(i));
-          System.out.println(i);
-          System.out.println(cleanedComments.get(i - 1));
           cleanedComments.set(i - 1, cleanedComments.get(i - 1) + " " + cleanedComments.get(i));
           cleanedComments.remove(i);
           i--;

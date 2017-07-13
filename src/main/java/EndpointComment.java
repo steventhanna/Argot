@@ -21,10 +21,10 @@ public class EndpointComment implements TypeComment {
 
   /**
   * @type :: VAR
-  * @name :: type
+  * @name :: crud
   * @description :: The type of url / POST, GET, PUT, DELETE, etc
   */
-  private String type;
+  private String crud;
 
   /**
   * @type :: VAR
@@ -102,6 +102,8 @@ public class EndpointComment implements TypeComment {
           tag = tag.substring(1);
           // For consistency, make sure all of the tags are lowercase
           tag = tag.toLowerCase();
+          System.out.println(tag);
+          System.out.println(content);
           switch(tag) {
             case "route": {
               route = content;
@@ -111,11 +113,15 @@ public class EndpointComment implements TypeComment {
               description = content;
               break;
             }
+            case "crud": {
+              crud = content;
+              break;
+            }
             case "param": {
               params.add(content);
               break;
             }
-            case "example": {
+            case "sample": {
               sampleResponses.add(content);
               break;
             }
@@ -147,14 +153,14 @@ public class EndpointComment implements TypeComment {
   public String generateMarkdown() {
     StringBuffer buff = new StringBuffer();
     if (route != null) {
-      if (type != null) {
-        buff.append("### " + type.toUpperCase() + " " + route + "\n");
+      if (crud != null) {
+        buff.append("### " + crud.toUpperCase() + " " + route + "\n");
       } else {
         buff.append("### " + route + "\n");
       }
     }
     if (params.size() > 0) {
-      buff.append("\n #### Parameters \n");
+      buff.append("\n#### Parameters \n");
       buff.append("\n");
       for(int i = 0; i < params.size(); i++) {
         buff.append("- " + params.get(i) + "\n");
@@ -162,7 +168,7 @@ public class EndpointComment implements TypeComment {
       buff.append("\n");
     }
     if (sampleResponses.size() > 0) {
-      buff.append("\n #### Sample Responses \n");
+      buff.append("\n#### Sample Responses \n");
       buff.append("\n");
       for(int i = 0; i < sampleResponses.size(); i++) {
         buff.append("- " + sampleResponses.get(i) + "\n");
@@ -170,7 +176,7 @@ public class EndpointComment implements TypeComment {
       buff.append("\n");
     }
     if (notes.size() > 0) {
-      buff.append("\n #### Notes \n");
+      buff.append("\n#### Notes \n");
       buff.append("\n");
       for(int i = 0; i < notes.size(); i++) {
         buff.append("- " + notes.get(i) + "\n");
@@ -178,7 +184,7 @@ public class EndpointComment implements TypeComment {
       buff.append("\n");
     }
     if (see.size() > 0) {
-      buff.append("\n #### See \n");
+      buff.append("\n#### See \n");
       buff.append("\n");
       for(int i = 0; i < see.size(); i++) {
         buff.append("- " + see.get(i) + "\n");
