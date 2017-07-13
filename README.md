@@ -237,7 +237,7 @@ Document routes, endpoints, and other REST API segments.
 /**
    * @type :: REST
    * @route :: test.com/test
-   * @crud :: CREATE
+   * @crud :: POST
    * @param :: temp - this is a test param
    * @param :: temp - this is a test param
    * @sample :: `200` - all good
