@@ -34,6 +34,11 @@ public class ArgotFile implements Runnable {
   */
   private File file;
 
+  /**
+  * @type :: VAR
+  * @name :: destination
+  * @description :: The destination file to write the rendered markdown to.
+  */
   private File destination;
 
   /**VAR
@@ -64,6 +69,12 @@ public class ArgotFile implements Runnable {
   */
   private ArrayList<String> markdown = new ArrayList<String>();
 
+  /**
+  * @type :: VAR
+  * @name :: t
+  * @description :: the placeholder to determine if a thread for this particular
+  * instance has been started or not.
+  */
   private Thread t;
 
   /**
@@ -77,8 +88,6 @@ public class ArgotFile implements Runnable {
     this.destination = destination;
     System.out.println(destination.toString());
     this.path = file.getAbsolutePath();
-    // extractContents();
-    // delegateLanguages();
   }
 
   /**
@@ -87,21 +96,19 @@ public class ArgotFile implements Runnable {
   * @description :: Main logic when the thrad is started.
   */
   public void run() {
-    System.out.println("RUNNING");
     extractContents();
-    System.out.println("EXTRACTED: " + filename);
-    System.out.println(contents.size());
     delegateLanguages();
-    System.out.println("DELEGATED: " + filename);
     if (markdown.size() > 0) {
-      System.out.println(markdown.size());
-      System.out.println("WRITE");
       writeToFile();
     }
   }
 
+  /**
+  * @type :: FUNC
+  * @name :: start
+  * @description :: The main method to start a thread.
+  */
   public void start() {
-    System.out.println("Starting Thread");
     if(t == null) {
       t = new Thread(this, file.toString());
       t.start();
