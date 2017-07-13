@@ -58,6 +58,14 @@ public class Language {
 
   /**
   * @type :: VAR
+  * @name :: endpoints
+  * @desription :: Object representation of all the endpoint comments.  Used as a
+  * staging before Markdown creation
+  * @end
+  */
+  public ArrayList<EndpointComment> endpoints = new ArrayList<EndpointComment>();
+  /**
+  * @type :: VAR
   * @name :: renderedMarkdown
   * @description :: The rendered markdown in the order that the comments appear in the target file.
   * @end
@@ -145,6 +153,11 @@ public class Language {
           case "class": {
             ClassComment classComment = new ClassComment(comments.get(i).getCleanedComments());
             classes.add(classComment);
+            break;
+          }
+          case "rest": {
+            EndpointComment endpointComment = new EndpointComment(comments.get(i).getCleanedComments());
+            endpoints.add(endpointComment);
             break;
           }
           default: {
@@ -294,6 +307,13 @@ public class Language {
     if(classes.size() > 0) {
       for(int i = 0; i < classes.size(); i++) {
         renderedMarkdown.add(classes.get(i).generateMarkdown());
+      }
+      renderedMarkdown.add("\n");
+    }
+    if (endpoints.size() > 0) {
+      renderedMarkdown.add("## REST Endpoints");
+      for(int i = 0; i < endpoints.size(); i++) {
+        renderedMarkdown.add(endpoints.get(i).generateMarkdown());
       }
       renderedMarkdown.add("\n");
     }
