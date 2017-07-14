@@ -2,7 +2,7 @@
 * @type :: class
 * @class :: Delegate
 * @author :: Steven Hanna
-* @date :: 7/27/16
+* @date :: 7/13/17
 * @description :: Takes a SRC, a DEST, and a Log Level, and completes
 * all of the Argot operations here.
 * @note :: This class should be multithreaded.
@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.apache.commons.io.FilenameUtils;
 
 public class Delegate {
 
@@ -101,21 +102,17 @@ public class Delegate {
       docDest = docDest.getParentFile();
     }
 
-    // @todo :: Compose threads here for handling the amount of files in the target
     if(recursive == false) {
       if(docSrc.isFile()) {
-        ArgotFile file = new ArgotFile(docSrc);
-        writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
+        ArgotFile file = new ArgotFile(docSrc, new File(docDest + "/" + getFilename(docSrc.toString()) + ".md"));
       } else {
         File[] fileArray = docSrc.listFiles();
         for(int i = 0; i < fileArray.length; i++) {
           if(!fileArray[i].canRead()) {
             System.err.println("The file: " + fileArray[i].getAbsolutePath() + " cannot be read becuase Argot does not have access.");
           } else if(!fileArray[i].isDirectory()) {
-            ArgotFile file = new ArgotFile(fileArray[i]);
-            if(file.getMarkdown().size() != 0) {
-              writeToFile(new File(docDest + "/" + file.getFilename() + ".md"), file.getMarkdown());
-            }
+            ArgotFile file = new ArgotFile(fileArray[i], new File(docDest + "/" + getFilename(fileArray[i].toString()) + ".md"));
+            file.start();
           }
         }
       }
@@ -142,33 +139,27 @@ public class Delegate {
         recursiveWalk(files[i]);
       }
     } else {
-      ArgotFile af = new ArgotFile(file);
-      if(af.getMarkdown().size() != 0) {
-        writeToFile(new File(docDest + "/" + af.getFilename() + ".md"), af.getMarkdown());
-      }
+      ArgotFile af = new ArgotFile(file, new File(docDest + "/" + getFilename(file.toString()) + ".md"));
+      af.start();
     }
   }
 
   /**
   * @type :: FUNC
-  * @name :: writeToFile
-  * @description :: Writes contents to a file
-  * @param :: File dest - the destination file to write to
-  * @param :: ArrayList<String> contents - the contents to be written to the file
+  * @name :: getFilename
+  * @param :: String path - the path to extract the filename from
+  * @description :: Extract the filename from the path, without the extension
+  * @return :: String - the filename without the extension
   */
-  public void writeToFile(File dest, ArrayList<String> contents) {
-    try {
-      if(!dest.exists()) {
-        dest.createNewFile();
-      }
-      FileWriter fw = new FileWriter(dest.getAbsoluteFile());
-      BufferedWriter bw = new BufferedWriter(fw);
-      for(int i = 0; i < contents.size(); i++) {
-        bw.write(contents.get(i));
-      }
-      bw.close();
-    } catch(IOException e) {
-      System.err.println("There was an error writing to the file. Error: " + e.getMessage());
+  private String getFilename(String path) {
+    // Harvest filename
+    String filename;
+    if(path.contains("/")) {
+      String[] pathArray = path.split("/");
+      filename = pathArray[pathArray.length - 1];
+    } else {
+      filename = path;
     }
+    return FilenameUtils.removeExtension(filename);
   }
 }

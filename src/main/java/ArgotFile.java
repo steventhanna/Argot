@@ -4,17 +4,21 @@
 * @date :: 7/16/16
 * @class :: ArgotFile
 * @description :: A general wrapper class for file operations.
+* @note :: Multithreaded
+* @implements :: Runnable
 */
 
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.commons.io.FilenameUtils;
 
-public class ArgotFile {
+public class ArgotFile implements Runnable {
 
   /**
   * @type :: VAR
@@ -29,6 +33,13 @@ public class ArgotFile {
   * @description :: The file representation of the input
   */
   private File file;
+
+  /**
+  * @type :: VAR
+  * @name :: destination
+  * @description :: The destination file to write the rendered markdown to.
+  */
+  private File destination;
 
   /**VAR
   * @type :: VAR
@@ -59,16 +70,49 @@ public class ArgotFile {
   private ArrayList<String> markdown = new ArrayList<String>();
 
   /**
+  * @type :: VAR
+  * @name :: t
+  * @description :: the placeholder to determine if a thread for this particular
+  * instance has been started or not.
+  */
+  private Thread t;
+
+  /**
   * @type :: FUNC
   * @name :: ArgotFile
   * @description :: Constructor for ArgotFile
   * @param :: String path - the path of the given file
   */
-  public ArgotFile(File file) {
+  public ArgotFile(File file, File destination) {
     this.file = file;
+    this.destination = destination;
+    System.out.println(destination.toString());
     this.path = file.getAbsolutePath();
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: run
+  * @description :: Main logic when the thrad is started.
+  */
+  public void run() {
     extractContents();
     delegateLanguages();
+    if (markdown.size() > 0) {
+      writeToFile();
+    }
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: start
+  * @description :: The main method to start a thread.
+  */
+  public void start() {
+    if(t == null) {
+      t = new Thread(this, file.toString());
+      t.start();
+    }
   }
 
   /**
@@ -186,5 +230,31 @@ public class ArgotFile {
   */
   public String getExtension() {
     return extension;
+  }
+
+  /**
+  * @type :: FUNC
+  * @name :: writeToFile
+  * @description :: Writes contents to a file
+  * @param :: File dest - the destination file to write to
+  * @param :: ArrayList<String> contents - the contents to be written to the file
+  */
+  public void writeToFile() {
+    if(markdown.size() <= 0) {
+      return;
+    }
+    try {
+      if(!destination.exists()) {
+        destination.createNewFile();
+      }
+      FileWriter fw = new FileWriter(destination.getAbsoluteFile());
+      BufferedWriter bw = new BufferedWriter(fw);
+      for(int i = 0; i < markdown.size(); i++) {
+        bw.write(markdown.get(i));
+      }
+      bw.close();
+    } catch(IOException e) {
+      System.err.println("There was an error writing to the file. Error: " + e.getMessage());
+    }
   }
 }

@@ -10,7 +10,7 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
-version = '0.1.2'
+version = '0.1.3'
 
 task runApp(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
@@ -19,8 +19,8 @@ task runApp(type: JavaExec) {
   // Arguments to pass to the application
   /*args '--help'*/
   /*args '-v'*/
-  args '-p /Users/steventhanna/Desktop/Programming/therender/nba-api'
-  args '-d /Users/steventhanna/Desktop/Programming/therender/nba-api/doc'
+  args '-p /Users/steventhanna/Desktop/Programming/java/argot'
+  args '-d /Users/steventhanna/Desktop/Programming/java/argot/doc'
   args '-r'
 }
 

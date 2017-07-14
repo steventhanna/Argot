@@ -15,17 +15,7 @@ import java.util.ArrayList;
 
 public class ArgotFileTest {
 
-  ArgotFile file = new ArgotFile(new File("TestRun.java"));
-
-  @Test public void testGetFilename() {
-    String expected = "TestRun";
-    assertTrue(expected.equals(file.getFilename()));
-  }
-
-  @Test public void testGetExtension() {
-    String expected = "java";
-    assertTrue(expected.equals(file.getExtension()));
-  }
+  ArgotFile file = new ArgotFile(new File("TestRun.java"), new File("TestRun.md"));
 
   @Test public void testGetContents() {
     ArrayList<String> expected = new ArrayList<String>();
