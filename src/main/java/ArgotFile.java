@@ -86,7 +86,6 @@ public class ArgotFile implements Runnable {
   public ArgotFile(File file, File destination) {
     this.file = file;
     this.destination = destination;
-    System.out.println(destination.toString());
     this.path = file.getAbsolutePath();
   }
 
