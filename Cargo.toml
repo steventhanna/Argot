@@ -1,0 +1,6 @@
+[package]
+name = "argot"
+version = "0.1.0"
+authors = ["Steven Hanna <steventhanna@gmail.com>"]
+
+[dependencies]
