@@ -43,23 +43,25 @@ pub mod parser {
     /**
     * @type :: FUNC
     * @name :: remove_comment_style
-    * @description :: Removes the comment style by. Easiest way to do this is by looking for the
-    * Might have to change this to some super conplex thingy
+    * @description :: Removes the comment style by. Takes the beginning of the string, takes sub
+    * string the length of the comment style, checks to see if there is a match. The comment
+    * style vector should be sorted by length
     */
     fn remove_comment_style(raw: String, comment_styles: &Vec<&str>) -> String {
         let mut raw_str = raw.as_str();
-        let mut c: String = raw.clone();
-        let mut has_extracted = false;
         for style in comment_styles {
-            let matches: Vec<_> = raw_str.match_indices(style).collect();
-            // Remove the first occurence from the raw_str
-            if matches.len() > 0 && !has_extracted {
-                let new_str = c.as_str().replacen(style, "", 1);
-                has_extracted = true;
-                c = new_str.clone();
+            // Take a substring
+            if raw_str.len() >= style.len() {
+                let s = &raw_str[0..style.len()];
+                if s == *style {
+                    // If the strings match, make a new slice
+                    raw_str = &raw_str[style.len()..];
+                }
             }
         }
-        c.as_str().trim().to_string()
+
+        raw_str = raw_str.trim();
+        raw_str.to_string()
     }
 
     #[cfg(test)]
@@ -76,12 +78,15 @@ pub mod parser {
 
         #[test]
         fn test_remove_comment_style() {
-            let orig = String::from("* @param :: test");
             let comment_styles = vec!["/**", "*/", "*"];
-            assert_eq!(remove_comment_style(String::from("* @param :: test"), &comment_styles), String::from("@param :: test"));
             assert_eq!(remove_comment_style(String::from("/**"), &comment_styles), String::from(""));
             assert_eq!(remove_comment_style(String::from("*/"), &comment_styles), String::from(""));
+            assert_eq!(remove_comment_style(String::from("* @param :: test"), &comment_styles), String::from("@param :: test"));
             assert_eq!(remove_comment_style(String::from("* @param :: *test /** */"), &comment_styles), String::from("@param :: *test /** */"));
+
+            let comment_styles = vec!["'''"];
+            assert_eq!(remove_comment_style(String::from("'''"), &comment_styles), String::from(""));
+            assert_eq!(remove_comment_style(String::from("Comment test"), &comment_styles), String::from("Comment test"));
         }
     }
 }
