@@ -4,7 +4,6 @@
 * @author :: Steven Hanna - steventhanna@gmail.com
 */
 
-
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*;
@@ -19,16 +18,16 @@ use std::ffi::OsStr;
 * @param :: raw - String - The raw string to parse
 * @return :: Option<(String, String)> - An optional tuple containing the both parts
 */
-fn extract_types(raw: String) -> Option<(String, String)> {
+pub fn extract_types(raw: String) -> (String, String) {
     // Convert the string to &str
-    let s = raw.as_str().trim().to_lowercase();
+    let s = raw.as_str().trim();
     let mut v: Vec<&str> = s
         .split("::")
         .map(|el| el.trim())
         .collect();
     match v.len() {
-        0 => None,
-        1 => None,
+        0 => (String::new(), s.to_string()),
+        1 => (String::new(), s.to_string()),
         _ => {
             // This part handles in case where there are arbritrary `::` inside the docs
             // Reformat after to delimit by ` :: `
@@ -42,9 +41,30 @@ fn extract_types(raw: String) -> Option<(String, String)> {
                     text_var.push_str(" :: ");
                 }
             }
-            Some((type_var, text_var))
+            (type_var, text_var)
         }
     }
+}
+
+/**
+* @type :: FUNC
+* @name :: join_extracted_comments
+* @description :: Joins multiline comments together
+*/
+fn join_extracted_comments(mut types: Vec<(String, String)>) -> Vec<(String, String)> {
+    if types.len() < 2 {
+        return types;
+    }
+    for x in 1..types.len() {
+        let (ref second_type, ref second_text) = types[x];
+        let (_, ref mut first_text) = types[x - 1];
+        // If the second string is blank, than it is a multiline comment and should be joined
+        if second_type.as_str() == "" {
+            first_text.push_str(" ");
+            first_text.push_str(second_text.as_str());
+        }
+    }
+    types
 }
 
 /**
@@ -161,10 +181,10 @@ mod test {
 
     #[test]
     fn test_extract_types() {
-        assert_eq!(extract_types(String::from("@param :: test")), Some((String::from("@param"), String::from("test"))));
-        assert_eq!(extract_types(String::from("   @param    ::    test   ")), Some((String::from("@param"), String::from("test"))));
-        assert_eq!(extract_types(String::from("   @param    ::    test :: x")), Some((String::from("@param"), String::from("test :: x"))));
-        assert_eq!(extract_types(String::from("")), None);
+        assert_eq!(extract_types(String::from("@param :: test")), ((String::from("@param"), String::from("test"))));
+        assert_eq!(extract_types(String::from("   @param    ::    test   ")), ((String::from("@param"), String::from("test"))));
+        assert_eq!(extract_types(String::from("   @param    ::    test :: x")), ((String::from("@param"), String::from("test :: x"))));
+        assert_eq!(extract_types(String::from("")), ((String::new(), String::new())));
     }
 
     #[test]
@@ -180,9 +200,16 @@ mod test {
         assert_eq!(remove_comment_style(String::from("Comment test"), &comment_styles), (String::from("Comment test"), false));
     }
 
-    // #[test]
-    // fn test_get_comments_from_file() {
-        // let comment_styles = vec!["/**", "*/", "*"];
-        // assert_eq!(get_comments_from_file("parser.rs", &comment_styles)));
-    // }
+    #[test]
+    fn test_get_extension_from_filename() {
+        assert_eq!(get_extension_from_filename("parser.rs").unwrap(), "rs");
+    }
+
+    #[test]
+    fn test_get_comment_styles() {
+        assert_eq!(get_comment_styles("rs"), vec!["/**", "*/", "*"]);
+        assert_eq!(get_comment_styles("java"), vec!["/**", "*/", "*"]);
+        assert_eq!(get_comment_styles("py"), vec!["'''"]);
+        assert_eq!(get_comment_styles("nonexistant"), Vec::<&str>::new());
+    }
 }

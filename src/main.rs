@@ -6,5 +6,12 @@ use parser::*;
 
 fn main() {
     println!("Hello, world!");
-    println!("{:?}", get_comments_from_file("src/parser.rs").unwrap());
+    let x = get_comments_from_file("src/parser.rs").unwrap();
+    for y in x {
+        for z in y {
+            println!("{:?}", extract_types(z));
+        }
+        // println!("{:?}", y);
+    }
+    // println!("{:?}", get_comments_from_file("src/parser.rs").unwrap());
 }
