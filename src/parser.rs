@@ -41,7 +41,7 @@ pub fn extract_types(raw: String) -> (String, String) {
                     text_var.push_str(" :: ");
                 }
             }
-            (type_var, text_var)333
+            (type_var, text_var)
         }
     }
 }
@@ -158,7 +158,7 @@ pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error>
 
     for line in f.lines() {
         match line {
-            Ok(l) =>{3
+            Ok(l) =>{
                 let (altered_string, has_altered) = remove_comment_style(l.to_string(), comment_styles);
                 if altered_string.len() > 0 && has_altered {
                     comment_break = false;
@@ -180,7 +180,7 @@ pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error>
         };
     }
     // Filter out blank vectors
-    contents.retain(|x| x.len() > 0);
+    contents.retain(|x: &Vec<String>| x.len() > 0);
     Ok(contents)
 }
 

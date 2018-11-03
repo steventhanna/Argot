@@ -1,5 +1,44 @@
 pub mod rendering {
 
+    use std::path::Path;
+    use std::fs::File;
+    use std::error::Error;
+    use std::io::Write;
+
+    /**
+    * @type :: FUNC
+    * @name :: write_markdown_to_file
+    * @description :: Writes a series of markdown elements to a file
+    * @param :: filename: &str - a string slice representing the source filename with the source
+    * extension
+    * @param :: elements: Vec<MarkdownElement> - a vector full of markdown elements to be rendered
+    */
+    pub fn write_markdown_to_file(filename: &str, elements: Vec<MarkdownElement>) {
+        // Chop the extension off the file
+        let path_stem = match Path::new(filename).file_stem() {
+            Some(x) => format!("{}{}", x.to_str().unwrap(), ".md"),
+            None => String::from("unnamed.md")
+        };
+
+        let path = Path::new(path_stem.as_str());
+
+        let mut file = match File::create(&path) {
+            Err(why) => panic!("Couldn't create {}: {}", path.display(), why.description()),
+            Ok(file) => file
+        };
+
+        // Render the strings
+        let elems: Vec<String> = elements.iter().map(|ref elem| elem.render()).collect();
+        let joined_strings = elems.join("\n");
+        let rendered_strings = joined_strings.as_str();
+
+        match file.write_all(rendered_strings.as_bytes()) {
+            Err(why) => panic!("Couldn't write to {}: {}", path.display(), why.description()),
+            Ok(_) => return
+        };
+
+    }
+
     /**
     * @type :: CLASS
     * @name :: MarkdownElement
