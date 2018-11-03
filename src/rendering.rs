@@ -36,7 +36,22 @@ pub mod rendering {
             Err(why) => panic!("Couldn't write to {}: {}", path.display(), why.description()),
             Ok(_) => return
         };
+    }
 
+    /**
+    * @type :: CLASS
+    * @name :: ParameterRep
+    * @description :: Represents a chunk of comments
+    */
+    pub struct ParameterRep {
+        type: String,
+        elements: Vec<MarkdownElement>
+    }
+
+    impl ParameterRep {
+        pub fn new(raw_elements: Vec<(String, String)>) {
+
+        }
     }
 
     /**
