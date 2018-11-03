@@ -41,7 +41,7 @@ pub fn extract_types(raw: String) -> (String, String) {
                     text_var.push_str(" :: ");
                 }
             }
-            (type_var, text_var)
+            (type_var, text_var)333
         }
     }
 }
@@ -50,19 +50,28 @@ pub fn extract_types(raw: String) -> (String, String) {
 * @type :: FUNC
 * @name :: join_extracted_comments
 * @description :: Joins multiline comments together
+* @param :: mut types: Vec<(String, String)> - a list of extracted string tuples
+* @return :: Vec<(String, String)> - a list of the joined string tuples
 */
-fn join_extracted_comments(mut types: Vec<(String, String)>) -> Vec<(String, String)> {
+pub fn join_extracted_comments(mut types: Vec<(String, String)>) -> Vec<(String, String)> {
     if types.len() < 2 {
         return types;
     }
-    for x in 1..types.len() {
-        let (ref second_type, ref second_text) = types[x];
-        let (_, ref mut first_text) = types[x - 1];
+    let mut x = 1;
+    while x < types.len() - 1 {
+        let (second_type, second_text) = types[x].clone();
+        let (first_type, mut first_text) = types[x - 1].clone();
         // If the second string is blank, than it is a multiline comment and should be joined
         if second_type.as_str() == "" {
             first_text.push_str(" ");
             first_text.push_str(second_text.as_str());
+            // Set the result text back fo the first text
+            types[x - 1] = (first_type, first_text);
+            // Delete the x object
+            types.remove(x);
+            x -= 1;
         }
+        x += 1;
     }
     types
 }
@@ -146,9 +155,10 @@ pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error>
 
     let mut contents = Vec::new();
     let mut comment_break = false;
+
     for line in f.lines() {
         match line {
-            Ok(l) =>{
+            Ok(l) =>{3
                 let (altered_string, has_altered) = remove_comment_style(l.to_string(), comment_styles);
                 if altered_string.len() > 0 && has_altered {
                     comment_break = false;
