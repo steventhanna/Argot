@@ -5,6 +5,9 @@ pub mod rendering {
     use std::error::Error;
     use std::io::Write;
 
+    use simple_error::SimpleError;
+
+
     /**
     * @type :: FUNC
     * @name :: write_markdown_to_file
@@ -41,16 +44,117 @@ pub mod rendering {
     /**
     * @type :: CLASS
     * @name :: ParameterRep
-    * @description :: Represents a chunk of comments
+    * @description :: Represents a chunk of comments to be rendered.
     */
     pub struct ParameterRep {
-        type: String,
+        /**
+        * @type :: VAR
+        * @name :: argot_type
+        * @vartype :: String
+        * @description :: Holds the type of each parameter, currently either FUNC, VAR, CLASS
+        */
+        argot_type: String,
+
+        /**
+        * @type :: VAR
+        * @name :: raw_elements
+        * @vartype :: Vec<(String, String)>
+        * @description :: Holds the raw source comments in a tuple, with the first element the
+        * part on the left of the ::, and second element on the right
+        */
+        raw_elements: Vec<(String, String)>,
+
+        /**
+        * @type :: VAR
+        * @name :: elements
+        * @vartype :: Vec<MarkdownElement>
+        * @description :: Holds a list of MarkdownElement's.  Should be considered to be in order,
+        * and can be rendered simply by looping through.  This instance variable will be built
+        * from data passed through the constructor
+        */
         elements: Vec<MarkdownElement>
     }
 
     impl ParameterRep {
-        pub fn new(raw_elements: Vec<(String, String)>) {
+        pub fn new(raw_elements: Vec<(String, String)>) -> Result<ParameterRep, SimpleError> {
+            // Find a type
+            let maybe_index = raw_elements.iter().position(|tuple| {
+                let (type_elem, _) = tuple;
+                type_elem == "@type"
+            });
+            let (_, type_elem) = match maybe_index {
+                Some(x) => raw_elements[x].clone(),
+                None => return Err(SimpleError::new("invalid format"))
+            };
 
+            // let elements = match type_elem.as_str() {
+            //     "CLASS" => create_class(raw_elements),
+            //     "VAR" => create_var(raw_elements),
+            //     "FUNC" => create_func(raw_elements)
+            // };
+
+            let elems: Vec<MarkdownElement> = Vec::new();
+
+            Ok(ParameterRep {
+                argot_type: type_elem,
+                elements: elems,
+                raw_elements: raw_elements.clone()
+            })
+        }
+
+        pub fn render(&mut self) -> String {
+            match self.argot_type.as_str() {
+                "CLASS" => self.create_class(),
+                "VAR" => self.create_var(),
+                "FUNC" => self.create_func(),
+                _ => return String::new()
+            };
+
+            self.render_to_string()
+        }
+
+        fn extract_type(&self, type_name: &str) -> Vec<String> {
+            self.raw_elements
+                .iter()
+                .filter(|x| x.0.as_str() == type_name)
+                .map(|x| x.1.clone())
+                .collect::<Vec<String>>()
+        }
+
+        fn create_class(&mut self) {
+            // Look for a @name
+            let names = self.extract_type("@name");
+            if names.len() > 0 {
+                self.elements.push(MarkdownElement::new(names[0].clone(), "h1"));
+            }
+            let dates = self.extract_type("@date");
+            let versions = self.extract_type("@version");
+            let sees = self.extract_type("@see");
+            let childs = self.extract_type("@child");
+            let parents = self.extract_type("@parent");
+            let descriptions = self.extract_type("@description");
+            let notes = self.extract_type("@note");
+        }
+
+        fn create_var(&self) {
+
+        }
+
+        fn create_func(&self) {
+
+        }
+
+        /**
+        * @type :: FUNC
+        * @name :: render_to_string
+        * @description :: Renders the markdown elements to a single String joined by newlines
+        */
+        fn render_to_string(&self) -> String{
+            self.elements
+                .iter()
+                .map(|elem| elem.render())
+                .collect::<Vec<String>>()
+                .join("\n")
         }
     }
 
@@ -85,10 +189,10 @@ pub mod rendering {
         * @param :: text - String - the text to be transformed to markdown
         * @param :: markdown_type - String - the type of element to render as
         */
-        pub fn new(text: String, markdown_type: String) -> MarkdownElement {
+        pub fn new(text: String, markdown_type: &str) -> MarkdownElement {
             MarkdownElement {
                 text: text,
-                markdown_type: markdown_type
+                markdown_type: String::from(markdown_type)
             }
         }
 
@@ -130,29 +234,29 @@ pub mod rendering {
 
         #[test]
         fn render() {
-            let elem = MarkdownElement::new(String::from("test"), String::from("h1"));
+            let elem = MarkdownElement::new(String::from("test"), "h1");
             assert_eq!(elem.render(), String::from("# test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("h2"));
+            let elem = MarkdownElement::new(String::from("test"), "h2");
             assert_eq!(elem.render(), String::from("## test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("h3"));
+            let elem = MarkdownElement::new(String::from("test"), "h3");
             assert_eq!(elem.render(), String::from("### test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("h4"));
+            let elem = MarkdownElement::new(String::from("test"), "h4");
             assert_eq!(elem.render(), String::from("#### test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("ul"));
+            let elem = MarkdownElement::new(String::from("test"), "ul");
             assert_eq!(elem.render(), String::from("- test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("ol"));
+            let elem = MarkdownElement::new(String::from("test"), "ol");
             assert_eq!(elem.render(), String::from("1. test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("code"));
+            let elem = MarkdownElement::new(String::from("test"), "code");
             assert_eq!(elem.render(), String::from("`test`"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("codeblock"));
+            let elem = MarkdownElement::new(String::from("test"), "codeblock");
             assert_eq!(elem.render(), String::from("```\ntest\n```"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("todo"));
+            let elem = MarkdownElement::new(String::from("test"), "todo");
             assert_eq!(elem.render(), String::from("- [] test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("todochecked"));
+            let elem = MarkdownElement::new(String::from("test"), "todochecked");
             assert_eq!(elem.render(), String::from("- [x] test"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("bold"));
+            let elem = MarkdownElement::new(String::from("test"), "bold");
             assert_eq!(elem.render(), String::from("**test**"));
-            let elem = MarkdownElement::new(String::from("test"), String::from("italic"));
+            let elem = MarkdownElement::new(String::from("test"), "italic");
             assert_eq!(elem.render(), String::from("*test*"));
         }
     }

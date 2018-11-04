@@ -1,6 +1,8 @@
 mod rendering;
 mod parser;
 // use rendering::MarkdownElement;
+#[macro_use]
+extern crate simple_error;
 
 use parser::*;
 
