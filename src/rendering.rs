@@ -133,54 +133,82 @@ pub mod rendering {
                 .collect::<Vec<MarkdownElement>>();
             self.elements.append(&mut names);
 
-            self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+            let mut authors = self.extract_type("@author")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if authors.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Authors"), "h3"));
+                self.elements.append(&mut authors);
+            }
+
             let mut dates = self.extract_type("@date")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut dates);
+            if dates.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+                self.elements.append(&mut dates);
+            }
 
-            self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+
             let mut versions = self.extract_type("@version")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut versions);
+            if versions.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+                self.elements.append(&mut versions);
+            }
 
-            self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+
             let mut sees = self.extract_type("@see")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut sees);
+            if sees.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+                self.elements.append(&mut sees);
+            }
 
-            self.elements.push(MarkdownElement::new(String::from("Children Classes"), "h3"));
             let mut children = self.extract_type("@child")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut children);
 
-            self.elements.push(MarkdownElement::new(String::from("Parent Classes"), "h3"));
+            if children.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Children Classes"), "h3"));
+                self.elements.append(&mut children);
+            }
+
             let mut parents = self.extract_type("@parent")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut parents);
+            if parents.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Parent Classes"), "h3"));
+                self.elements.append(&mut parents);
+            }
 
-            self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+
             let mut descriptions = self.extract_type("@description")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut descriptions);
+            if descriptions.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+                self.elements.append(&mut descriptions);
+            }
 
-            self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+
             let mut notes = self.extract_type("@note")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
-            self.elements.append(&mut notes);
+            if notes.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+                self.elements.append(&mut notes);
+            }
         }
 
         fn create_var(&self) {
@@ -256,13 +284,13 @@ pub mod rendering {
                 "h2" => String::from("## ") + &self.text.clone(),
                 "h3" => String::from("### ") + &self.text.clone(),
                 "h4" => String::from("#### ") + &self.text.clone(),
-                "ul" => String::from("- ") + &self.text.clone(),
-                "ol" => String::from("1. ") + &self.text.clone(),
+                "ul" => String::from("- ") + &self.text.clone() + &String::from("\n"),
+                "ol" => String::from("1. ") + &self.text.clone() + &String::from("\n"),
                 "p"  => String::from(self.text.as_str()),
                 "code" => String::from("`") + &self.text.clone() + &String::from("`"),
                 "codeblock" => String::from("```\n") + &self.text.clone() + &String::from("\n```"),
-                "todo" => String::from("- [] ") + &self.text.clone(),
-                "todochecked" => String::from("- [x] ") + &self.text.clone(),
+                "todo" => String::from("- [] ") + &self.text.clone() + &String::from("\n"),
+                "todochecked" => String::from("- [x] ") + &self.text.clone() + &String::from("\n"),
                 "bold" => String::from("**") + &self.text.clone() + &String::from("**"),
                 "italic" => String::from("*") + &self.text.clone() + &String::from("*"),
                 "newline" => String::from("\n"),

@@ -18,7 +18,6 @@ fn main() {
         let new_set = set.into_iter().map(|j| extract_types(j)).collect();
         let joined = join_extracted_comments(new_set);
         println!("{:?}", joined);
-        test();
         let mut param_rep = ParameterRep::new(joined).unwrap();
         println!("{:?}", param_rep.render().clone());
     }
