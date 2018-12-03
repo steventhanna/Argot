@@ -91,12 +91,6 @@ pub mod rendering {
                 None => return Err(SimpleError::new("invalid format"))
             };
 
-            // let elements = match type_elem.as_str() {
-            //     "CLASS" => create_class(raw_elements),
-            //     "VAR" => create_var(raw_elements),
-            //     "FUNC" => create_func(raw_elements)
-            // };
-
             let elems: Vec<MarkdownElement> = Vec::new();
 
             Ok(ParameterRep {
@@ -161,7 +155,6 @@ pub mod rendering {
                 self.elements.append(&mut versions);
             }
 
-
             let mut sees = self.extract_type("@see")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
@@ -211,12 +204,158 @@ pub mod rendering {
             }
         }
 
-        fn create_var(&self) {
+        fn create_var(&mut self) {
+            // Look for a @name
+            let mut names = self.extract_type("@name")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "h2"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut names);
 
+            let mut authors = self.extract_type("@author")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if authors.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Authors"), "h3"));
+                self.elements.append(&mut authors);
+            }
+
+            let mut vartype = self.extract_type("@vartype")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            if vartype.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Type"), "h3"));
+                self.elements.append(&mut vartype);
+            }
+
+
+            let mut dates = self.extract_type("@date")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            if dates.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+                self.elements.append(&mut dates);
+            }
+
+            let mut versions = self.extract_type("@version")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
+                .collect::<Vec<MarkdownElement>>();
+            if versions.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+                self.elements.append(&mut versions);
+            }
+
+            let mut sees = self.extract_type("@see")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
+                .collect::<Vec<MarkdownElement>>();
+            if sees.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+                self.elements.append(&mut sees);
+            }
+
+            let mut descriptions = self.extract_type("@description")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            if descriptions.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+                self.elements.append(&mut descriptions);
+            }
+
+            let mut notes = self.extract_type("@note")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if notes.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+                self.elements.append(&mut notes);
+            }
         }
 
-        fn create_func(&self) {
+        fn create_func(&mut self) {
+            // Look for a @name
+            let mut names = self.extract_type("@name")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "h2"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut names);
 
+            let mut authors = self.extract_type("@author")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if authors.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Authors"), "h3"));
+                self.elements.append(&mut authors);
+            }
+
+            let mut params = self.extract_type("@param")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if params.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Parameters"), "h3"));
+                self.elements.append(&mut params);
+            }
+
+            let mut returns = self.extract_type("@return")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if returns.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Returns"), "h3"));
+                self.elements.append(&mut returns);
+            }
+
+            let mut dates = self.extract_type("@date")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            if dates.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+                self.elements.append(&mut dates);
+            }
+
+            let mut versions = self.extract_type("@version")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
+                .collect::<Vec<MarkdownElement>>();
+            if versions.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+                self.elements.append(&mut versions);
+            }
+
+            let mut sees = self.extract_type("@see")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
+                .collect::<Vec<MarkdownElement>>();
+            if sees.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+                self.elements.append(&mut sees);
+            }
+
+            let mut descriptions = self.extract_type("@description")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            if descriptions.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+                self.elements.append(&mut descriptions);
+            }
+
+            let mut notes = self.extract_type("@note")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            if notes.len() > 0 {
+                self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+                self.elements.append(&mut notes);
+            }
         }
 
         /**
