@@ -227,9 +227,9 @@ pub mod rendering {
 
         #[test]
         fn new() {
-            let elem = MarkdownElement::new(String::from("test"), String::from("h1"));
+            let elem = MarkdownElement::new(String::from("test"), "h1");
             assert_eq!(elem.text, String::from("test"));
-            assert_eq!(elem.markdown_type, String::from("h1"));
+            assert_eq!(elem.markdown_type, "h1");
         }
 
         #[test]
