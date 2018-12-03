@@ -41,6 +41,10 @@ pub mod rendering {
         };
     }
 
+    pub fn test() {
+        println!("test");
+    }
+
     /**
     * @type :: CLASS
     * @name :: ParameterRep
@@ -123,17 +127,60 @@ pub mod rendering {
 
         fn create_class(&mut self) {
             // Look for a @name
-            let names = self.extract_type("@name");
-            if names.len() > 0 {
-                self.elements.push(MarkdownElement::new(names[0].clone(), "h1"));
-            }
-            let dates = self.extract_type("@date");
-            let versions = self.extract_type("@version");
-            let sees = self.extract_type("@see");
-            let childs = self.extract_type("@child");
-            let parents = self.extract_type("@parent");
-            let descriptions = self.extract_type("@description");
-            let notes = self.extract_type("@note");
+            let mut names = self.extract_type("@name")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "h1"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut names);
+
+            self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+            let mut dates = self.extract_type("@date")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut dates);
+
+            self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+            let mut versions = self.extract_type("@version")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut versions);
+
+            self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+            let mut sees = self.extract_type("@see")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut sees);
+
+            self.elements.push(MarkdownElement::new(String::from("Children Classes"), "h3"));
+            let mut children = self.extract_type("@child")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut children);
+
+            self.elements.push(MarkdownElement::new(String::from("Parent Classes"), "h3"));
+            let mut parents = self.extract_type("@parent")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut parents);
+
+            self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+            let mut descriptions = self.extract_type("@description")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "p"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut descriptions);
+
+            self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+            let mut notes = self.extract_type("@note")
+                .iter()
+                .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
+                .collect::<Vec<MarkdownElement>>();
+            self.elements.append(&mut notes);
         }
 
         fn create_var(&self) {
@@ -157,6 +204,7 @@ pub mod rendering {
                 .join("\n")
         }
     }
+
 
     /**
     * @type :: CLASS
@@ -210,12 +258,14 @@ pub mod rendering {
                 "h4" => String::from("#### ") + &self.text.clone(),
                 "ul" => String::from("- ") + &self.text.clone(),
                 "ol" => String::from("1. ") + &self.text.clone(),
+                "p"  => String::from(self.text.as_str()),
                 "code" => String::from("`") + &self.text.clone() + &String::from("`"),
                 "codeblock" => String::from("```\n") + &self.text.clone() + &String::from("\n```"),
                 "todo" => String::from("- [] ") + &self.text.clone(),
                 "todochecked" => String::from("- [x] ") + &self.text.clone(),
                 "bold" => String::from("**") + &self.text.clone() + &String::from("**"),
                 "italic" => String::from("*") + &self.text.clone() + &String::from("*"),
+                "newline" => String::from("\n"),
                 _ => String::new()
             }
         }
