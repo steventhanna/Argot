@@ -41,6 +41,34 @@ pub mod rendering {
         };
     }
 
+    /**
+    * @type :: FUNC
+    * @name :: write_string_to_file
+    * @description :: Writes a string to a file
+    * @param :: filename: &str - a string slice representing the source filename with the source
+    * extension
+    * @param :: elements: Vec<MarkdownElement> - a vector full of markdown elements to be rendered
+    */
+    pub fn write_string_to_file(filename: &str, contents: String) {
+        // Chop the extension off the file
+        let path_stem = match Path::new(filename).file_stem() {
+            Some(x) => format!("{}{}", x.to_str().unwrap(), ".md"),
+            None => String::from("unnamed.md")
+        };
+
+        let path = Path::new(path_stem.as_str());
+
+        let mut file = match File::create(&path) {
+            Err(why) => panic!("Couldn't create {}: {}", path.display(), why.description()),
+            Ok(file) => file
+        };
+
+        match file.write_all(contents.as_bytes()) {
+            Err(why) => panic!("Couldn't write to {}: {}", path.display(), why.description()),
+            Ok(_) => return
+        };
+    }
+
     pub fn test() {
         println!("test");
     }
