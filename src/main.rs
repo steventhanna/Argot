@@ -4,6 +4,8 @@ use rendering::rendering::*;
 use std::path::{Path, PathBuf};
 use std::ffi::OsStr;
 
+use std::fs;
+
 extern crate glob;
 use glob::glob;
 
@@ -57,7 +59,19 @@ fn main() {
     let destination = matches.value_of("destination").unwrap();
 
     let is_recursive = matches.is_present("recursive");
-    println!("{:?}", collect_list_of_files(input, is_recursive));
+    let list_of_files = collect_list_of_files(input, is_recursive);
+
+    // Create the destination folder if necessary
+    fs::create_dir_all(destination);
+
+    let dest_path = PathBuf::from(destination).canonicalize().unwrap();
+
+    for file in list_of_files {
+        println!("{:?}", dest_path.display());
+        handle_file(file.into_os_string().to_str().unwrap(), dest_path.to_str().unwrap());
+    }
+
+    // println!("{:?}", collect_list_of_files(input, is_recursive));
     // handle_file("src/parser.rs", "src");
     // handle_file("src/rendering.rs", "src");
     // handle_file("src/Extraction.rs", "src");
@@ -74,14 +88,15 @@ fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
     let p = Path::new(input);
     let mut result: Vec<PathBuf> = Vec::new();
     if !p.is_dir() {
-        result.push(PathBuf::from(input));
+        result.push(p.canonicalize().unwrap());
         return result;
     }
 
     if !is_recursive {
         let path_str = String::from(p.to_str().unwrap()) + &"/*";
         for e in glob(path_str.as_str()).expect("Failed to read glob pattern") {
-            let x = PathBuf::from(e.unwrap().file_name().unwrap().to_str().unwrap());
+            let x = e.unwrap().canonicalize().unwrap();
+            // let x = PathBuf::from(e.unwrap().file_name().unwrap().to_str().unwrap());
             match x.as_path().extension() {
                 Some(y) => {
                     if is_extension_supported(y.to_str().unwrap()) {
@@ -99,7 +114,7 @@ fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
                 match x.as_path().extension() {
                     Some(y) => {
                         if is_extension_supported(y.to_str().unwrap()) {
-                            result.push(entry.path().to_path_buf())
+                            result.push(entry.path().canonicalize().unwrap())
                         }
                     },
                     _ => continue
@@ -136,6 +151,6 @@ fn handle_file(filename: &str, destination: &str) {
 
     let destination_path = Path::new(destination);
     let final_file_path = destination_path.join(stem.as_str()).with_extension("md");
-
+    println!("{:?}", final_file_path);
     write_string_to_file(final_file_path.as_path().to_str().unwrap(), contents.join("\n"));
 }

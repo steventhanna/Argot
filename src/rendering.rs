@@ -50,13 +50,9 @@ pub mod rendering {
     * @param :: elements: Vec<MarkdownElement> - a vector full of markdown elements to be rendered
     */
     pub fn write_string_to_file(filename: &str, contents: String) {
-        // Chop the extension off the file
-        let path_stem = match Path::new(filename).file_stem() {
-            Some(x) => format!("{}{}", x.to_str().unwrap(), ".md"),
-            None => String::from("unnamed.md")
-        };
+        let path = Path::new(filename);
 
-        let path = Path::new(path_stem.as_str());
+        println!("{:?}", path);
 
         let mut file = match File::create(&path) {
             Err(why) => panic!("Couldn't create {}: {}", path.display(), why.description()),
