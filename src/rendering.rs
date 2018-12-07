@@ -1,20 +1,20 @@
 pub mod rendering {
 
-    use std::path::Path;
-    use std::fs::File;
     use std::error::Error;
+    use std::fs::File;
     use std::io::Write;
+    use std::path::Path;
 
     use simple_error::SimpleError;
 
     /**
-    * @type :: FUNC
-    * @name :: write_string_to_file
-    * @description :: Writes a string to a file
-    * @param :: filename: &str - a string slice representing the source filename with the source
-    * extension
-    * @param :: elements: Vec<MarkdownElement> - a vector full of markdown elements to be rendered
-    */
+     * @type :: FUNC
+     * @name :: write_string_to_file
+     * @description :: Writes a string to a file
+     * @param :: filename: &str - a string slice representing the source filename with the source
+     * extension
+     * @param :: elements: Vec<MarkdownElement> - a vector full of markdown elements to be rendered
+     */
     pub fn write_string_to_file(filename: &str, contents: String) {
         let path = Path::new(filename);
 
@@ -22,59 +22,62 @@ pub mod rendering {
 
         let mut file = match File::create(&path) {
             Err(why) => panic!("Couldn't create {}: {}", path.display(), why.description()),
-            Ok(file) => file
+            Ok(file) => file,
         };
 
         match file.write_all(contents.as_bytes()) {
-            Err(why) => panic!("Couldn't write to {}: {}", path.display(), why.description()),
-            Ok(_) => return
+            Err(why) => panic!(
+                "Couldn't write to {}: {}",
+                path.display(),
+                why.description()
+            ),
+            Ok(_) => return,
         };
     }
 
     /**
-    * @type :: CLASS
-    * @name :: ParameterRep
-    * @description :: Represents a chunk of comments to be rendered.
-    */
+     * @type :: CLASS
+     * @name :: ParameterRep
+     * @description :: Represents a chunk of comments to be rendered.
+     */
     pub struct ParameterRep {
         /**
-        * @type :: VAR
-        * @name :: argot_type
-        * @vartype :: String
-        * @description :: Holds the type of each parameter, currently either FUNC, VAR, CLASS
-        */
+         * @type :: VAR
+         * @name :: argot_type
+         * @vartype :: String
+         * @description :: Holds the type of each parameter, currently either FUNC, VAR, CLASS
+         */
         argot_type: String,
 
         /**
-        * @type :: VAR
-        * @name :: raw_elements
-        * @vartype :: Vec<(String, String)>
-        * @description :: Holds the raw source comments in a tuple, with the first element the
-        * part on the left of the ::, and second element on the right
-        */
+         * @type :: VAR
+         * @name :: raw_elements
+         * @vartype :: Vec<(String, String)>
+         * @description :: Holds the raw source comments in a tuple, with the first element the
+         * part on the left of the ::, and second element on the right
+         */
         raw_elements: Vec<(String, String)>,
 
         /**
-        * @type :: VAR
-        * @name :: elements
-        * @vartype :: Vec<MarkdownElement>
-        * @description :: Holds a list of MarkdownElement's.  Should be considered to be in order,
-        * and can be rendered simply by looping through.  This instance variable will be built
-        * from data passed through the constructor
-        */
-        elements: Vec<MarkdownElement>
+         * @type :: VAR
+         * @name :: elements
+         * @vartype :: Vec<MarkdownElement>
+         * @description :: Holds a list of MarkdownElement's.  Should be considered to be in order,
+         * and can be rendered simply by looping through.  This instance variable will be built
+         * from data passed through the constructor
+         */
+        elements: Vec<MarkdownElement>,
     }
 
     impl ParameterRep {
-
         /**
-        * @type :: FUNC
-        * @name :: new
-        * @param :: `raw_elements: Vec<(String, String)>` - the raw extraction elements separated
-        * by type and content
-        * @return :: `Result<ParameterRep, SimpleError>` - Either returns a parameter
-        * representation, or an error
-        */
+         * @type :: FUNC
+         * @name :: new
+         * @param :: `raw_elements: Vec<(String, String)>` - the raw extraction elements separated
+         * by type and content
+         * @return :: `Result<ParameterRep, SimpleError>` - Either returns a parameter
+         * representation, or an error
+         */
         pub fn new(raw_elements: Vec<(String, String)>) -> Result<ParameterRep, SimpleError> {
             // Find a type
             let maybe_index = raw_elements.iter().position(|tuple| {
@@ -83,7 +86,7 @@ pub mod rendering {
             });
             let (_, type_elem) = match maybe_index {
                 Some(x) => raw_elements[x].clone(),
-                None => return Err(SimpleError::new("invalid format"))
+                None => return Err(SimpleError::new("invalid format")),
             };
 
             let elems: Vec<MarkdownElement> = Vec::new();
@@ -91,38 +94,38 @@ pub mod rendering {
             Ok(ParameterRep {
                 argot_type: type_elem,
                 elements: elems,
-                raw_elements: raw_elements.clone()
+                raw_elements: raw_elements.clone(),
             })
         }
 
         /**
-        * @type :: FUNC
-        * @name :: render
-        * @param :: ` &mut self`
-        * @return :: String - string represenation of the markdown that can be dumped to a file.
-        * @description :: Renders each ParameterRep based on its type, either as a class, var, or
-        * func
-        */
+         * @type :: FUNC
+         * @name :: render
+         * @param :: ` &mut self`
+         * @return :: String - string represenation of the markdown that can be dumped to a file.
+         * @description :: Renders each ParameterRep based on its type, either as a class, var, or
+         * func
+         */
         pub fn render(&mut self) -> String {
             match self.argot_type.as_str() {
                 "CLASS" => self.create_class(),
                 "VAR" => self.create_var(),
                 "FUNC" => self.create_func(),
-                _ => return String::new()
+                _ => return String::new(),
             };
 
             self.render_to_string()
         }
 
         /**
-        * @type :: FUNC
-        * @name :: extract_type
-        * @param :: &self
-        * @param :: `type_name: &str` - the type contents to extract
-        * @return :: `Vec<String>` - a Vector of contents associated with that type
-        * @description :: Extracts and collects the content of raw_elements depending on the
-        * provided `type_name`
-        */
+         * @type :: FUNC
+         * @name :: extract_type
+         * @param :: &self
+         * @param :: `type_name: &str` - the type contents to extract
+         * @return :: `Vec<String>` - a Vector of contents associated with that type
+         * @description :: Extracts and collects the content of raw_elements depending on the
+         * provided `type_name`
+         */
         fn extract_type(&self, type_name: &str) -> Vec<String> {
             self.raw_elements
                 .iter()
@@ -144,7 +147,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if authors.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Authors"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Authors"), "h3"));
                 self.elements.append(&mut authors);
             }
 
@@ -153,17 +157,18 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if dates.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Date"), "h3"));
                 self.elements.append(&mut dates);
             }
-
 
             let mut versions = self.extract_type("@version")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
                 .collect::<Vec<MarkdownElement>>();
             if versions.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Current Version"), "h3"));
                 self.elements.append(&mut versions);
             }
 
@@ -172,7 +177,10 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
                 .collect::<Vec<MarkdownElement>>();
             if sees.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+                self.elements.push(MarkdownElement::new(
+                    String::from("See - Relevant Links / Documents"),
+                    "h3",
+                ));
                 self.elements.append(&mut sees);
             }
 
@@ -182,7 +190,8 @@ pub mod rendering {
                 .collect::<Vec<MarkdownElement>>();
 
             if children.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Children Classes"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Children Classes"), "h3"));
                 self.elements.append(&mut children);
             }
 
@@ -191,27 +200,28 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if parents.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Parent Classes"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Parent Classes"), "h3"));
                 self.elements.append(&mut parents);
             }
-
 
             let mut descriptions = self.extract_type("@description")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if descriptions.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Description"), "h3"));
                 self.elements.append(&mut descriptions);
             }
-
 
             let mut notes = self.extract_type("@note")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if notes.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Notes"), "h3"));
                 self.elements.append(&mut notes);
             }
         }
@@ -229,7 +239,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if authors.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Authors"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Authors"), "h3"));
                 self.elements.append(&mut authors);
             }
 
@@ -238,17 +249,18 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if vartype.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Type"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Type"), "h3"));
                 self.elements.append(&mut vartype);
             }
-
 
             let mut dates = self.extract_type("@date")
                 .iter()
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if dates.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Date"), "h3"));
                 self.elements.append(&mut dates);
             }
 
@@ -257,7 +269,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
                 .collect::<Vec<MarkdownElement>>();
             if versions.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Current Version"), "h3"));
                 self.elements.append(&mut versions);
             }
 
@@ -266,7 +279,10 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
                 .collect::<Vec<MarkdownElement>>();
             if sees.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+                self.elements.push(MarkdownElement::new(
+                    String::from("See - Relevant Links / Documents"),
+                    "h3",
+                ));
                 self.elements.append(&mut sees);
             }
 
@@ -275,7 +291,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if descriptions.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Description"), "h3"));
                 self.elements.append(&mut descriptions);
             }
 
@@ -284,7 +301,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if notes.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Notes"), "h3"));
                 self.elements.append(&mut notes);
             }
         }
@@ -302,7 +320,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if authors.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Authors"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Authors"), "h3"));
                 self.elements.append(&mut authors);
             }
 
@@ -311,7 +330,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if params.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Parameters"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Parameters"), "h3"));
                 self.elements.append(&mut params);
             }
 
@@ -320,7 +340,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if returns.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Returns"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Returns"), "h3"));
                 self.elements.append(&mut returns);
             }
 
@@ -329,7 +350,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if dates.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Date"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Date"), "h3"));
                 self.elements.append(&mut dates);
             }
 
@@ -338,7 +360,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "italic"))
                 .collect::<Vec<MarkdownElement>>();
             if versions.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Current Version"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Current Version"), "h3"));
                 self.elements.append(&mut versions);
             }
 
@@ -347,7 +370,10 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "bold"))
                 .collect::<Vec<MarkdownElement>>();
             if sees.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("See - Relevant Links / Documents"), "h3"));
+                self.elements.push(MarkdownElement::new(
+                    String::from("See - Relevant Links / Documents"),
+                    "h3",
+                ));
                 self.elements.append(&mut sees);
             }
 
@@ -356,7 +382,8 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "p"))
                 .collect::<Vec<MarkdownElement>>();
             if descriptions.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Description"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Description"), "h3"));
                 self.elements.append(&mut descriptions);
             }
 
@@ -365,17 +392,18 @@ pub mod rendering {
                 .map(|elem| MarkdownElement::new(elem.clone(), "ul"))
                 .collect::<Vec<MarkdownElement>>();
             if notes.len() > 0 {
-                self.elements.push(MarkdownElement::new(String::from("Notes"), "h3"));
+                self.elements
+                    .push(MarkdownElement::new(String::from("Notes"), "h3"));
                 self.elements.append(&mut notes);
             }
         }
 
         /**
-        * @type :: FUNC
-        * @name :: render_to_string
-        * @description :: Renders the markdown elements to a single String joined by newlines
-        */
-        fn render_to_string(&self) -> String{
+         * @type :: FUNC
+         * @name :: render_to_string
+         * @description :: Renders the markdown elements to a single String joined by newlines
+         */
+        fn render_to_string(&self) -> String {
             self.elements
                 .iter()
                 .map(|elem| elem.render())
@@ -384,51 +412,50 @@ pub mod rendering {
         }
     }
 
-
     /**
-    * @type :: CLASS
-    * @name :: MarkdownElement
-    * @author :: Steven Hanna - steventhanna@gmail.com
-    * @description :: Representation of an arbritrary element to be represented in Markdown
-    */
+     * @type :: CLASS
+     * @name :: MarkdownElement
+     * @author :: Steven Hanna - steventhanna@gmail.com
+     * @description :: Representation of an arbritrary element to be represented in Markdown
+     */
     pub struct MarkdownElement {
         /**
-        * @type :: VAR
-        * @name :: markdown_type
-        * @description :: String type that holds what kind of element the markdown should be
-        * rendered as
-        */
+         * @type :: VAR
+         * @name :: markdown_type
+         * @description :: String type that holds what kind of element the markdown should be
+         * rendered as
+         */
         markdown_type: String,
 
         /**
-        * @type :: VAR
-        * @name :: text
-        * @description :: The text to be rendered out to the type
-        */
-        text: String
+         * @type :: VAR
+         * @name :: text
+         * @description :: The text to be rendered out to the type
+         */
+        text: String,
     }
 
     impl MarkdownElement {
         /**
-        * @type :: FUNC
-        * @name :: new
-        * @description :: Creates a new markdown element that can be rendered
-        * @param :: text - String - the text to be transformed to markdown
-        * @param :: markdown_type - String - the type of element to render as
-        */
+         * @type :: FUNC
+         * @name :: new
+         * @description :: Creates a new markdown element that can be rendered
+         * @param :: text - String - the text to be transformed to markdown
+         * @param :: markdown_type - String - the type of element to render as
+         */
         pub fn new(text: String, markdown_type: &str) -> MarkdownElement {
             MarkdownElement {
                 text: text,
-                markdown_type: String::from(markdown_type)
+                markdown_type: String::from(markdown_type),
             }
         }
 
         /**
-        * @type :: FUNC
-        * @name :: render
-        * @return :: String - the markdown representation of the object
-        * @description :: Renders a MarkdownElement object to Markdown
-        */
+         * @type :: FUNC
+         * @name :: render
+         * @return :: String - the markdown representation of the object
+         * @description :: Renders a MarkdownElement object to Markdown
+         */
         pub fn render(&self) -> String {
             match self.markdown_type.as_ref() {
                 "h1" => String::from("# ") + &self.text.clone(),
@@ -437,7 +464,7 @@ pub mod rendering {
                 "h4" => String::from("#### ") + &self.text.clone(),
                 "ul" => String::from("- ") + &self.text.clone() + &String::from("\n"),
                 "ol" => String::from("1. ") + &self.text.clone() + &String::from("\n"),
-                "p"  => String::from(self.text.as_str()),
+                "p" => String::from(self.text.as_str()),
                 "code" => String::from("`") + &self.text.clone() + &String::from("`"),
                 "codeblock" => String::from("```\n") + &self.text.clone() + &String::from("\n```"),
                 "todo" => String::from("- [] ") + &self.text.clone() + &String::from("\n"),
@@ -445,7 +472,7 @@ pub mod rendering {
                 "bold" => String::from("**") + &self.text.clone() + &String::from("**"),
                 "italic" => String::from("*") + &self.text.clone() + &String::from("*"),
                 "newline" => String::from("\n"),
-                _ => String::new()
+                _ => String::new(),
             }
         }
     }

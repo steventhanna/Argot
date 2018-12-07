@@ -1,15 +1,14 @@
+use std::ffi::OsStr;
 /**
 * @type :: CLASS
 * @name :: Parser
 * @author :: Steven Hanna - steventhanna@gmail.com
 */
-
 use std::fs::File;
-use std::io::BufReader;
 use std::io::prelude::*;
+use std::io::BufReader;
 use std::io::Error;
 use std::path::Path;
-use std::ffi::OsStr;
 
 /**
 * @type :: FUNC
@@ -21,10 +20,7 @@ use std::ffi::OsStr;
 pub fn extract_types(raw: String) -> (String, String) {
     // Convert the string to &str
     let s = raw.as_str().trim();
-    let mut v: Vec<&str> = s
-        .split("::")
-        .map(|el| el.trim())
-        .collect();
+    let mut v: Vec<&str> = s.split("::").map(|el| el.trim()).collect();
     match v.len() {
         0 => (String::new(), s.to_string()),
         1 => (String::new(), s.to_string()),
@@ -111,9 +107,7 @@ fn remove_comment_style(raw: String, comment_styles: &Vec<&str>) -> (String, boo
 * @description :: Extracts an extension from a filename
 */
 fn get_extension_from_filename(filename: &str) -> Option<&str> {
-    Path::new(filename)
-        .extension()
-        .and_then(OsStr::to_str)
+    Path::new(filename).extension().and_then(OsStr::to_str)
 }
 
 /**
@@ -130,7 +124,7 @@ fn get_comment_styles(extension: &str) -> Vec<&str> {
         "js" => vec!["/**", "*/", "*"],
         "jsx" => vec!["/**", "*/", "*"],
         "py" => vec!["'''"],
-        _ => Vec::new()
+        _ => Vec::new(),
     }
 }
 
@@ -142,13 +136,13 @@ fn get_comment_styles(extension: &str) -> Vec<&str> {
 pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error> {
     let f = match File::open(filename) {
         Ok(ff) => ff,
-        Err(e) => return Err(e)
+        Err(e) => return Err(e),
     };
     let f = BufReader::new(f);
 
     let extension = match get_extension_from_filename(filename) {
         Some(x) => x,
-        None => ""
+        None => "",
     };
 
     let comment_styles = &get_comment_styles(extension);
@@ -158,13 +152,14 @@ pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error>
 
     for line in f.lines() {
         match line {
-            Ok(l) =>{
-                let (altered_string, has_altered) = remove_comment_style(l.to_string(), comment_styles);
+            Ok(l) => {
+                let (altered_string, has_altered) =
+                    remove_comment_style(l.to_string(), comment_styles);
                 if altered_string.len() > 0 && has_altered {
                     comment_break = false;
                     let mut current = match contents.pop() {
                         Some(x) => x,
-                        None => Vec::new()
+                        None => Vec::new(),
                     };
                     current.push(altered_string);
                     contents.push(current);
@@ -175,8 +170,8 @@ pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error>
                     }
                     comment_break = true;
                 }
-            },
-            Err(e) => return Err(e)
+            }
+            Err(e) => return Err(e),
         };
     }
     // Filter out blank vectors
@@ -191,23 +186,53 @@ mod test {
 
     #[test]
     fn test_extract_types() {
-        assert_eq!(extract_types(String::from("@param :: test")), ((String::from("@param"), String::from("test"))));
-        assert_eq!(extract_types(String::from("   @param    ::    test   ")), ((String::from("@param"), String::from("test"))));
-        assert_eq!(extract_types(String::from("   @param    ::    test :: x")), ((String::from("@param"), String::from("test :: x"))));
-        assert_eq!(extract_types(String::from("")), ((String::new(), String::new())));
+        assert_eq!(
+            extract_types(String::from("@param :: test")),
+            ((String::from("@param"), String::from("test")))
+        );
+        assert_eq!(
+            extract_types(String::from("   @param    ::    test   ")),
+            ((String::from("@param"), String::from("test")))
+        );
+        assert_eq!(
+            extract_types(String::from("   @param    ::    test :: x")),
+            ((String::from("@param"), String::from("test :: x")))
+        );
+        assert_eq!(
+            extract_types(String::from("")),
+            ((String::new(), String::new()))
+        );
     }
 
     #[test]
     fn test_remove_comment_style() {
         let comment_styles = vec!["/**", "*/", "*"];
-        assert_eq!(remove_comment_style(String::from("/**"), &comment_styles), (String::from(""), true));
-        assert_eq!(remove_comment_style(String::from("*/"), &comment_styles), (String::from(""), true));
-        assert_eq!(remove_comment_style(String::from("* @param :: test"), &comment_styles), (String::from("@param :: test"), true));
-        assert_eq!(remove_comment_style(String::from("* @param :: *test /** */"), &comment_styles), (String::from("@param :: *test /** */"), true));
+        assert_eq!(
+            remove_comment_style(String::from("/**"), &comment_styles),
+            (String::from(""), true)
+        );
+        assert_eq!(
+            remove_comment_style(String::from("*/"), &comment_styles),
+            (String::from(""), true)
+        );
+        assert_eq!(
+            remove_comment_style(String::from("* @param :: test"), &comment_styles),
+            (String::from("@param :: test"), true)
+        );
+        assert_eq!(
+            remove_comment_style(String::from("* @param :: *test /** */"), &comment_styles),
+            (String::from("@param :: *test /** */"), true)
+        );
 
         let comment_styles = vec!["'''"];
-        assert_eq!(remove_comment_style(String::from("'''"), &comment_styles), (String::from(""), true));
-        assert_eq!(remove_comment_style(String::from("Comment test"), &comment_styles), (String::from("Comment test"), false));
+        assert_eq!(
+            remove_comment_style(String::from("'''"), &comment_styles),
+            (String::from(""), true)
+        );
+        assert_eq!(
+            remove_comment_style(String::from("Comment test"), &comment_styles),
+            (String::from("Comment test"), false)
+        );
     }
 
     #[test]

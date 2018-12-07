@@ -1,17 +1,16 @@
+mod parser;
 /**
 * @type :: CLASS
 * @name :: main
 * @author :: Steven Hanna <steventhanna@gmail.com>
 * @description :: The main class that handles multithreading, and the cli implementation.
 */
-
 mod rendering;
-mod parser;
 use rendering::rendering::*;
-use std::path::{Path, PathBuf};
-use std::thread;
-use std::sync::Arc;
 use std::fs;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
+use std::thread;
 
 extern crate glob;
 use glob::glob;
@@ -21,39 +20,42 @@ extern crate simple_error;
 extern crate clap;
 extern crate walkdir;
 
-use clap::{Arg, App};
+use clap::{App, Arg};
 
 use parser::*;
 
-use walkdir::{WalkDir};
+use walkdir::WalkDir;
 
 fn main() {
     let matches = App::new("Argot")
         .version("0.2.0")
         .author("Steven Hanna <steventhanna@gmail.com>")
         .about("Parse documentation from codebases into Markdown for easy doc creation.")
-        .arg(Arg::with_name("destination")
-            .short("d")
-            .long("destination")
-            .value_name("DESTINATION")
-            .help("Sets a custom destination path for rendered markdown files")
-            .takes_value(true)
-            .required(true)
+        .arg(
+            Arg::with_name("destination")
+                .short("d")
+                .long("destination")
+                .value_name("DESTINATION")
+                .help("Sets a custom destination path for rendered markdown files")
+                .takes_value(true)
+                .required(true),
         )
-        .arg(Arg::with_name("origin")
-            .short("o")
-            .long("origin")
-            .value_name("ORIGIN")
-            .help("Sets the origin of where Argot should start parsing from")
-            .takes_value(true)
-            .required(true)
+        .arg(
+            Arg::with_name("origin")
+                .short("o")
+                .long("origin")
+                .value_name("ORIGIN")
+                .help("Sets the origin of where Argot should start parsing from")
+                .takes_value(true)
+                .required(true),
         )
-        .arg(Arg::with_name("recursive")
-            .short("r")
-            .long("recursive")
-            .value_name("RECURSIVE")
-            .help("Recursively walk the file tree parsing")
-            .takes_value(false)
+        .arg(
+            Arg::with_name("recursive")
+                .short("r")
+                .long("recursive")
+                .value_name("RECURSIVE")
+                .help("Recursively walk the file tree parsing")
+                .takes_value(false),
         )
         .get_matches();
 
@@ -66,21 +68,41 @@ fn main() {
     let list_of_files = collect_list_of_files(input, is_recursive);
 
     // Create the destination folder if necessary
-    fs::create_dir_all(destination).unwrap();
+    match fs::create_dir_all(destination) {
+        Ok(_) => (),
+        Err(e) => panic!(
+            "There was an error creating the documentation destination. {:?}",
+            e
+        ),
+    };
 
-    let dest_path = Arc::new(PathBuf::from(destination).canonicalize().unwrap());
+    let path_buf = match PathBuf::from(destination).canonicalize() {
+        Ok(x) => x,
+        Err(e) => panic!(
+            "There was an error creating the documentation destination. {:?}",
+            e
+        ),
+    };
+
+    let dest_path = Arc::new(path_buf);
 
     let mut threads = Vec::new();
 
     for file in list_of_files {
         let dest_path = Arc::clone(&dest_path);
         threads.push(thread::spawn(move || {
-            handle_file(file.into_os_string().to_str().unwrap(), &dest_path.to_str().unwrap());
+            handle_file(
+                file.into_os_string().to_str().unwrap(),
+                &dest_path.to_str().unwrap(),
+            );
         }));
     }
 
     for x in threads {
-        x.join().unwrap();
+        match x.join() {
+            Ok(_) => continue,
+            Err(e) => println!("{:?}", e),
+        };
     }
 }
 
@@ -108,8 +130,8 @@ fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
                     if is_extension_supported(y.to_str().unwrap()) {
                         result.push(x.clone())
                     }
-                },
-                _ => continue
+                }
+                _ => continue,
             };
         }
     } else {
@@ -121,8 +143,8 @@ fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
                         if is_extension_supported(y.to_str().unwrap()) {
                             result.push(entry.path().canonicalize().unwrap())
                         }
-                    },
-                    _ => continue
+                    }
+                    _ => continue,
                 };
             }
         }
@@ -151,7 +173,7 @@ fn is_extension_supported(x: &str) -> bool {
 fn handle_file(filename: &str, destination: &str) {
     let x = match get_comments_from_file(filename) {
         Ok(x) => x,
-        Err(e) => panic!(e)
+        Err(e) => panic!(e),
     };
 
     let mut contents: Vec<String> = Vec::new();
@@ -164,11 +186,13 @@ fn handle_file(filename: &str, destination: &str) {
 
     let stem = match Path::new(filename).file_stem() {
         None => String::from("unnamed"),
-        Some(x) => String::from(x.to_str().unwrap())
+        Some(x) => String::from(x.to_str().unwrap()),
     };
-
 
     let destination_path = Path::new(destination);
     let final_file_path = destination_path.join(stem.as_str()).with_extension("md");
-    write_string_to_file(final_file_path.as_path().to_str().unwrap(), contents.join("\n"));
+    write_string_to_file(
+        final_file_path.as_path().to_str().unwrap(),
+        contents.join("\n"),
+    );
 }
