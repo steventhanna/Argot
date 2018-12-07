@@ -84,7 +84,12 @@ fn main() {
     }
 }
 
-
+/**
+* @type :: FUNC
+* @name :: collect_list_of_files
+* @param :: `input: &str` - the input filepath
+* @param :: `is_recursive: bool` - flag whether to search recursively or not
+*/
 fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
     let p = Path::new(input);
     let mut result: Vec<PathBuf> = Vec::new();
@@ -125,11 +130,24 @@ fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
     result
 }
 
+/**
+* @type :: FUNC
+* @name :: is_extension_supported
+* @param :: x - &str - the extension type to test against
+* @return :: bool - whether or not that extension is currently supported
+*/
 fn is_extension_supported(x: &str) -> bool {
     let list = ["js", "rs", "c", "cpp", "py", "java"];
     list.contains(&x)
 }
 
+/**
+* @type :: FUNC
+* @name :: handle_file
+* @param :: `filename: &str` - the file path to parse
+* @param :: `destination: &str` - the destination folder to place the file
+* @description :: Encapsulates logic to extract, prepare, and otherwise manage the inline docs.
+*/
 fn handle_file(filename: &str, destination: &str) {
     let x = match get_comments_from_file(filename) {
         Ok(x) => x,

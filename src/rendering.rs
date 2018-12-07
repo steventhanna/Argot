@@ -66,6 +66,15 @@ pub mod rendering {
     }
 
     impl ParameterRep {
+
+        /**
+        * @type :: FUNC
+        * @name :: new
+        * @param :: `raw_elements: Vec<(String, String)>` - the raw extraction elements separated
+        * by type and content
+        * @return :: `Result<ParameterRep, SimpleError>` - Either returns a parameter
+        * representation, or an error
+        */
         pub fn new(raw_elements: Vec<(String, String)>) -> Result<ParameterRep, SimpleError> {
             // Find a type
             let maybe_index = raw_elements.iter().position(|tuple| {
@@ -86,6 +95,14 @@ pub mod rendering {
             })
         }
 
+        /**
+        * @type :: FUNC
+        * @name :: render
+        * @param :: ` &mut self`
+        * @return :: String - string represenation of the markdown that can be dumped to a file.
+        * @description :: Renders each ParameterRep based on its type, either as a class, var, or
+        * func
+        */
         pub fn render(&mut self) -> String {
             match self.argot_type.as_str() {
                 "CLASS" => self.create_class(),
@@ -97,6 +114,15 @@ pub mod rendering {
             self.render_to_string()
         }
 
+        /**
+        * @type :: FUNC
+        * @name :: extract_type
+        * @param :: &self
+        * @param :: `type_name: &str` - the type contents to extract
+        * @return :: `Vec<String>` - a Vector of contents associated with that type
+        * @description :: Extracts and collects the content of raw_elements depending on the
+        * provided `type_name`
+        */
         fn extract_type(&self, type_name: &str) -> Vec<String> {
             self.raw_elements
                 .iter()
