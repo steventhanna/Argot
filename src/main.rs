@@ -19,7 +19,7 @@ use glob::glob;
 extern crate human_panic;
 
 extern crate indicatif;
-use indicatif::{ProgressBar, ProgressStyle};
+use indicatif::ProgressBar;
 
 extern crate simple_error;
 
@@ -72,10 +72,9 @@ fn main() {
     let is_recursive = matches.is_present("recursive");
     let list_of_files = collect_list_of_files(input, is_recursive);
 
-    let pb = ProgressBar::new(list_of_files.len() as u64);
-    pb.set_style(ProgressStyle::default_bar()
-        .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})")
-        .progress_chars("#>-"));
+    let list_of_files_length = list_of_files.len();
+
+    let pb = ProgressBar::new(list_of_files_length as u64);
 
     // Create the destination folder if necessary
     match fs::create_dir_all(destination) {
@@ -116,6 +115,7 @@ fn main() {
     }
 
     pb.finish_with_message("done");
+    println!("Finished processing {:?} files.", list_of_files_length);
 }
 
 /**
