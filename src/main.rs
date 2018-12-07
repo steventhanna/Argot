@@ -15,6 +15,9 @@ use std::thread;
 extern crate glob;
 use glob::glob;
 
+#[macro_use]
+extern crate human_panic;
+
 extern crate indicatif;
 use indicatif::{ProgressBar, ProgressStyle};
 
@@ -30,6 +33,7 @@ use parser::*;
 use walkdir::WalkDir;
 
 fn main() {
+    setup_panic!();
     let matches = App::new("Argot")
         .version("0.2.0")
         .author("Steven Hanna <steventhanna@gmail.com>")
@@ -68,7 +72,7 @@ fn main() {
     let is_recursive = matches.is_present("recursive");
     let list_of_files = collect_list_of_files(input, is_recursive);
 
-    let mut pb = ProgressBar::new(list_of_files.len() as u64);
+    let pb = ProgressBar::new(list_of_files.len() as u64);
     pb.set_style(ProgressStyle::default_bar()
         .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})")
         .progress_chars("#>-"));
