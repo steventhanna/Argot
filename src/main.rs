@@ -1,27 +1,31 @@
+/**
+* @type :: CLASS
+* @name :: main
+* @author :: Steven Hanna <steventhanna@gmail.com>
+* @description :: The main class that handles multithreading, and the cli implementation.
+*/
+
 mod rendering;
 mod parser;
 use rendering::rendering::*;
 use std::path::{Path, PathBuf};
-use std::ffi::OsStr;
-
+use std::thread;
+use std::sync::Arc;
 use std::fs;
 
 extern crate glob;
 use glob::glob;
 
-#[macro_use]
 extern crate simple_error;
 
 extern crate clap;
 extern crate walkdir;
 
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
 
 use parser::*;
-use rendering::*;
 
-use walkdir::{DirEntry, WalkDir};
-
+use walkdir::{WalkDir};
 
 fn main() {
     let matches = App::new("Argot")
@@ -62,27 +66,24 @@ fn main() {
     let list_of_files = collect_list_of_files(input, is_recursive);
 
     // Create the destination folder if necessary
-    fs::create_dir_all(destination);
+    fs::create_dir_all(destination).unwrap();
 
-    let dest_path = PathBuf::from(destination).canonicalize().unwrap();
+    let dest_path = Arc::new(PathBuf::from(destination).canonicalize().unwrap());
+
+    let mut threads = Vec::new();
 
     for file in list_of_files {
-        println!("{:?}", dest_path.display());
-        handle_file(file.into_os_string().to_str().unwrap(), dest_path.to_str().unwrap());
+        let dest_path = Arc::clone(&dest_path);
+        threads.push(thread::spawn(move || {
+            handle_file(file.into_os_string().to_str().unwrap(), &dest_path.to_str().unwrap());
+        }));
     }
 
-    // println!("{:?}", collect_list_of_files(input, is_recursive));
-    // handle_file("src/parser.rs", "src");
-    // handle_file("src/rendering.rs", "src");
-    // handle_file("src/Extraction.rs", "src");
+    for x in threads {
+        x.join().unwrap();
+    }
 }
 
-fn is_hidden(entry: &DirEntry) -> bool {
-    entry.file_name()
-         .to_str()
-         .map(|s| s.starts_with("."))
-         .unwrap_or(false)
-}
 
 fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
     let p = Path::new(input);
@@ -105,7 +106,6 @@ fn collect_list_of_files(input: &str, is_recursive: bool) -> Vec<PathBuf> {
                 },
                 _ => continue
             };
-            // result.push(e.unwrap().to_path_buf());
         }
     } else {
         for entry in WalkDir::new(input).into_iter().filter_map(|e| e.ok()) {
@@ -133,7 +133,7 @@ fn is_extension_supported(x: &str) -> bool {
 fn handle_file(filename: &str, destination: &str) {
     let x = match get_comments_from_file(filename) {
         Ok(x) => x,
-        _ => Vec::new()
+        Err(e) => panic!(e)
     };
 
     let mut contents: Vec<String> = Vec::new();
@@ -149,8 +149,8 @@ fn handle_file(filename: &str, destination: &str) {
         Some(x) => String::from(x.to_str().unwrap())
     };
 
+
     let destination_path = Path::new(destination);
     let final_file_path = destination_path.join(stem.as_str()).with_extension("md");
-    println!("{:?}", final_file_path);
     write_string_to_file(final_file_path.as_path().to_str().unwrap(), contents.join("\n"));
 }
