@@ -81,22 +81,24 @@ pub fn join_extracted_comments(mut types: Vec<(String, String)>) -> Vec<(String,
 * @return :: (String, bool) - String representing the cleaned array, bool if it was altered
 */
 fn remove_comment_style(raw: String, comment_styles: &Vec<&str>) -> (String, bool) {
-    let mut raw_str = raw.as_str().trim();
+    // println!("Processing: {:?}", raw);
+    let mut raw_str = raw.trim().to_string();
     let mut has_altered = false;
     for style in comment_styles {
-        // Take a substring
-        if raw_str.len() >= style.len() {
-            let s = &raw_str[0..style.len()];
-            if s == *style {
-                // If the strings match, make a new slice
-                raw_str = &raw_str[style.len()..];
+        // Just check if the style even exists in the raw string
+        if raw.contains(style) {
+            // Take a substring
+            if raw_str.starts_with(style) {
+                raw_str = raw_str.replacen(style, "", 1);
                 has_altered = true;
             }
         }
     }
-
-    raw_str = raw_str.trim();
-    (raw_str.to_string(), has_altered)
+    while raw_str.starts_with(" ") {
+        raw_str = raw_str.replacen(" ", "", 1);
+    }
+    // raw_str = raw_str.trim_start();
+    (raw_str, has_altered)
 }
 
 /**
@@ -233,6 +235,15 @@ mod test {
             remove_comment_style(String::from("Comment test"), &comment_styles),
             (String::from("Comment test"), false)
         );
+        // Handling stupid unicode reeeeeeeeeeeeeeeeeeeee
+        assert_eq!(
+            remove_comment_style(String::from("😊 Comment test"), &comment_styles),
+            (String::from("😊 Comment test"), false)
+        );
+        // assert_eq!(
+        //     remove_comment_style(String::from("* 😊 Comment test"), &comment_styles),
+        //     (String::from("😊 Comment test"), true)
+        // );
     }
 
     #[test]

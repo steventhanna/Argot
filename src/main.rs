@@ -15,6 +15,9 @@ use std::thread;
 extern crate glob;
 use glob::glob;
 
+extern crate indicatif;
+use indicatif::{ProgressBar, ProgressStyle};
+
 extern crate simple_error;
 
 extern crate clap;
@@ -59,13 +62,16 @@ fn main() {
         )
         .get_matches();
 
-    // println!("{:?}", matches);
-
     let input = matches.value_of("origin").unwrap();
     let destination = matches.value_of("destination").unwrap();
 
     let is_recursive = matches.is_present("recursive");
     let list_of_files = collect_list_of_files(input, is_recursive);
+
+    let mut pb = ProgressBar::new(list_of_files.len() as u64);
+    pb.set_style(ProgressStyle::default_bar()
+        .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})")
+        .progress_chars("#>-"));
 
     // Create the destination folder if necessary
     match fs::create_dir_all(destination) {
@@ -100,10 +106,12 @@ fn main() {
 
     for x in threads {
         match x.join() {
-            Ok(_) => continue,
+            Ok(_) => pb.inc(1),
             Err(e) => println!("{:?}", e),
         };
     }
+
+    pb.finish_with_message("done");
 }
 
 /**
@@ -173,26 +181,35 @@ fn is_extension_supported(x: &str) -> bool {
 fn handle_file(filename: &str, destination: &str) {
     let x = match get_comments_from_file(filename) {
         Ok(x) => x,
-        Err(e) => panic!(e),
+        Err(_) => return,
     };
 
     let mut contents: Vec<String> = Vec::new();
     for set in x {
         let new_set = set.into_iter().map(|j| extract_types(j)).collect();
         let joined = join_extracted_comments(new_set);
-        let mut param_rep = ParameterRep::new(joined).unwrap();
+        let mut param_rep = match ParameterRep::new(joined) {
+            Ok(x) => x,
+            Err(_) => continue
+        };
         contents.push(param_rep.render().clone());
     }
 
-    let stem = match Path::new(filename).file_stem() {
-        None => String::from("unnamed"),
-        Some(x) => String::from(x.to_str().unwrap()),
-    };
+    if contents.len() > 0 {
+        let stem = match Path::new(filename).file_stem() {
+            None => String::from("unnamed"),
+            Some(x) => String::from(match x.to_str() {
+                Some(y) => y,
+                None => return
+            }),
+        };
 
-    let destination_path = Path::new(destination);
-    let final_file_path = destination_path.join(stem.as_str()).with_extension("md");
-    write_string_to_file(
-        final_file_path.as_path().to_str().unwrap(),
-        contents.join("\n"),
-    );
+        let destination_path = Path::new(destination);
+        let final_file_path = destination_path.join(stem.as_str()).with_extension("md");
+        write_string_to_file(
+            final_file_path.as_path().to_str().unwrap(),
+            contents.join("\n"),
+        );
+    }
+
 }
