@@ -73,7 +73,7 @@ All tags must include a `type` tag.
 '''
 ```
 
-** NOTE:**  Markdown can be included within the documentation itself, and it will be rendered on the final page.
+**NOTE:**  Markdown can be included within the documentation itself, and it will be rendered on the final page.
 
 ### Types
 - `FUNC` - Tag for a function or method
