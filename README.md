@@ -9,8 +9,14 @@ Maintaining large systems in differenet languages brings its own set of unique c
 ## The Name?
 The defintion of argot is "the jaron or slang of a particular group or class".  Seems like a pretty fitting name for a documentation system.
 
+## Warning
+This is still a work in progress, so things might break. Submitting a bug report is the best way to help me identify issues.
+
 ## Argot in Action
 Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against this repo.
+
+## Installation (for use)
+Coming soon to your favorite package manager.
 
 ## Installation (for development)
 - Clone the repo
