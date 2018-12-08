@@ -194,7 +194,7 @@ fn handle_file(filename: &str, destination: &str) {
         let joined = join_extracted_comments(new_set);
         let mut param_rep = match ParameterRep::new(joined) {
             Ok(x) => x,
-            Err(_) => continue
+            Err(_) => continue,
         };
         contents.push(param_rep.render().clone());
     }
@@ -204,7 +204,7 @@ fn handle_file(filename: &str, destination: &str) {
             None => String::from("unnamed"),
             Some(x) => String::from(match x.to_str() {
                 Some(y) => y,
-                None => return
+                None => return,
             }),
         };
 
@@ -215,5 +215,4 @@ fn handle_file(filename: &str, destination: &str) {
             contents.join("\n"),
         );
     }
-
 }
