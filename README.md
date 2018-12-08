@@ -3,6 +3,12 @@
 
 Parse documentation from codebases into markdown for easy doc creation. Argot is inspired by the traditional JavaDoc system.
 
+## Motivation
+Maintaining large systems in differenet languages brings its own set of unique challenges, especially when maintaining documentation for those systems.  Different documentation systems degrade the overall quality of the codebase, while hindering the productivity of developers. Argot attempts to rectify this by providing a single documentation style that can support any language, and dumps the resultant documentation to Markdown.
+
+## The Name?
+The defintion of argot is "the jaron or slang of a particular group or class".  Seems like a pretty fitting name for a documentation system.
+
 ## Argot in Action
 Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against this repo.
 
