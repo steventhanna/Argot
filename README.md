@@ -16,7 +16,11 @@ This is still a work in progress, so things might break. Submitting a bug report
 Check out [Argot's Wiki](https://github.com/steventhanna/Argot/wiki) where Argot is run against this repo.
 
 ## Installation (for use)
-Coming soon to your favorite package manager.
+Install using Cargo
+
+```
+cargo install argot
+```
 
 ## Installation (for development)
 - Clone the repo
