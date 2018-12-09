@@ -4,6 +4,9 @@ version = "0.2.0"
 authors = ["Steven Hanna <steventhanna@gmail.com>"]
 description = "Parse documentation from codebases into Markdown for easy doc creation."
 license = "GNU"
+documentation = "https://github.com/steventhanna/Argot/wiki"
+homepage = "https://github.com/steventhanna/Argot"
+repository = "https://github.com/steventhanna/Argot"
 
 [dependencies]
 simple-error = "0.1"
