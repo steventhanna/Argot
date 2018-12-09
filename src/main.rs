@@ -43,7 +43,7 @@ use walkdir::WalkDir;
 fn main() {
     setup_panic!();
     let matches = App::new("Argot")
-        .version("0.2.0")
+        .version("0.2.2")
         .author("Steven Hanna <steventhanna@gmail.com>")
         .about("Parse documentation from codebases into Markdown for easy doc creation.")
         .arg(

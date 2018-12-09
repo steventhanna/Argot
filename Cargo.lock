@@ -16,7 +16,7 @@ dependencies = [
 
 [[package]]
 name = "argot"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "clap 2.32.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "glob 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",

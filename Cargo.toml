@@ -1,6 +1,6 @@
 [package]
 name = "argot"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Steven Hanna <steventhanna@gmail.com>"]
 description = "Parse documentation from codebases into Markdown for easy doc creation."
 license = "GPL-3.0-or-later"
