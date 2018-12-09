@@ -1,22 +1,19 @@
 use std::ffi::OsStr;
-/**
-* @type :: CLASS
-* @name :: Parser
-* @author :: Steven Hanna - steventhanna@gmail.com
-*/
+
+/// @type :: CLASS
+/// @name :: Parser
+/// @author :: Steven Hanna - steventhanna@gmail.com
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::io::Error;
 use std::path::Path;
 
-/**
-* @type :: FUNC
-* @name :: extract_types
-* @description :: Extracts the data, and the type from a comment
-* @param :: raw - String - The raw string to parse
-* @return :: Option<(String, String)> - An optional tuple containing the both parts
-*/
+/// @type :: FUNC
+/// @name :: extract_types
+/// @description :: Extracts the data, and the type from a comment
+/// @param :: raw - String - The raw string to parse
+/// @return :: Option<(String, String)> - An optional tuple containing the both parts
 pub fn extract_types(raw: String) -> (String, String) {
     // Convert the string to &str
     let s = raw.as_str().trim();
@@ -42,13 +39,11 @@ pub fn extract_types(raw: String) -> (String, String) {
     }
 }
 
-/**
-* @type :: FUNC
-* @name :: join_extracted_comments
-* @description :: Joins multiline comments together
-* @param :: mut types: Vec<(String, String)> - a list of extracted string tuples
-* @return :: Vec<(String, String)> - a list of the joined string tuples
-*/
+/// @type :: FUNC
+/// @name :: join_extracted_comments
+/// @description :: Joins multiline comments together
+/// @param :: mut types: Vec<(String, String)> - a list of extracted string tuples
+/// @return :: Vec<(String, String)> - a list of the joined string tuples
 pub fn join_extracted_comments(mut types: Vec<(String, String)>) -> Vec<(String, String)> {
     if types.len() < 2 {
         return types;
@@ -72,14 +67,12 @@ pub fn join_extracted_comments(mut types: Vec<(String, String)>) -> Vec<(String,
     types
 }
 
-/**
-* @type :: FUNC
-* @name :: remove_comment_style
-* @description :: Removes the comment style by. Takes the beginning of the string, takes sub
-* string the length of the comment style, checks to see if there is a match. The comment
-* style vector should be sorted by length
-* @return :: (String, bool) - String representing the cleaned array, bool if it was altered
-*/
+/// @type :: FUNC
+/// @name :: remove_comment_style
+/// @description :: Removes the comment style by. Takes the beginning of the string, takes sub
+/// string the length of the comment style, checks to see if there is a match. The comment
+/// style vector should be sorted by length
+/// @return :: (String, bool) - String representing the cleaned array, bool if it was altered
 fn remove_comment_style(raw: String, comment_styles: &Vec<&str>) -> (String, bool) {
     // println!("Processing: {:?}", raw);
     let mut raw_str = raw.trim().to_string();
@@ -101,27 +94,23 @@ fn remove_comment_style(raw: String, comment_styles: &Vec<&str>) -> (String, boo
     (raw_str, has_altered)
 }
 
-/**
-* @type :: FUNC
-* @name :: get_extension_from_filename
-* @param :: filename: &str - the filename to get the extension from
-* @return :: Option<&str> - an optional type that could contain a valid string
-* @description :: Extracts an extension from a filename
-*/
+/// @type :: FUNC
+/// @name :: get_extension_from_filename
+/// @param :: filename: &str - the filename to get the extension from
+/// @return :: Option<&str> - an optional type that could contain a valid string
+/// @description :: Extracts an extension from a filename
 fn get_extension_from_filename(filename: &str) -> Option<&str> {
     Path::new(filename).extension().and_then(OsStr::to_str)
 }
 
-/**
-* @type :: FUNC
-* @name :: get_comment_styles
-* @param :: extension - &str - The file extension to return the comment style for
-* @return :: Vec<&str> - A vector with string slices representing the comment styles
-* @description :: Returns a list of comment styles for each supported language
-*/
+/// @type :: FUNC
+/// @name :: get_comment_styles
+/// @param :: extension - &str - The file extension to return the comment style for
+/// @return :: Vec<&str> - A vector with string slices representing the comment styles
+/// @description :: Returns a list of comment styles for each supported language
 fn get_comment_styles(extension: &str) -> Vec<&str> {
     match extension {
-        "rs" => vec!["/**", "*/", "*"],
+        "rs" => vec!["///"],
         "java" => vec!["/**", "*/", "*"],
         "js" => vec!["/**", "*/", "*"],
         "jsx" => vec!["/**", "*/", "*"],
@@ -130,11 +119,9 @@ fn get_comment_styles(extension: &str) -> Vec<&str> {
     }
 }
 
-/**
-* @type :: FUNC
-* @name :: get_comments_from_file
-* @description :: Extracts comments from a file, pushing sets of comments into vectors
-*/
+/// @type :: FUNC
+/// @name :: get_comments_from_file
+/// @description :: Extracts comments from a file, pushing sets of comments into vectors
 pub fn get_comments_from_file(filename: &str) -> Result<Vec<Vec<String>>, Error> {
     let f = match File::open(filename) {
         Ok(ff) => ff,
@@ -253,7 +240,7 @@ mod test {
 
     #[test]
     fn test_get_comment_styles() {
-        assert_eq!(get_comment_styles("rs"), vec!["/**", "*/", "*"]);
+        assert_eq!(get_comment_styles("rs"), vec!["///"]);
         assert_eq!(get_comment_styles("java"), vec!["/**", "*/", "*"]);
         assert_eq!(get_comment_styles("py"), vec!["'''"]);
         assert_eq!(get_comment_styles("nonexistant"), Vec::<&str>::new());

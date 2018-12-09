@@ -1,7 +1,9 @@
 [package]
 name = "argot"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Steven Hanna <steventhanna@gmail.com>"]
+description = "Parse documentation from codebases into Markdown for easy doc creation."
+license = "GNU"
 
 [dependencies]
 simple-error = "0.1"
