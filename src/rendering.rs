@@ -124,7 +124,7 @@ pub mod rendering {
             // Look for a @name
             let mut names = self.extract_type("@name")
                 .iter()
-                .map(|elem| MarkdownElement::new(elem.clone(), "h1"))
+                .map(|elem| MarkdownElement::new(elem.clone(), "h2"))
                 .collect::<Vec<MarkdownElement>>();
             self.elements.append(&mut names);
 
@@ -216,7 +216,7 @@ pub mod rendering {
             // Look for a @name
             let mut names = self.extract_type("@name")
                 .iter()
-                .map(|elem| MarkdownElement::new(elem.clone(), "h2"))
+                .map(|elem| MarkdownElement::new(elem.clone(), "h3"))
                 .collect::<Vec<MarkdownElement>>();
             self.elements.append(&mut names);
 

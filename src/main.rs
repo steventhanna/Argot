@@ -191,6 +191,32 @@ fn handle_file(filename: &str, destination: &str) {
     };
 
     let mut contents: Vec<String> = Vec::new();
+
+    let p = Path::new(filename);
+
+    let stem = match p.file_stem() {
+        None => String::from("unnamed"),
+        Some(x) => String::from(match x.to_str() {
+            Some(y) => y,
+            None => return,
+        }),
+    };
+
+    let extension = match p.extension() {
+        None => String::new(),
+        Some(x) => String::from(match x.to_str() {
+            Some(y) => y,
+            None => return,
+        }),
+    };
+
+    let rebuilt_filename = stem.clone() + &String::from(".") + &extension;
+
+    // Add the filename as the first element
+    let file_header = MarkdownElement::new(rebuilt_filename, "h1").render();
+
+    contents.push(file_header);
+
     for set in x {
         let new_set = set.into_iter().map(|j| extract_types(j)).collect();
         let joined = join_extracted_comments(new_set);
@@ -201,15 +227,7 @@ fn handle_file(filename: &str, destination: &str) {
         contents.push(param_rep.render().clone());
     }
 
-    if contents.len() > 0 {
-        let stem = match Path::new(filename).file_stem() {
-            None => String::from("unnamed"),
-            Some(x) => String::from(match x.to_str() {
-                Some(y) => y,
-                None => return,
-            }),
-        };
-
+    if contents.len() > 1 {
         let destination_path = Path::new(destination);
         let final_file_path = destination_path.join(stem.as_str()).with_extension("md");
         write_string_to_file(
